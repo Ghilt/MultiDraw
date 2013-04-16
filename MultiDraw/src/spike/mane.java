@@ -31,7 +31,7 @@ class Inputer extends Thread{ // två sådana här running at the same time ger 
 	}
 
 	public void run(){
-		System.out.println("TYPE NOW!");
+		System.out.println("TYPE LATER!");
 		String s = "";
 		
 		while((s = scan.next()) != null){
