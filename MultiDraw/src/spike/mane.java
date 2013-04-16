@@ -46,7 +46,7 @@ class Inputer extends Thread{ // två sådana här running at the same time ger 
 
 class Increaser extends Thread{
 	private int width = 20;
-	private int height = 20;
+	private int height = 200;
 	private Color c;
 	private int incr;
 	
