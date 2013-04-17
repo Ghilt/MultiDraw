@@ -75,13 +75,13 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 
 	public void blur() {
 		float[] blurKernel = {
-	        1/9f, 1/9f, 1/9f,
-	        1/9f, 1/9f, 1/9f,
-	        1/9f, 1/9f, 1/9f
-	    };
+			1/9f, 1/9f, 1/9f,
+			1/9f, 1/9f, 1/9f,
+			1/9f, 1/9f, 1/9f
+		};
 	
-	    BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
-	    bufImage = blur.filter(bufImage, bufDest);
+		BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
+		bufImage = blur.filter(bufImage, bufDest);
 	}
 	
 	private void drawBrush(Graphics2D g2) {
@@ -100,9 +100,9 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		}
 		
 		Graphics2D g2 = bufImage.createGraphics();
-        g2.setStroke(stroke);
-        
-        // Right-click for eraser, don't know if values are the same for all mice, seems weird.
+		g2.setStroke(stroke);
+		
+		// Right-click for eraser, don't know if values are the same for all mice, seems weird.
 		switch (e.getModifiers()) {
 			case 4:
 				g2.setColor(Color.WHITE);

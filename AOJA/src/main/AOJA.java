@@ -6,9 +6,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 class AOJA {
-    public static void main(String[] args) {
-    	try {
-    		// Fix look and feel of GUI.
+	public static void main(String[] args) {
+		try {
+			// Fix look and feel of GUI.
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -19,8 +19,8 @@ class AOJA {
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-        PaintWindow window = new PaintWindow();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setVisible(true);
-    }
+		PaintWindow window = new PaintWindow();
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setVisible(true);
+	}
 }
