@@ -4,3 +4,8 @@
 *.jar
 *.war
 *.ear
+
+# Stupid Eclipse #
+.settings
+.classpath
+.project
