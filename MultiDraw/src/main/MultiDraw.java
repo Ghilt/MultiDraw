@@ -3,7 +3,6 @@ import gui.PaintWindow;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 class MultiDraw {
 	public static void main(String[] args) {
