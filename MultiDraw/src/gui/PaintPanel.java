@@ -1,4 +1,6 @@
 package gui;
+import interfaces.Protocol;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,8 +18,12 @@ import java.awt.image.Kernel;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import networktest.DrawClient;
+
 @SuppressWarnings("serial")
 public class PaintPanel extends JPanel implements MouseListener, MouseMotionListener {
+	private DrawClient mc;
+	
 	// Stores underlying image. (Maybe we can have a Vector of BufferedImages, then we could probably implement Ctrl+Z etc.)
 	private BufferedImage bufImage;
 	
@@ -41,11 +47,12 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	/**
 	 * A "canvas" used to draw on.
 	 */
-	public PaintPanel() {    	
+	public PaintPanel(DrawClient mc) {    	
 		setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
 		this.setBorder(BorderFactory.createEmptyBorder());
 		this.addMouseListener(this); 
 		this.addMouseMotionListener(this);
+		this.mc = mc;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -123,11 +130,31 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	}
 
 	public void mousePressed(MouseEvent e) {
-		drawStuff(e);
+//		drawStuff(e);
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		drawStuff(e);
+//		drawStuff(e);
+		// Set mouse coordinates
+		currentX = e.getX();
+		currentY = e.getY();
+		
+		// Need something better than -90000 here... Ugly.
+		if (previousX == -90000 && previousY == -90000) {
+			previousX = currentX;
+			previousY = currentY;
+		}
+		
+		String send = "";
+		send += Protocol.DRAW_LINE;
+		send += " " + previousX + " " + previousY + " " + currentX + " " + currentY;
+		
+//		System.out.println(send);
+		mc.send(send);
+
+		// Set previous coordinates
+		previousX = currentX;
+		previousY = currentY;
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -140,4 +167,12 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	public void mouseEntered (MouseEvent e) {}
 	public void mouseExited  (MouseEvent e) {}
 	public void mouseClicked (MouseEvent e) {}
+
+	public void drawLine(int previousX, int previousY, int currentX, int currentY) {
+		Graphics2D g2 = bufImage.createGraphics();
+		g2.setStroke(stroke);
+		g2.setColor(brushColor);
+		g2.drawLine(previousX, previousY, currentX, currentY);
+		repaint();
+	}
 }

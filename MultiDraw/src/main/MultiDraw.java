@@ -1,8 +1,11 @@
 package main;
+import gui.PaintPanel;
 import gui.PaintWindow;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import networktest.DrawClient;
 
 class MultiDraw {
 	public static void main(String[] args) {
@@ -12,6 +15,10 @@ class MultiDraw {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		PaintWindow window = new PaintWindow();
+		DrawClient mc = new DrawClient("localhost", 30001);
+		PaintPanel paintpanel = new PaintPanel(mc);
+		mc.setPaintPanel(paintpanel);
+		mc.start();
+		PaintWindow window = new PaintWindow(paintpanel);
 	}
 }
