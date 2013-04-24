@@ -19,7 +19,7 @@ public class PaintWindow extends JFrame {
 	/**
 	 * Blabla
 	 */
-	public PaintWindow(PaintPanel panel) {
+	public PaintWindow(PaintPanel paintpanel) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");
 		
@@ -41,7 +41,7 @@ public class PaintWindow extends JFrame {
 		rightPanel.setPreferredSize(new Dimension(150, 800));
 		rightPanel.add(new JLabel("Users"));
 
-		JScrollPane scroller = new JScrollPane(panel);
+		JScrollPane scroller = new JScrollPane(paintpanel);
 		scroller.setBorder(BorderFactory.createEmptyBorder());
 		
 		JPanel chatPanel = new JPanel();

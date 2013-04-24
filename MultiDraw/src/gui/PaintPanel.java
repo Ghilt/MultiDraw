@@ -196,8 +196,11 @@ public class PaintPanel extends JPanel implements MouseListener,
 		}
 		
 		String send = "";
-		send += Protocol.DRAW_LINE;
-		send += " " + previousX + " " + previousY + " " + currentX + " " + currentY;
+		send += Protocol.DRAW_LINE + " " 
+			 + previousX + " " 
+			 + previousY + " " 
+			 + currentX + " " 
+			 + currentY;
 		
 //		System.out.println(send);
 		mc.send(send);
