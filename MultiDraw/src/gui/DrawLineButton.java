@@ -1,16 +1,9 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.Line2D;
 
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 
 public class DrawLineButton extends JButton {
 	private PaintPanel paintpanel;
@@ -18,13 +11,17 @@ public class DrawLineButton extends JButton {
 	public DrawLineButton(String name, PaintPanel paintpanel) {
 		super(name);
 		this.paintpanel = paintpanel;
-		this.addActionListener(actionListener);
+		
+		// Changed this to use an anonymous class instead, which do you prefer?
+		this.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DrawLineButton src = (DrawLineButton) e.getSource();
+				src.getPaintPanel().drawLine();
+			}
+		});
 	}
-
-	ActionListener actionListener = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			paintpanel.drawLine();
-		}
-	};
-
+	
+	public PaintPanel getPaintPanel() {
+		return paintpanel;
+	}
 }

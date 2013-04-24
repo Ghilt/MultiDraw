@@ -1,13 +1,13 @@
 package gui;
 
 import interfaces.Protocol;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,16 +20,15 @@ import java.awt.image.Kernel;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import networktest.DrawClient;
+import network.ClientReceiver;
+import network.SendBuffer;
 
-@SuppressWarnings("serial")
-public class PaintPanel extends JPanel implements MouseListener,
-		MouseMotionListener {
+public class PaintPanel extends JPanel implements MouseListener, MouseMotionListener {
 	// Stores underlying image. (Maybe we can have a Vector of BufferedImages,
 	// then we could probably implement Ctrl+Z etc.)
 	private BufferedImage bufImage;
 
-	// Temporary storage for convolution filters
+	// Temporary storage for convolution filters (blur etc.)
 	private BufferedImage bufDest;
 
 	// Canvas size
@@ -52,42 +51,39 @@ public class PaintPanel extends JPanel implements MouseListener,
 	private Color brushColor = Color.BLACK;
 	private Stroke stroke;
 	
-	private DrawClient mc;
+	// Buffer for outgoing commands
+	private SendBuffer buffer;
 
 	/**
 	 * A "canvas" used to draw on.
 	 */
-	public PaintPanel(DrawClient mc) {
+	public PaintPanel(SendBuffer buffer) {
 		setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
 		this.setBorder(BorderFactory.createEmptyBorder());
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-		this.mc = mc;
+		this.buffer = buffer;
+		
+		// Initializing bufImage
+		bufImage = (BufferedImage) createImage(SIZE_X, SIZE_Y);
+		bufImage = new BufferedImage(SIZE_X, SIZE_Y, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D gc = bufImage.createGraphics();
+
+		// Fill background with white color
+		gc.setColor(Color.WHITE);
+		gc.fillRect(0, 0, SIZE_X, SIZE_Y);
+		
+		// Initializing stroke
+		stroke = new BasicStroke(10, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
 	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		Graphics2D g2 = (Graphics2D) g; // downcast to Graphics2D
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		if (bufImage == null) {
-			// Initializing bufImage
-			bufImage = (BufferedImage) createImage(getWidth(), getHeight());
-			bufImage = new BufferedImage(getWidth(), getHeight(),
-					BufferedImage.TYPE_INT_ARGB);
-			Graphics2D gc = bufImage.createGraphics();
-
-			// Fill background with white color
-			gc.setColor(Color.WHITE);
-			gc.fillRect(0, 0, getWidth(), getHeight());
-		}
-
-		if (stroke == null) {
-			// Initializing stroke
-			stroke = new BasicStroke(10, BasicStroke.CAP_ROUND,
-					BasicStroke.JOIN_BEVEL);
-		}
+		
+		// Dunno if this does anything.. I hoped it would create antialiasing but it doesn't.. :(
+		// g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// re-draw bufImage
 		g2.drawImage(bufImage, null, 0, 0);
@@ -99,10 +95,6 @@ public class PaintPanel extends JPanel implements MouseListener,
 
 		BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
 		bufImage = blur.filter(bufImage, bufDest);
-	}
-
-	private void drawBrush(Graphics2D g2) {
-		g2.drawLine(previousX, previousY, currentX, currentY);
 	}
 
 	private void drawStuff(MouseEvent e) {
@@ -119,8 +111,7 @@ public class PaintPanel extends JPanel implements MouseListener,
 		Graphics2D g2 = bufImage.createGraphics();
 		g2.setStroke(stroke);
 
-		// Right-click for eraser, don't know if values are the same for all
-		// mice, seems weird.
+		// Right-click for eraser, don't know if values are the same for all mice, seems weird.
 		switch (e.getModifiers()) {
 			case 4:
 				g2.setColor(Color.WHITE);
@@ -130,21 +121,21 @@ public class PaintPanel extends JPanel implements MouseListener,
 				break;
 		}
 		
-		//check if we are waiting a shape to be drawn (works only for lines for the moment)
+		// Check if we are waiting a shape to be drawn (works only for lines for the moment)
 		if (waitForShape) {
-			if(p1 == null) {
+			if (p1 == null) {
 				p1 = new Point(e.getX(), e.getY());
 			} else if (p2 == null) {
 				p2 = new Point(e.getX(), e.getY());
 			
-				 waitForShape = false;
-				 g2.drawLine(p1.x, p1.y, p2.x, p2.y);
-				 p1 = null;
-				 p2 = null;
+				waitForShape = false;
+				g2.drawLine(p1.x, p1.y, p2.x, p2.y);
+				p1 = null;
+				p2 = null;
 			}
 		} else {
 			// TOOLS
-			drawBrush(g2); // Brush tool
+			g2.drawLine(previousX, previousY, currentX, currentY); // Brush tool
 		}
 
 		// Set previous coordinates
@@ -174,9 +165,17 @@ public class PaintPanel extends JPanel implements MouseListener,
 		this.stroke = stroke;
 	}
 	
-	//experimental
+	// experimental
 	public void drawLine() {
 		waitForShape = true;
+	}
+
+	public void drawLine(int previousX, int previousY, int currentX, int currentY) {
+		Graphics2D g2 = bufImage.createGraphics();
+		g2.setStroke(stroke);
+		g2.setColor(brushColor);
+		g2.drawLine(previousX, previousY, currentX, currentY);
+		repaint();
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -185,6 +184,13 @@ public class PaintPanel extends JPanel implements MouseListener,
 
 	public void mouseDragged(MouseEvent e) {
 //		drawStuff(e);
+		drawBrush(e);
+	}
+
+	/*
+	 * This method doesn't actually draw anything, it just puts a draw command into the SendBuffer.
+	 */
+	private void drawBrush(MouseEvent e) {
 		// Set mouse coordinates
 		currentX = e.getX();
 		currentY = e.getY();
@@ -195,15 +201,13 @@ public class PaintPanel extends JPanel implements MouseListener,
 			previousY = currentY;
 		}
 		
-		String send = "";
-		send += Protocol.DRAW_LINE + " " 
-			 + previousX + " " 
-			 + previousY + " " 
-			 + currentX + " " 
-			 + currentY;
+		String send = Protocol.DRAW_LINE + " " 
+					+ previousX + " " 
+					+ previousY + " " 
+					+ currentX + " " 
+					+ currentY;
 		
-//		System.out.println(send);
-		mc.send(send);
+		buffer.put(send);
 
 		// Set previous coordinates
 		previousX = currentX;
@@ -220,12 +224,4 @@ public class PaintPanel extends JPanel implements MouseListener,
 	public void mouseEntered (MouseEvent e) {}
 	public void mouseExited  (MouseEvent e) {}
 	public void mouseClicked (MouseEvent e) {}
-
-	public void drawLine(int previousX, int previousY, int currentX, int currentY) {
-		Graphics2D g2 = bufImage.createGraphics();
-		g2.setStroke(stroke);
-		g2.setColor(brushColor);
-		g2.drawLine(previousX, previousY, currentX, currentY);
-		repaint();
-	}
 }
