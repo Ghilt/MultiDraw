@@ -1,10 +1,13 @@
 package gui;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -17,10 +20,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class PaintPanel extends JPanel implements MouseListener, MouseMotionListener {
-	// Stores underlying image. (Maybe we can have a Vector of BufferedImages, then we could probably implement Ctrl+Z etc.)
+public class PaintPanel extends JPanel implements MouseListener,
+		MouseMotionListener {
+	// Stores underlying image. (Maybe we can have a Vector of BufferedImages,
+	// then we could probably implement Ctrl+Z etc.)
 	private BufferedImage bufImage;
-	
+
 	// Temporary storage for convolution filters
 	private BufferedImage bufDest;
 
@@ -34,75 +39,82 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	private int previousX = -90000;
 	private int previousY = -90000;
 
+	// Mouse pressed coordinates
+	private Point p1 = null;
+	private Point p2 = null;
+	private boolean waitForShape = false; // when drawing shapes we are waiting
+											// for mouse press
+
 	// Current brush properties
 	private Color brushColor = Color.BLACK;
-	private BasicStroke stroke;
+	private Stroke stroke;
 
 	/**
 	 * A "canvas" used to draw on.
 	 */
-	public PaintPanel() {    	
+	public PaintPanel() {
 		setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
 		this.setBorder(BorderFactory.createEmptyBorder());
-		this.addMouseListener(this); 
+		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		Graphics2D g2 = (Graphics2D)g;  // downcast to Graphics2D
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Graphics2D g2 = (Graphics2D) g; // downcast to Graphics2D
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 		if (bufImage == null) {
 			// Initializing bufImage
-			bufImage = (BufferedImage)createImage(getWidth(), getHeight());
-			bufImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+			bufImage = (BufferedImage) createImage(getWidth(), getHeight());
+			bufImage = new BufferedImage(getWidth(), getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D gc = bufImage.createGraphics();
 
 			// Fill background with white color
 			gc.setColor(Color.WHITE);
 			gc.fillRect(0, 0, getWidth(), getHeight());
 		}
-		
+
 		if (stroke == null) {
 			// Initializing stroke
-			stroke = new BasicStroke(10, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
+			stroke = new BasicStroke(10, BasicStroke.CAP_ROUND,
+					BasicStroke.JOIN_BEVEL);
 		}
 
 		// re-draw bufImage
-		g2.drawImage(bufImage, null, 0, 0); 
+		g2.drawImage(bufImage, null, 0, 0);
 	}
 
 	public void blur() {
-		float[] blurKernel = {
-			1/9f, 1/9f, 1/9f,
-			1/9f, 1/9f, 1/9f,
-			1/9f, 1/9f, 1/9f
-		};
-	
+		float[] blurKernel = { 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f,
+				1 / 9f, 1 / 9f, 1 / 9f };
+
 		BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
 		bufImage = blur.filter(bufImage, bufDest);
 	}
-	
+
 	private void drawBrush(Graphics2D g2) {
 		g2.drawLine(previousX, previousY, currentX, currentY);
 	}
-	
+
 	private void drawStuff(MouseEvent e) {
 		// Set mouse coordinates
 		currentX = e.getX();
 		currentY = e.getY();
-		
+
 		// Need something better than -90000 here... Ugly.
 		if (previousX == -90000 && previousY == -90000) {
 			previousX = currentX;
 			previousY = currentY;
 		}
-		
+
 		Graphics2D g2 = bufImage.createGraphics();
 		g2.setStroke(stroke);
-		
-		// Right-click for eraser, don't know if values are the same for all mice, seems weird.
+
+		// Right-click for eraser, don't know if values are the same for all
+		// mice, seems weird.
 		switch (e.getModifiers()) {
 			case 4:
 				g2.setColor(Color.WHITE);
@@ -112,14 +124,55 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 				break;
 		}
 		
-		// TOOLS
-		drawBrush(g2); // Brush tool
+		//check if we are waiting a shape to be drawn (works only for lines for the moment)
+		if (waitForShape) {
+			if(p1 == null) {
+				p1 = new Point(e.getX(), e.getY());
+			} else if (p2 == null) {
+				p2 = new Point(e.getX(), e.getY());
+			
+				 waitForShape = false;
+				 g2.drawLine(p1.x, p1.y, p2.x, p2.y);
+				 p1 = null;
+				 p2 = null;
+			}
+		} else {
+			// TOOLS
+			drawBrush(g2); // Brush tool
+		}
+
 		
+
 		// Set previous coordinates
 		previousX = currentX;
 		previousY = currentY;
-		
+
 		repaint();
+	}
+
+	// returns brushColor
+	public Color getBrushColor() {
+		return this.brushColor;
+	}
+
+	// sets brushColor
+	public void setBrushColor(Color color) {
+		brushColor = color;
+	}
+
+	// returns stroke
+	public Stroke getStroke() {
+		return stroke;
+	}
+
+	// sets stroke
+	public void setStroke(Stroke stroke) {
+		this.stroke = stroke;
+	}
+	
+	//experimental
+	public void drawLine() {
+		waitForShape = true;
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -136,8 +189,15 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		previousY = -90000;
 	}
 
-	public void mouseMoved   (MouseEvent e) {}
-	public void mouseEntered (MouseEvent e) {}
-	public void mouseExited  (MouseEvent e) {}
-	public void mouseClicked (MouseEvent e) {}
+	public void mouseMoved(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mouseClicked(MouseEvent e) {
+	}
 }
