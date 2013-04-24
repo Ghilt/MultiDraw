@@ -1,11 +1,10 @@
 package networktest;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 class ClientConnection extends Thread {
@@ -14,8 +13,8 @@ class ClientConnection extends Thread {
 	private BufferedReader in;
 	private ArrayList<ClientConnection> connections;
 
-	public ClientConnection(String name, Socket s, ArrayList<ClientConnection> connections) {
-		super(name);
+	public ClientConnection(Socket s, ArrayList<ClientConnection> connections) {
+		super();
 		this.s = s;
 		this.connections = connections;
 	}
@@ -30,7 +29,7 @@ class ClientConnection extends Thread {
 				writeToAll(strIn);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
 		}
 	}
 	

@@ -15,8 +15,8 @@ public class MultiDrawServer {
 			
 			Socket s;
 			while ((s = server.accept()) != null) {
-				System.out.println("Connected : " + s.getInetAddress());
-				ClientConnection cc = new ClientConnection(s.getInetAddress().getHostName(), s, connections);
+				System.out.println("Connected : " + s.getInetAddress().getHostAddress());
+				ClientConnection cc = new ClientConnection(s, connections);
 				cc.start();
 				connections.add(cc);
 			}
