@@ -17,6 +17,9 @@ public class PaintWindow extends JFrame {
 	 * Blabla
 	 */
 	public PaintWindow() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");
+		
 		JPanel leftPanel = new JPanel();
 		leftPanel.setPreferredSize(new Dimension(80, 800));
 		leftPanel.add(new JLabel("Tools"));
@@ -51,7 +54,8 @@ public class PaintWindow extends JFrame {
 		add(leftPanel, BorderLayout.WEST);
 		add(centerPanel, BorderLayout.CENTER);
 		add(rightPanel, BorderLayout.EAST);
-		setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");
+
 		pack();
+		setVisible(true);
 	}
 }

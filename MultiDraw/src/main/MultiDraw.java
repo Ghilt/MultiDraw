@@ -13,7 +13,5 @@ class MultiDraw {
 			e.printStackTrace();
 		}
 		PaintWindow window = new PaintWindow();
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setVisible(true);
 	}
 }
