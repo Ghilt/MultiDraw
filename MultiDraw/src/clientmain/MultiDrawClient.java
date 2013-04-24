@@ -1,4 +1,4 @@
-package main;
+package clientmain;
 import gui.PaintPanel;
 import gui.PaintWindow;
 
@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 
 import networktest.DrawClient;
 
-class MultiDraw {
+class MultiDrawClient {
 	public static void main(String[] args) {
 		try {
 			// Fix look and feel of GUI.

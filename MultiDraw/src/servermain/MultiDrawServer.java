@@ -1,8 +1,10 @@
-package networktest;
+package servermain;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import networktest.ClientConnection;
 
 public class MultiDrawServer {
 	private static ArrayList<ClientConnection> connections;

@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-class ClientConnection extends Thread {
+public class ClientConnection extends Thread {
 	private Socket s;
 	private PrintWriter out;
 	private BufferedReader in;

@@ -24,7 +24,7 @@ public class DrawClient extends Thread {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("No host at this address, shutting down...");
+			System.out.println("Connection error, shutting down...");
 		}
 	}
 
