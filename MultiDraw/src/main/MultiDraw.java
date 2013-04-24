@@ -7,6 +7,7 @@ import javax.swing.UIManager;
 class MultiDraw {
 	public static void main(String[] args) {
 		try {
+			//Teständring
 			// Fix look and feel of GUI.
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
