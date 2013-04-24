@@ -11,19 +11,17 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import networktest.DrawClient;
+
 @SuppressWarnings("serial")
 public class PaintWindow extends JFrame {
 	
 	/**
 	 * Blabla
 	 */
-	public PaintWindow() {
+	public PaintWindow(PaintPanel panel) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");
-		
-		PaintPanel paintpanel = new PaintPanel();
-		JScrollPane scroller = new JScrollPane(paintpanel);
-		scroller.setBorder(BorderFactory.createEmptyBorder());
 		
 		JPanel leftPanel = new JPanel();
 		leftPanel.setPreferredSize(new Dimension(80, 800));
@@ -42,8 +40,10 @@ public class PaintWindow extends JFrame {
 		JPanel rightPanel = new JPanel();
 		rightPanel.setPreferredSize(new Dimension(150, 800));
 		rightPanel.add(new JLabel("Users"));
-		
 
+		JScrollPane scroller = new JScrollPane(panel);
+		scroller.setBorder(BorderFactory.createEmptyBorder());
+		
 		JPanel chatPanel = new JPanel();
 		chatPanel.add(new JLabel("Chat"));
 		chatPanel.setPreferredSize(new Dimension(800, 150));
