@@ -12,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class MultiDrawFrame extends JFrame {
@@ -24,7 +25,7 @@ public class MultiDrawFrame extends JFrame {
 	private static final int CHATWINDOW_HEIGHT = 500;
 	private static final int LEFT_PANEL_HEIGHT = 800;
 	private static final int LEFT_PANEL_WIDTH = 80;
-	private Component chatWindow;
+	private JTextArea chatWindow;
 
 	public MultiDrawFrame(PaintPanel paintpanel) {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,14 +83,16 @@ public class MultiDrawFrame extends JFrame {
 		rightPanel.add(new JLabel("Users"));
 		rightPanel.setBackground(Color.PINK);
 		
-		JTextField connectedUsersList = new JTextField();
+		JTextArea connectedUsersList = new JTextArea();
 		connectedUsersList.setPreferredSize(new Dimension(USERS_LIST_WIDTH, USERS_LIST_HEIGHT));
 		rightPanel.add(connectedUsersList);
+		connectedUsersList.setEditable(false);
 		
 		rightPanel.add(new JLabel("Chat"));
-		chatWindow = new JTextField();
+		chatWindow = new JTextArea();
 		chatWindow.setPreferredSize(new Dimension(CHATWINDOW_WIDTH, CHATWINDOW_HEIGHT));
 		rightPanel.add(chatWindow);
+		
 		
 		return rightPanel;
 	}
