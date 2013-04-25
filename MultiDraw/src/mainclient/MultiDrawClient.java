@@ -1,5 +1,4 @@
 package mainclient;
-import gui.PaintPanel;
 import gui.MultiDrawFrame;
 
 import java.io.IOException;
@@ -23,7 +22,7 @@ class MultiDrawClient {
 		
 		Socket s = null;
 		try {
-			s = new Socket("localhost", 30002);
+			s = new Socket("localhost", 30001);
 		} catch (UnknownHostException e) {
 			System.out.println("Did not find a host at the specified address.");
 		} catch (IOException e) {
@@ -31,11 +30,12 @@ class MultiDrawClient {
 		}
 		
 		SendBuffer buffer = new SendBuffer(10);
-		PaintPanel paintpanel = new PaintPanel(buffer);
-		ClientReceiver receiver = new ClientReceiver(s, paintpanel);
-		ClientSender sender = new ClientSender(s, buffer);	
-		new MultiDrawFrame(paintpanel);
-
+		Controller controller = new Controller();
+		ClientReceiver receiver = new ClientReceiver(s, controller);
+		ClientSender sender = new ClientSender(s, buffer);
+		MultiDrawFrame mainframe = new MultiDrawFrame(buffer);
+		
+		controller.setFrame(mainframe);
 		receiver.start();
 		sender.start();
 	}

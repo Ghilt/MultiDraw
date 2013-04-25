@@ -1,9 +1,12 @@
 package gui;
 
+import interfaces.Protocol;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -15,7 +18,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import network.SendBuffer;
+
 public class MultiDrawFrame extends JFrame {
+	private SendBuffer buffer;
 	private PaintPanel paintpanel;
 	
 	/**
@@ -25,23 +31,21 @@ public class MultiDrawFrame extends JFrame {
 	private static final int RIGHT_PANEL_WIDTH = 150;
 	private static final int RIGHT_PANEL_HEIGHT = 800;
 	private static final int USERS_LIST_WIDTH = 148;
-	private static final int USERS_LIST_HEIGHT = 300;
+	private static final int USERS_LIST_HEIGHT = 200;
 	private static final int CHATWINDOW_WIDTH = 148;
 	private static final int CHATWINDOW_HEIGHT = 500;
 	private static final int LEFT_PANEL_HEIGHT = 800;
 	private static final int LEFT_PANEL_WIDTH = 80;
 	private JTextArea chatWindow;
 
-	public MultiDrawFrame(PaintPanel paintpanel) {
-		this.paintpanel = paintpanel;
+	public MultiDrawFrame(SendBuffer buffer) {
+		this.buffer = buffer;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");
 
-		JPanel leftPanel = makeLeftPanel(paintpanel);
-
-		JPanel rightPanel = makeRightPanel(paintpanel);
-
-		JPanel centerPanel = makeCenterPanel(paintpanel);
+		JPanel centerPanel = makeCenterPanel();
+		JPanel leftPanel = makeLeftPanel();
+		JPanel rightPanel = makeRightPanel();
 
 		JMenuBar menuBar = makeMenuBar();
 
@@ -66,8 +70,8 @@ public class MultiDrawFrame extends JFrame {
 		return menuBar;
 	}
 
-	private JPanel makeCenterPanel(PaintPanel paintpanel) {
-
+	private JPanel makeCenterPanel() {
+		paintpanel = new PaintPanel(buffer);
 		JScrollPane scroller = new JScrollPane(paintpanel);
 		scroller.setBorder(BorderFactory.createEmptyBorder());
 
@@ -83,7 +87,7 @@ public class MultiDrawFrame extends JFrame {
 		return centerPanel;
 	}
 
-	private JPanel makeRightPanel(PaintPanel paintpanel) {
+	private JPanel makeRightPanel() {
 		JPanel rightPanel = new JPanel();
 		rightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, RIGHT_PANEL_HEIGHT));
 		rightPanel.add(new JLabel("Users"));
@@ -91,19 +95,40 @@ public class MultiDrawFrame extends JFrame {
 		
 		JTextArea connectedUsersList = new JTextArea();
 		connectedUsersList.setPreferredSize(new Dimension(USERS_LIST_WIDTH, USERS_LIST_HEIGHT));
+		connectedUsersList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		rightPanel.add(connectedUsersList);
 		connectedUsersList.setEditable(false);
 		
 		rightPanel.add(new JLabel("Chat"));
 		chatWindow = new JTextArea();
 		chatWindow.setPreferredSize(new Dimension(CHATWINDOW_WIDTH, CHATWINDOW_HEIGHT));
+		chatWindow.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		rightPanel.add(chatWindow);
+		chatWindow.setEditable(false);
 		
+		JTextField chatInput = new JTextField();
+		chatInput.setPreferredSize(new Dimension(CHATWINDOW_WIDTH, 25));
+		chatInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		rightPanel.add(chatInput);
+		
+		chatInput.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int keyCode = e.getKeyCode();
+				if (keyCode == KeyEvent.VK_ENTER) {
+					JTextField field = (JTextField) e.getSource();
+			        buffer.put(Protocol.CHAT_MESSAGE + " " + field.getText());
+			        field.setText("");
+				}
+			}
+			public void keyReleased(KeyEvent arg0) { }
+			public void keyTyped(KeyEvent arg0) { }
+		});
 		
 		return rightPanel;
 	}
 
-	private JPanel makeLeftPanel(PaintPanel paintpanel) {
+	private JPanel makeLeftPanel() {
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBackground(Color.GREEN);
 		leftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT));
@@ -125,5 +150,9 @@ public class MultiDrawFrame extends JFrame {
 
 	public PaintPanel getPaintPanel() {
 		return paintpanel;
+	}
+	
+	public JTextArea getChatPanel() {
+		return chatWindow;
 	}
 }

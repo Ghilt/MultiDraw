@@ -13,7 +13,7 @@ public class MultiDrawServer {
 		connections = new ArrayList<ServerConnection>();
 		try {
 			System.out.println("Server commenciated!");
-			ServerSocket server = new ServerSocket(30002);
+			ServerSocket server = new ServerSocket(30001);
 			
 			Socket s;
 			while ((s = server.accept()) != null) {

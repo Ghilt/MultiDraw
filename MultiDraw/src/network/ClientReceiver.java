@@ -9,15 +9,15 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import mainclient.Controller;
+
 public class ClientReceiver extends Thread {
 	private Socket s;
 	private BufferedReader in;
-	private PaintPanel panel;
+	private Controller controller;
 
-	public ClientReceiver(Socket s , PaintPanel panel) {
-		
-		this.panel = panel;
-		
+	public ClientReceiver(Socket s, Controller controller) {
+		this.controller = controller;
 		try {
 			this.s = s;
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -35,12 +35,12 @@ public class ClientReceiver extends Thread {
 		try {
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
-				System.out.println("string in: " + strIn);
-				String[] words = strIn.split(" ");
-				switch (Integer.parseInt(words[0])) {
+				String cmd = strIn.substring(0, strIn.indexOf(" "));
+				String[] words;
+				switch (Integer.parseInt(cmd)) {
 				case Protocol.DRAW_LINE:
+					words = strIn.split(" ");
 					if (words.length > 4) {
-						
 						int x1, y1, x2, y2, rgb, width;
 						x1 = Integer.parseInt(words[1]);
 						y1 = Integer.parseInt(words[2]);
@@ -48,16 +48,20 @@ public class ClientReceiver extends Thread {
 						y2 = Integer.parseInt(words[4]);
 						rgb = Integer.parseInt(words[5]);
 						width = Integer.parseInt(words[6]);
-						panel.drawLine(x1, y1, x2, y2, rgb, width);
+						controller.drawLine(x1, y1, x2, y2, rgb, width);
 					}
 					break;
 				case Protocol.CHANGE_BRUSH_COLOR:
+					words = strIn.split(" ");
 					if (words.length > 1) {
-						System.out.println("in changecolor in client receiver");
 						int rgb;
 						rgb = Integer.parseInt(words[1]);
-						panel.setBrushColor(new Color(rgb));
+						controller.setBrushColor(new Color(rgb));
 					}
+					break;
+				case Protocol.CHAT_MESSAGE:
+					String msg = strIn.substring(strIn.indexOf(" "));
+					controller.putChatMessage(msg);
 					break;
 				}
 			}

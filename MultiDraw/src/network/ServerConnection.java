@@ -33,8 +33,7 @@ public class ServerConnection extends Thread {
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
-				strIn = parseCommand(strIn);
-
+				parseCommand(strIn);
 			}
 		} catch (IOException e) {
 			System.out.println("Disconnected: "
@@ -45,8 +44,10 @@ public class ServerConnection extends Thread {
 	private String parseCommand(String strIn) {
 		String[] words = strIn.split(" ");
 		switch (Integer.parseInt(words[0])) {
+			case Protocol.CHAT_MESSAGE:
+				writeToAll(strIn);
+				break;
 			case Protocol.DRAW_LINE:
-	
 				strIn += " " + tp.getColor() + " " + tp.getBrushSize();
 				writeToAll(strIn);
 				break;
