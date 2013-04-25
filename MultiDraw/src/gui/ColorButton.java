@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 
-public class ColorButton extends JButton {
+public class ColorButton extends JButton implements ActionListener  {
 	private JColorChooser jcc;
 	private PaintPanel paintPanel;
 
@@ -15,15 +15,14 @@ public class ColorButton extends JButton {
 		this.paintPanel = paintpanel;
 		jcc = new JColorChooser(paintPanel.getBrushColor());
 
-		this.addActionListener(actionListener);
+		this.addActionListener(this);
 	}
 
-	ActionListener actionListener = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			Color color =  jcc.showDialog(null, "Choose Color", paintPanel.getBrushColor());
-			paintPanel.sendChangeBrushcolorCommandToserver(color);
+	
+	public void actionPerformed(ActionEvent e) {
+		Color color =  jcc.showDialog(null, "Choose Color", paintPanel.getBrushColor());
+		paintPanel.sendChangeBrushcolorCommandToserver(color);
 
-			
-		}
-	};
+		
+	}
 }

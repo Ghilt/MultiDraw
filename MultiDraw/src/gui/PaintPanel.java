@@ -155,6 +155,12 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		brushColor = color;
 	}
 	
+	public void sendChangeBrushSizeCommandToserver(int size) {
+		String send = Protocol.CHANGE_BRUSH_SIZE + " " 
+				+ size;
+		buffer.put(send);
+	}
+	
 	public void sendChangeBrushcolorCommandToserver(Color color){
 		String send = Protocol.CHANGE_BRUSH_COLOR + " " 
 				+ color.getRGB();
@@ -176,9 +182,9 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		waitForShape = true;
 	}
 
-	public void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb) {
+	public void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
 		Graphics2D g2 = bufImage.createGraphics();
-		g2.setStroke(stroke);
+		g2.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
 		g2.setColor(new Color(rgb));
 		g2.drawLine(previousX, previousY, currentX, currentY);
 		repaint();
@@ -230,4 +236,5 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	public void mouseEntered (MouseEvent e) {}
 	public void mouseExited  (MouseEvent e) {}
 	public void mouseClicked (MouseEvent e) {}
+
 }

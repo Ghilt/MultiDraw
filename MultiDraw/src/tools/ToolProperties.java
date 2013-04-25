@@ -20,4 +20,12 @@ public class ToolProperties {
 	public void setColor(int clr) {
 		this.color = clr;
 	}
+
+	public void setBrushWidth(int width) {
+		this.width = width;
+	}
+
+	public int getBrushSize() {
+		return width;
+	}
 }

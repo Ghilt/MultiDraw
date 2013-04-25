@@ -7,28 +7,21 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class BrushSizeSlider extends JSlider{
+public class BrushSizeSlider extends JSlider implements ChangeListener{
 	private PaintPanel paintPanel;
 	
 	public BrushSizeSlider(PaintPanel paintPanel) {
 		super();
 		this.paintPanel = paintPanel;
 		this.setValue(10);
-		this.addChangeListener(changeListener);
+		this.addChangeListener(this);
 		this.setPreferredSize(new Dimension(80,20));
 	}
 	
-	private int getSliderValue() {
-		return this.getValue();
-	}
 
-	ChangeListener changeListener = new ChangeListener() {
-		public void stateChanged(ChangeEvent ce){
-			 int size = getSliderValue();
-			BasicStroke stroke = new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
-			paintPanel.setStroke(stroke);	
-		}
-	};
-	
+	public void stateChanged(ChangeEvent ce) {
+		int size = this.getValue();
+		paintPanel.sendChangeBrushSizeCommandToserver(size);
+	}
 
 }

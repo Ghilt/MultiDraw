@@ -1,4 +1,5 @@
 package network;
+
 import interfaces.Protocol;
 
 import java.awt.Color;
@@ -33,26 +34,30 @@ public class ServerConnection extends Thread {
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
 				strIn = parseCommand(strIn);
-				
+
 			}
 		} catch (IOException e) {
-			System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
+			System.out.println("Disconnected: "
+					+ s.getInetAddress().getHostAddress());
 		}
 	}
-	
+
 	private String parseCommand(String strIn) {
 		String[] words = strIn.split(" ");
 		switch (Integer.parseInt(words[0])) {
-		case Protocol.DRAW_LINE:
-			
-			strIn += " " + tp.getColor();
-			writeToAll(strIn);
-			break;
-		case Protocol.CHANGE_BRUSH_COLOR:
-			tp.setColor(Integer.parseInt(words[1]));
-			break;
+			case Protocol.DRAW_LINE:
+	
+				strIn += " " + tp.getColor() + " " + tp.getBrushSize();
+				writeToAll(strIn);
+				break;
+			case Protocol.CHANGE_BRUSH_COLOR:
+				tp.setColor(Integer.parseInt(words[1]));
+				break;
+			case Protocol.CHANGE_BRUSH_SIZE:
+				tp.setBrushWidth(Integer.parseInt(words[1]));
+				break;
 		}
-		
+
 		return strIn;
 	}
 
@@ -60,13 +65,13 @@ public class ServerConnection extends Thread {
 		out.println(in);
 		out.flush();
 	}
-	
+
 	public void writeToAll(String msg) {
 		for (ServerConnection cc : connections) {
 			cc.write(msg);
 		}
 	}
-	
+
 	public void closeConnection() {
 		try {
 			s.close();
@@ -74,7 +79,7 @@ public class ServerConnection extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getHostName() {
 		return s.getInetAddress().getHostName();
 	}

@@ -41,13 +41,14 @@ public class ClientReceiver extends Thread {
 				case Protocol.DRAW_LINE:
 					if (words.length > 4) {
 						
-						int x1, y1, x2, y2, rgb;
+						int x1, y1, x2, y2, rgb, width;
 						x1 = Integer.parseInt(words[1]);
 						y1 = Integer.parseInt(words[2]);
 						x2 = Integer.parseInt(words[3]);
 						y2 = Integer.parseInt(words[4]);
 						rgb = Integer.parseInt(words[5]);
-						panel.drawLine(x1, y1, x2, y2, rgb);
+						width = Integer.parseInt(words[6]);
+						panel.drawLine(x1, y1, x2, y2, rgb, width);
 					}
 					break;
 				case Protocol.CHANGE_BRUSH_COLOR:

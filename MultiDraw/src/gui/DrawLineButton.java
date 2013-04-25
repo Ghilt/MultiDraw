@@ -5,23 +5,18 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-public class DrawLineButton extends JButton {
+public class DrawLineButton extends JButton implements ActionListener {
 	private PaintPanel paintpanel;
 
 	public DrawLineButton(String name, PaintPanel paintpanel) {
 		super(name);
 		this.paintpanel = paintpanel;
 		
-		// Changed this to use an anonymous class instead, which do you prefer?
-		this.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				DrawLineButton src = (DrawLineButton) e.getSource();
-				src.getPaintPanel().drawLine();
-			}
-		});
+		addActionListener(this);
 	}
 	
-	public PaintPanel getPaintPanel() {
-		return paintpanel;
+	// Changed to this, more clear imho
+	public void actionPerformed(ActionEvent e) {
+		paintpanel.drawLine();
 	}
 }
