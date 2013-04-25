@@ -198,13 +198,8 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 				p1 = new Point(e.getX(), e.getY());
 				previousX = p1.x;
 				previousY = p1.y;
-				System.out.println("Previous set: " + p1.x + ", " + p1.y);
 			} else if (p2 == null) {
 				p2 = new Point(e.getX(), e.getY());
-				currentX = p2.x;
-				currentY = p2.y;
-				System.out.println("Previous coords: " + previousX + ", " + previousY);
-				System.out.println("Current set: " + p2.x + ", " + p2.y);
 				waitForShape = false;
 				drawBrush(e);
 				p1 = null;
