@@ -3,11 +3,18 @@ import gui.PaintPanel;
 import interfaces.Protocol;
 
 import java.awt.Color;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import com.sun.nio.sctp.SendFailedNotification;
 
 import mainclient.Controller;
 
@@ -63,6 +70,9 @@ public class ClientReceiver extends Thread {
 					String msg = strIn.substring(strIn.indexOf(" "));
 					controller.putChatMessage(msg);
 					break;
+				case Protocol.SEND_FILE:
+					sendFile(controller.getFile());
+					break;
 				}
 			}
 			in.close();
@@ -72,5 +82,20 @@ public class ClientReceiver extends Thread {
 		}
 	}
 	
+	
+	public void sendFile(File file) throws IOException {
+		  System.out.println("Client has started sending");
+		    while (!s.isClosed()) {
+		      byte[] mybytearray = new byte[(int) file.length()];
+		      BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+		      bis.read(mybytearray, 0, mybytearray.length);
+		      OutputStream os = s.getOutputStream();
+		      System.out.println("Trying to sen it all in one go! nbr of bytes " + file.length()  );
+		      os.write(mybytearray, 0, mybytearray.length);
+		      os.flush();
+		      s.close();
+		    }
+		    System.out.println("Client has finished sending");
+	}
 
 }

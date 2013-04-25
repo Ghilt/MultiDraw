@@ -17,6 +17,7 @@ import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -276,6 +277,14 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		gc.drawImage(img, null, 0, 0);
 		repaint();
 		
+		buffer.put(Protocol.SEND_FILE + " " + f.length());
+		buffer.bufferFile(f);
+	
+		
+	}
+
+	public SendBuffer getBuffer() {
+		return buffer;
 	}
 
 }

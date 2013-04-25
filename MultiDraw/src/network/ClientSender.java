@@ -1,5 +1,8 @@
 package network;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -25,4 +28,7 @@ public class ClientSender extends Thread {
 			System.out.println("Connection error, bailing out...");
 		}
 	}
+	
+	
+
 }

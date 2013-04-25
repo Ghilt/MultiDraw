@@ -1,6 +1,7 @@
 package mainclient;
 
 import java.awt.Color;
+import java.io.File;
 
 import gui.MultiDrawFrame;
 
@@ -25,5 +26,9 @@ public class Controller {
 
 	public void drawLine(int x1, int y1, int x2, int y2, int rgb, int width) {
 		frame.getPaintPanel().drawLine(x1, y1, x2, y2, rgb, width);
+	}
+
+	public File getFile() {
+		return frame.getPaintPanel().getBuffer().getFile();
 	}
 }
