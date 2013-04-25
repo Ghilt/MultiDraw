@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
@@ -10,8 +12,19 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 public class MultiDrawFrame extends JFrame {
+
+	private static final int RIGHT_PANEL_WIDTH = 150;
+	private static final int RIGHT_PANEL_HEIGHT = 800;
+	private static final int USERS_LIST_WIDTH = 148;
+	private static final int USERS_LIST_HEIGHT = 300;
+	private static final int CHATWINDOW_WIDTH = 148;
+	private static final int CHATWINDOW_HEIGHT = 500;
+	private static final int LEFT_PANEL_HEIGHT = 800;
+	private static final int LEFT_PANEL_WIDTH = 80;
+	private Component chatWindow;
 
 	public MultiDrawFrame(PaintPanel paintpanel) {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,7 +65,7 @@ public class MultiDrawFrame extends JFrame {
 		scroller.setBorder(BorderFactory.createEmptyBorder());
 
 		JPanel chatPanel = new JPanel();
-		chatPanel.add(new JLabel("Chat"));
+		chatPanel.add(new JLabel("SOMETHING"));
 		chatPanel.setPreferredSize(new Dimension(800, 150));
 
 		JPanel centerPanel = new JPanel();
@@ -65,14 +78,26 @@ public class MultiDrawFrame extends JFrame {
 
 	private JPanel makeRightPanel(PaintPanel paintpanel) {
 		JPanel rightPanel = new JPanel();
-		rightPanel.setPreferredSize(new Dimension(150, 800));
+		rightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, RIGHT_PANEL_HEIGHT));
 		rightPanel.add(new JLabel("Users"));
+		rightPanel.setBackground(Color.PINK);
+		
+		JTextField connectedUsersList = new JTextField();
+		connectedUsersList.setPreferredSize(new Dimension(USERS_LIST_WIDTH, USERS_LIST_HEIGHT));
+		rightPanel.add(connectedUsersList);
+		
+		rightPanel.add(new JLabel("Chat"));
+		chatWindow = new JTextField();
+		chatWindow.setPreferredSize(new Dimension(CHATWINDOW_WIDTH, CHATWINDOW_HEIGHT));
+		rightPanel.add(chatWindow);
+		
 		return rightPanel;
 	}
 
 	private JPanel makeLeftPanel(PaintPanel paintpanel) {
 		JPanel leftPanel = new JPanel();
-		leftPanel.setPreferredSize(new Dimension(80, 800));
+		leftPanel.setBackground(Color.GREEN);
+		leftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT));
 		leftPanel.add(new JLabel("Tools"));
 
 		// Color button
