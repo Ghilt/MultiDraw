@@ -62,11 +62,6 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	 * A "canvas" used to draw on.
 	 */
 	public PaintPanel(SendBuffer buffer) {
-		
-		
-
-		
-		
 		setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
 		this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		this.addMouseListener(this);
@@ -214,6 +209,9 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 				p1 = null;
 				p2 = null;
 			}
+		}
+		if (!waitForShape) {
+			drawBrush(e);
 		}
 	}
 
