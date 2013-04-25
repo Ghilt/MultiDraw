@@ -192,11 +192,32 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 
 	public void mousePressed(MouseEvent e) {
 //		drawStuff(e);
+		// Check if we are waiting a shape to be drawn (works only for lines for the moment)
+		if (waitForShape) {
+			if (p1 == null) {
+				p1 = new Point(e.getX(), e.getY());
+				previousX = p1.x;
+				previousY = p1.y;
+				System.out.println("Previous set: " + p1.x + ", " + p1.y);
+			} else if (p2 == null) {
+				p2 = new Point(e.getX(), e.getY());
+				currentX = p2.x;
+				currentY = p2.y;
+				System.out.println("Previous coords: " + previousX + ", " + previousY);
+				System.out.println("Current set: " + p2.x + ", " + p2.y);
+				waitForShape = false;
+				drawBrush(e);
+				p1 = null;
+				p2 = null;
+			}
+		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
 //		drawStuff(e);
-		drawBrush(e);
+		if (!waitForShape) {
+			drawBrush(e);
+		}
 	}
 
 	/*
@@ -228,8 +249,10 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 
 	public void mouseReleased(MouseEvent e) {
 		// Resetting previous coordinates
-		previousX = -90000;
-		previousY = -90000;
+		if (!waitForShape) {
+			previousX = -90000;
+			previousY = -90000;
+		}
 	}
 
 	public void mouseMoved   (MouseEvent e) {}
