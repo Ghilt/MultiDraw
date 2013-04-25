@@ -5,6 +5,9 @@ import interfaces.Protocol;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -22,32 +25,32 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 
 import network.SendBuffer;
 
 public class MultiDrawFrame extends JFrame {
+	private static final int RIGHT_PANEL_WIDTH = 200;
+	private static final int RIGHT_PANEL_HEIGHT = 800;
+	private static final int USERS_LIST_HEIGHT = 200;
+	private static final int CHATWINDOW_HEIGHT = 510;
+	private static final int LEFT_PANEL_HEIGHT = 800;
+	private static final int LEFT_PANEL_WIDTH = 80;
+	
 	private SendBuffer buffer;
 	private PaintPanel paintpanel;
+	private JTextPane chatWindow;
 
 	/**
 	 * Blabla
 	 */
-
-	private static final int RIGHT_PANEL_WIDTH = 150;
-	private static final int RIGHT_PANEL_HEIGHT = 800;
-	private static final int USERS_LIST_WIDTH = 148;
-	private static final int USERS_LIST_HEIGHT = 200;
-	private static final int CHATWINDOW_WIDTH = 148;
-	private static final int CHATWINDOW_HEIGHT = 500;
-	private static final int LEFT_PANEL_HEIGHT = 800;
-	private static final int LEFT_PANEL_WIDTH = 80;
-	private JTextArea chatWindow;
-
 	public MultiDrawFrame(SendBuffer buffer) {
 		this.buffer = buffer;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");
+		this.setMinimumSize(new Dimension(1200, 850));
+		this.setResizable(true);
 
 		JPanel centerPanel = makeCenterPanel();
 		JPanel leftPanel = makeLeftPanel();
@@ -101,46 +104,65 @@ public class MultiDrawFrame extends JFrame {
 		JScrollPane scroller = new JScrollPane(paintpanel);
 		scroller.setBorder(BorderFactory.createEmptyBorder());
 
-		JPanel chatPanel = new JPanel();
-		chatPanel.add(new JLabel("SOMETHING"));
-		chatPanel.setPreferredSize(new Dimension(800, 150));
-
 		JPanel centerPanel = new JPanel();
-		centerPanel.setLayout(new BorderLayout());
-		centerPanel.add(scroller, BorderLayout.CENTER);
-		centerPanel.add(chatPanel, BorderLayout.SOUTH);
-
+		centerPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.insets = new Insets(5, 5, 5, 5);
+		centerPanel.add(scroller, c);
 		return centerPanel;
 	}
 
 	private JPanel makeRightPanel() {
 		JPanel rightPanel = new JPanel();
-		rightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH,
-				RIGHT_PANEL_HEIGHT));
-		rightPanel.add(new JLabel("Users"));
-		rightPanel.setBackground(Color.PINK);
+		rightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, RIGHT_PANEL_HEIGHT));
+		rightPanel.setBackground(new Color(230, 230, 230));
+		rightPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(200, 200, 200)));
+		rightPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 
+		JLabel users = new JLabel("Users");
+		users.setForeground(new Color(60, 60, 60));
+		
+		JLabel chat = new JLabel("Chat");
+		chat.setForeground(new Color(60, 60, 60));
+		
 		JTextArea connectedUsersList = new JTextArea();
-		connectedUsersList.setPreferredSize(new Dimension(USERS_LIST_WIDTH,
-				USERS_LIST_HEIGHT));
-		connectedUsersList.setBorder(BorderFactory
-				.createLineBorder(Color.BLACK));
-		rightPanel.add(connectedUsersList);
+		connectedUsersList.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, USERS_LIST_HEIGHT));
+		connectedUsersList.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		connectedUsersList.setEditable(false);
 
-		rightPanel.add(new JLabel("Chat"));
-		chatWindow = new JTextArea();
-		chatWindow.setPreferredSize(new Dimension(CHATWINDOW_WIDTH,
-				CHATWINDOW_HEIGHT));
-		chatWindow.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		rightPanel.add(chatWindow);
+		chatWindow = new JTextPane();
+		chatWindow.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, CHATWINDOW_HEIGHT));
+		chatWindow.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		chatWindow.setEditable(false);
-
+		chatWindow.setMargin(new Insets(4, 4, 4, 4));
+		
 		JTextField chatInput = new JTextField();
-		chatInput.setPreferredSize(new Dimension(CHATWINDOW_WIDTH, 25));
-		chatInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		rightPanel.add(chatInput);
+		chatInput.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, 25));
+		chatInput.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
+		c.anchor = GridBagConstraints.NORTH;
+		c.gridx = 0;
+		c.insets = new Insets(2, 2, 2, 2);
+
+		c.gridy = 0;
+		rightPanel.add(users, c);
+
+		c.gridy = 1;
+		rightPanel.add(connectedUsersList, c);
+
+		c.gridy = 2;
+		rightPanel.add(chat, c);
+
+		c.gridy = 3;
+		rightPanel.add(chatWindow, c);
+
+		c.gridy = 4;
+		rightPanel.add(chatInput, c);
+		
 		chatInput.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -164,15 +186,13 @@ public class MultiDrawFrame extends JFrame {
 
 	private JPanel makeLeftPanel() {
 		JPanel leftPanel = new JPanel();
-		leftPanel.setBackground(Color.GREEN);
-		leftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH,
-				LEFT_PANEL_HEIGHT));
+		leftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT));
+		leftPanel.setBackground(new Color(230, 230, 230));
+		leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(200, 200, 200)));
+
+		// Tools label
 		leftPanel.add(new JLabel("Tools"));
-
-		// Color button
-		ColorButton colorButton = new ColorButton("color", paintpanel);
-		leftPanel.add(colorButton);
-
+		
 		// Brush size slider
 		BrushSizeSlider brushSizeSlider = new BrushSizeSlider(paintpanel);
 		leftPanel.add(brushSizeSlider);
@@ -180,14 +200,25 @@ public class MultiDrawFrame extends JFrame {
 		// Draw line button
 		DrawLineButton drawLineButton = new DrawLineButton("Line", paintpanel);
 		leftPanel.add(drawLineButton);
+		
+		// Color button
+		JLabel colorLabel = new JLabel("Color");
+		colorLabel.setForeground(new Color(60, 60, 60));
+		leftPanel.add(colorLabel);
+		ColorButton colorButton = new ColorButton("", paintpanel);
+		colorButton.setPreferredSize(new Dimension(50, 50));
+		colorButton.setBackground(Color.BLACK);
+		colorButton.setOpaque(true);
+		leftPanel.add(colorButton);
+		
 		return leftPanel;
 	}
 
 	public PaintPanel getPaintPanel() {
 		return paintpanel;
 	}
-
-	public JTextArea getChatPanel() {
+	
+	public JTextPane getChatPanel() {
 		return chatWindow;
 	}
 }

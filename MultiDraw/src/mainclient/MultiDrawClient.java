@@ -13,16 +13,19 @@ import network.SendBuffer;
 
 class MultiDrawClient {
 	public static void main(String[] args) {
-		try {
-			// Fix look and feel of GUI.
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			// Fix look and feel of GUI.
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
 		Socket s = null;
 		try {
+
 			s = new Socket("localhost", 30002);
+
+
 		} catch (UnknownHostException e) {
 			System.out.println("Did not find a host at the specified address.");
 		} catch (IOException e) {
