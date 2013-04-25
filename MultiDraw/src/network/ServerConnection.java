@@ -1,4 +1,7 @@
 package network;
+import interfaces.Protocol;
+
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,16 +9,20 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import tools.ToolProperties;
+
 public class ServerConnection extends Thread {
 	private Socket s;
 	private PrintWriter out;
 	private BufferedReader in;
 	private ArrayList<ServerConnection> connections;
+	private ToolProperties tp;
 
 	public ServerConnection(Socket s, ArrayList<ServerConnection> connections) {
 		super();
 		this.s = s;
 		this.connections = connections;
+		this.tp = new ToolProperties(Color.BLACK.getRGB(), 10);
 	}
 
 	@Override
@@ -25,14 +32,31 @@ public class ServerConnection extends Thread {
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
-				writeToAll(strIn);
+				strIn = parseCommand(strIn);
+				
 			}
 		} catch (IOException e) {
 			System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
 		}
 	}
 	
-	public void write(String in) {
+	private String parseCommand(String strIn) {
+		String[] words = strIn.split(" ");
+		switch (Integer.parseInt(words[0])) {
+		case Protocol.DRAW_LINE:
+			
+			strIn += " " + tp.getColor();
+			writeToAll(strIn);
+			break;
+		case Protocol.CHANGE_BRUSH_COLOR:
+			tp.setColor(Integer.parseInt(words[1]));
+			break;
+		}
+		
+		return strIn;
+	}
+
+	public void write(String in) { // send command to receiver
 		out.println(in);
 		out.flush();
 	}

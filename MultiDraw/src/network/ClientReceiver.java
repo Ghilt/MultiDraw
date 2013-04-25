@@ -1,8 +1,8 @@
 package network;
 import gui.PaintPanel;
-
 import interfaces.Protocol;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,16 +35,27 @@ public class ClientReceiver extends Thread {
 		try {
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
+				System.out.println("string in: " + strIn);
 				String[] words = strIn.split(" ");
 				switch (Integer.parseInt(words[0])) {
 				case Protocol.DRAW_LINE:
 					if (words.length > 4) {
-						int x1, y1, x2, y2;
+						
+						int x1, y1, x2, y2, rgb;
 						x1 = Integer.parseInt(words[1]);
 						y1 = Integer.parseInt(words[2]);
 						x2 = Integer.parseInt(words[3]);
 						y2 = Integer.parseInt(words[4]);
-						panel.drawLine(x1, y1, x2, y2);
+						rgb = Integer.parseInt(words[5]);
+						panel.drawLine(x1, y1, x2, y2, rgb);
+					}
+					break;
+				case Protocol.CHANGE_BRUSH_COLOR:
+					if (words.length > 1) {
+						System.out.println("in changecolor in client receiver");
+						int rgb;
+						rgb = Integer.parseInt(words[1]);
+						panel.setBrushColor(new Color(rgb));
 					}
 					break;
 				}

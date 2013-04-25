@@ -21,7 +21,9 @@ public class ColorButton extends JButton {
 	ActionListener actionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			Color color =  jcc.showDialog(null, "Choose Color", paintPanel.getBrushColor());
-			paintPanel.setBrushColor(color);
+			paintPanel.sendChangeBrushcolorCommandToserver(color);
+
+			
 		}
 	};
 }
