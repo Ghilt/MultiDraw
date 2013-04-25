@@ -11,11 +11,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 public class MultiDrawFrame extends JFrame {
+	private PaintPanel paintpanel;
 	
 	/**
 	 * Blabla
 	 */
 	public MultiDrawFrame(PaintPanel paintpanel) {
+		this.paintpanel = paintpanel;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");
 		
@@ -39,7 +41,7 @@ public class MultiDrawFrame extends JFrame {
 		rightPanel.setPreferredSize(new Dimension(150, 800));
 		rightPanel.add(new JLabel("Users"));
 
-		JScrollPane scroller = new JScrollPane(paintpanel);
+		JScrollPane scroller = new JScrollPane(this.paintpanel);
 		scroller.setBorder(BorderFactory.createEmptyBorder());
 		
 		JPanel chatPanel = new JPanel();
@@ -67,5 +69,9 @@ public class MultiDrawFrame extends JFrame {
 
 		this.pack();
 		this.setVisible(true);
+	}
+
+	public PaintPanel getPaintPanel() {
+		return paintpanel;
 	}
 }
