@@ -5,25 +5,31 @@ import interfaces.Protocol;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import network.SendBuffer;
 
 public class MultiDrawFrame extends JFrame {
 	private SendBuffer buffer;
 	private PaintPanel paintpanel;
-	
+
 	/**
 	 * Blabla
 	 */
@@ -61,12 +67,32 @@ public class MultiDrawFrame extends JFrame {
 
 	private JMenuBar makeMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
-		JMenu fileItem = new JMenu("File");
-		JMenu editItem = new JMenu("Edit");
-		JMenu aboutItem = new JMenu("About");
-		menuBar.add(fileItem);
-		menuBar.add(editItem);
-		menuBar.add(aboutItem);
+		JMenu fileMenu = new JMenu("File");
+		JMenuItem importPic = new JMenuItem("Import image...", KeyEvent.VK_T);
+		importPic.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,ActionEvent.ALT_MASK));
+		importPic.getAccessibleContext().setAccessibleDescription("Import image...");
+		importPic.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				int returnVal = fc.showOpenDialog(null);
+				
+				  if (returnVal == JFileChooser.APPROVE_OPTION) {
+			            File file = fc.getSelectedFile();
+			            paintpanel.insertPicture(file);
+			        } else {
+			           //do nothign
+			        }
+			}
+		});
+		fileMenu.add(importPic);
+		
+		JMenu editMenu = new JMenu("Edit");
+		JMenu aboutMenu = new JMenu("About");
+		menuBar.add(fileMenu);
+		menuBar.add(editMenu);
+		menuBar.add(aboutMenu);
 		return menuBar;
 	}
 
@@ -89,49 +115,58 @@ public class MultiDrawFrame extends JFrame {
 
 	private JPanel makeRightPanel() {
 		JPanel rightPanel = new JPanel();
-		rightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, RIGHT_PANEL_HEIGHT));
+		rightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH,
+				RIGHT_PANEL_HEIGHT));
 		rightPanel.add(new JLabel("Users"));
 		rightPanel.setBackground(Color.PINK);
-		
+
 		JTextArea connectedUsersList = new JTextArea();
-		connectedUsersList.setPreferredSize(new Dimension(USERS_LIST_WIDTH, USERS_LIST_HEIGHT));
-		connectedUsersList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		connectedUsersList.setPreferredSize(new Dimension(USERS_LIST_WIDTH,
+				USERS_LIST_HEIGHT));
+		connectedUsersList.setBorder(BorderFactory
+				.createLineBorder(Color.BLACK));
 		rightPanel.add(connectedUsersList);
 		connectedUsersList.setEditable(false);
-		
+
 		rightPanel.add(new JLabel("Chat"));
 		chatWindow = new JTextArea();
-		chatWindow.setPreferredSize(new Dimension(CHATWINDOW_WIDTH, CHATWINDOW_HEIGHT));
+		chatWindow.setPreferredSize(new Dimension(CHATWINDOW_WIDTH,
+				CHATWINDOW_HEIGHT));
 		chatWindow.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		rightPanel.add(chatWindow);
 		chatWindow.setEditable(false);
-		
+
 		JTextField chatInput = new JTextField();
 		chatInput.setPreferredSize(new Dimension(CHATWINDOW_WIDTH, 25));
 		chatInput.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		rightPanel.add(chatInput);
-		
+
 		chatInput.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				int keyCode = e.getKeyCode();
 				if (keyCode == KeyEvent.VK_ENTER) {
 					JTextField field = (JTextField) e.getSource();
-			        buffer.put(Protocol.CHAT_MESSAGE + " " + field.getText());
-			        field.setText("");
+					buffer.put(Protocol.CHAT_MESSAGE + " " + field.getText());
+					field.setText("");
 				}
 			}
-			public void keyReleased(KeyEvent arg0) { }
-			public void keyTyped(KeyEvent arg0) { }
+
+			public void keyReleased(KeyEvent arg0) {
+			}
+
+			public void keyTyped(KeyEvent arg0) {
+			}
 		});
-		
+
 		return rightPanel;
 	}
 
 	private JPanel makeLeftPanel() {
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBackground(Color.GREEN);
-		leftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_PANEL_HEIGHT));
+		leftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH,
+				LEFT_PANEL_HEIGHT));
 		leftPanel.add(new JLabel("Tools"));
 
 		// Color button
@@ -151,7 +186,7 @@ public class MultiDrawFrame extends JFrame {
 	public PaintPanel getPaintPanel() {
 		return paintpanel;
 	}
-	
+
 	public JTextArea getChatPanel() {
 		return chatWindow;
 	}

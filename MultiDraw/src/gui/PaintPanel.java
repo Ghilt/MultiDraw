@@ -16,11 +16,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import network.ClientReceiver;
 import network.SendBuffer;
 
 public class PaintPanel extends JPanel implements MouseListener, MouseMotionListener {
@@ -54,10 +56,16 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	// Buffer for outgoing commands
 	private SendBuffer buffer;
 
+
 	/**
 	 * A "canvas" used to draw on.
 	 */
 	public PaintPanel(SendBuffer buffer) {
+		
+		
+
+		
+		
 		setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
 		this.setBorder(BorderFactory.createEmptyBorder());
 		this.addMouseListener(this);
@@ -72,7 +80,6 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		// Fill background with white color
 		gc.setColor(Color.WHITE);
 		gc.fillRect(0, 0, SIZE_X, SIZE_Y);
-		
 		// Initializing stroke
 		stroke = new BasicStroke(10, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
 	}
@@ -84,7 +91,8 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		
 		// Dunno if this does anything.. I hoped it would create antialiasing but it doesn't.. :(
 		// g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
+		
+	
 		// re-draw bufImage
 		g2.drawImage(bufImage, null, 0, 0);
 	}
@@ -254,5 +262,20 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	public void mouseEntered (MouseEvent e) {}
 	public void mouseExited  (MouseEvent e) {}
 	public void mouseClicked (MouseEvent e) {}
+
+	public void insertPicture(File f) {
+		BufferedImage img = null;
+		try {
+			System.out.println("pic ahead");
+		    img = ImageIO.read(f);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Graphics2D gc = bufImage.createGraphics();
+		gc.drawImage(img, null, 0, 0);
+		repaint();
+		
+	}
 
 }
