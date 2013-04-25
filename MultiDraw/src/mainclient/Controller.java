@@ -2,6 +2,9 @@ package mainclient;
 
 import java.awt.Color;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+
 import gui.MultiDrawFrame;
 
 public class Controller {
@@ -20,7 +23,12 @@ public class Controller {
 	}
 
 	public void putChatMessage(String msg) {
-		frame.getChatPanel().append(msg + "\n");
+		StyledDocument doc = frame.getChatPanel().getStyledDocument();
+		try {
+			doc.insertString(doc.getLength(), msg + "\n", null);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void drawLine(int x1, int y1, int x2, int y2, int rgb, int width) {

@@ -13,16 +13,14 @@ public class ColorButton extends JButton implements ActionListener  {
 	public ColorButton(String name, PaintPanel paintpanel) {
 		super(name);
 		this.paintPanel = paintpanel;
-		jcc = new JColorChooser(paintPanel.getBrushColor());
-
 		this.addActionListener(this);
 	}
-
 	
 	public void actionPerformed(ActionEvent e) {
-		Color color =  jcc.showDialog(null, "Choose Color", paintPanel.getBrushColor());
-		paintPanel.sendChangeBrushcolorCommandToserver(color);
-
-		
+		Color color =  JColorChooser.showDialog(null, "Choose Color", paintPanel.getBrushColor());
+		if (color != null) {
+			this.setBackground(color);
+			paintPanel.sendChangeBrushcolorCommandToserver(color);
+		}
 	}
 }

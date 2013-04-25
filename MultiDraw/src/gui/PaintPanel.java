@@ -35,7 +35,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 
 	// Canvas size
 	private static final int SIZE_X = 900;
-	private static final int SIZE_Y = 700;
+	private static final int SIZE_Y = 780;
 
 	// Mouse pointer coordinates
 	private int currentX = 0;
@@ -67,7 +67,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		
 		
 		setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
-		this.setBorder(BorderFactory.createEmptyBorder());
+		this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.buffer = buffer;
