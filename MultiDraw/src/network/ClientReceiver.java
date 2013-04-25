@@ -14,7 +14,10 @@ public class ClientReceiver extends Thread {
 	private BufferedReader in;
 	private PaintPanel panel;
 
-	public ClientReceiver(Socket s) {
+	public ClientReceiver(Socket s , PaintPanel panel) {
+		
+		this.panel = panel;
+		
 		try {
 			this.s = s;
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -53,7 +56,5 @@ public class ClientReceiver extends Thread {
 		}
 	}
 	
-	public void setPaintPanel(PaintPanel panel) {
-		this.panel = panel;
-	}
+
 }

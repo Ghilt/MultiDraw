@@ -31,13 +31,11 @@ class MultiDrawClient {
 		}
 		
 		SendBuffer buffer = new SendBuffer(10);
-		ClientReceiver receiver = new ClientReceiver(s);
-		ClientSender sender = new ClientSender(s, buffer);
-		
 		PaintPanel paintpanel = new PaintPanel(buffer);
+		ClientReceiver receiver = new ClientReceiver(s, paintpanel);
+		ClientSender sender = new ClientSender(s, buffer);	
 		new MultiDrawFrame(paintpanel);
 
-		receiver.setPaintPanel(paintpanel);
 		receiver.start();
 		sender.start();
 	}
