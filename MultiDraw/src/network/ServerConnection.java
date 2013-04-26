@@ -22,6 +22,7 @@ import javax.imageio.ImageIO;
 import tools.ToolProperties;
 import utils.ImageWrapper;
 import utils.Protocol;
+import utils.ServerState;
 
 public class ServerConnection extends Thread {
 	private Socket s;
@@ -30,11 +31,13 @@ public class ServerConnection extends Thread {
 	private ArrayList<ServerConnection> connections;
 	private ImageWrapper image;
 	private ToolProperties tp;
+	private ServerState state;
 
 	public ServerConnection(Socket s, ArrayList<ServerConnection> connections,
-			ImageWrapper image) {
+			ImageWrapper image, ServerState state) {
 		super();
 		this.s = s;
+		this.state = state;
 		this.image = image;
 		this.connections = connections;
 		this.tp = new ToolProperties(Color.BLACK.getRGB(), 10);
@@ -61,7 +64,9 @@ public class ServerConnection extends Thread {
 		words = strIn.split(" ");
 		switch (Integer.parseInt(cmd)) {
 			case Protocol.ALOHA:
+				state.setDisabled(true);
 				sendImage();
+				state.setDisabled(false);
 			break;
 			case Protocol.CHAT_MESSAGE:
 				writeToAll(strIn);
@@ -70,12 +75,14 @@ public class ServerConnection extends Thread {
 				write(Protocol.SEND_FILE + " ");
 				BufferedImage img = receiveImage(Integer.parseInt(words[1]));
 				image.insertPicture(img);
+				state.setDisabled(true);
 				for (ServerConnection cc : connections) {
 					cc.sendImage();
 				}
+				state.setDisabled(false);
 				break;
 			case Protocol.DRAW_LINE:
-				if(!image.disabled){
+				if(!state.isDisabled()){
 					strIn += " " + tp.getColor() + " " + tp.getBrushSize();
 					writeToAll(strIn);
 					if (words.length > 4) {
@@ -110,8 +117,7 @@ public class ServerConnection extends Thread {
 			write(Protocol.ALOHA + " " + imageInByte.length);
 
 			OutputStream os = s.getOutputStream();
-			System.out
-					.println("Trying to sen it all(BufferedImage) in one go! nbr of bytes ");
+//			System.out.println("Trying to sen it all(BufferedImage) in one go! nbr of bytes ");
 			os.write(imageInByte, 0, imageInByte.length);
 			os.flush();
 		} catch (IOException e) {

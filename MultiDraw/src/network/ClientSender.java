@@ -43,12 +43,4 @@ public class ClientSender extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	public void pause() {
-		buffer.pause();
-	}
-	
-	public void unpause() {
-		buffer.unpause();
-	}
 }

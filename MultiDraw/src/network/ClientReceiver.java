@@ -42,14 +42,9 @@ public class ClientReceiver extends Thread {
 				String cmd = strIn.substring(0, strIn.indexOf(" "));
 				String[] words;
 				words = strIn.split(" ");
-				System.out.println("strIn: " + strIn);
 				switch (Integer.parseInt(cmd)) {
 					case Protocol.ALOHA:
-//						controller.pauseSender();
-//						System.out.println("Paused");
 						receiveImage(Integer.parseInt(words[1]));
-//						System.out.println("Unpaused");
-//						controller.unpauseSender();
 						break;
 					case Protocol.DRAW_LINE:
 						if (words.length > 4) {
@@ -95,6 +90,7 @@ public class ClientReceiver extends Thread {
 			while (totalBytesRead < size && bytesRead != -1) {
 				bytesRead = is.read(mybytearray, totalBytesRead, mybytearray.length - totalBytesRead);
 				totalBytesRead += bytesRead;
+				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead);
 			}
 			InputStream in = new ByteArrayInputStream(mybytearray);
 			BufferedImage image = ImageIO.read(in);

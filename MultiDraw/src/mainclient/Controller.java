@@ -51,12 +51,4 @@ public class Controller {
 	public void insertImage(BufferedImage img) {
 		frame.getPaintPanel().insertPicture(img);
 	}
-
-	public void pauseSender() {
-		sender.pause();
-	}
-	
-	public void unpauseSender() {
-		sender.unpause();
-	}
 }
