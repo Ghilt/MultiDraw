@@ -1,6 +1,5 @@
 package network;
 
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -32,7 +31,8 @@ public class ServerConnection extends Thread {
 	private ImageWrapper image;
 	private ToolProperties tp;
 
-	public ServerConnection(Socket s, ArrayList<ServerConnection> connections, ImageWrapper image) {
+	public ServerConnection(Socket s, ArrayList<ServerConnection> connections,
+			ImageWrapper image) {
 		super();
 		this.s = s;
 		this.image = image;
@@ -68,19 +68,24 @@ public class ServerConnection extends Thread {
 				break;
 			case Protocol.SEND_FILE:
 				write(Protocol.SEND_FILE + " ");
-				receiveImage(Integer.parseInt(words[1]));
-				
+				BufferedImage img = receiveImage(Integer.parseInt(words[1]));
+				image.insertPicture(img);
+				for (ServerConnection cc : connections) {
+					cc.sendImage();
+				}
 				break;
 			case Protocol.DRAW_LINE:
-				strIn += " " + tp.getColor() + " " + tp.getBrushSize();
-				writeToAll(strIn);
-				if (words.length > 4) {
-					int x1, y1, x2, y2;
-					x1 = Integer.parseInt(words[1]);
-					y1 = Integer.parseInt(words[2]);
-					x2 = Integer.parseInt(words[3]);
-					y2 = Integer.parseInt(words[4]);
-					image.drawLine(x1, y1, x2, y2, tp.getColor(), tp.getBrushSize());
+				if(!image.disabled){
+					strIn += " " + tp.getColor() + " " + tp.getBrushSize();
+					writeToAll(strIn);
+					if (words.length > 4) {
+						int x1, y1, x2, y2;
+						x1 = Integer.parseInt(words[1]);
+						y1 = Integer.parseInt(words[2]);
+						x2 = Integer.parseInt(words[3]);
+						y2 = Integer.parseInt(words[4]);
+						image.drawLine(x1, y1, x2, y2, tp.getColor(), tp.getBrushSize());
+					}
 				}
 				break;
 			case Protocol.CHANGE_BRUSH_COLOR:
@@ -103,39 +108,40 @@ public class ServerConnection extends Thread {
 			baos.close();
 
 			write(Protocol.ALOHA + " " + imageInByte.length);
-			
+
 			OutputStream os = s.getOutputStream();
-			System.out.println("Trying to sen it all(BufferedImage) in one go! nbr of bytes ");
+			System.out
+					.println("Trying to sen it all(BufferedImage) in one go! nbr of bytes ");
 			os.write(imageInByte, 0, imageInByte.length);
 			os.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private void receiveImage(int size) {
+
+	private BufferedImage receiveImage(int size) {
+		BufferedImage im = null;
 		try {
 			System.out.println("Starting to receive image with size: " + size);
 			byte[] mybytearray = new byte[size];
 			InputStream is = s.getInputStream();
 			int totalBytesRead = 0;
 			int bytesRead = 0;
-			
+
 			while (totalBytesRead < size && bytesRead != -1) {
-				bytesRead = is.read(mybytearray, totalBytesRead, mybytearray.length - totalBytesRead);
+				bytesRead = is.read(mybytearray, totalBytesRead,
+						mybytearray.length - totalBytesRead);
 				totalBytesRead += bytesRead;
-//				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead);
+				// System.out.println(totalBytesRead + " / " + size +
+				// " read & bytesread = " + bytesRead);
 			}
-			
+
 			InputStream in = new ByteArrayInputStream(mybytearray);
-			BufferedImage im = ImageIO.read(in);
-			image.insertPicture(im);
-			for (ServerConnection cc : connections) {
-				cc.sendImage();
-			}
+			im = ImageIO.read(in);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return im;
 	}
 
 	public void write(String in) { // send command to receiver

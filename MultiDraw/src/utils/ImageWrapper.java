@@ -16,6 +16,7 @@ public class ImageWrapper extends BufferedImage {
 	private int sizeX;
 	private int sizeY;
 	private Graphics2D g2;
+	public boolean disabled;
 
 	// Temporary storage for convolution filters (blur etc.)
 	private BufferedImage bufDest;
@@ -25,6 +26,7 @@ public class ImageWrapper extends BufferedImage {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.g2 = createGraphics();
+		this.disabled = false;
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, sizeX, sizeY);
 	}

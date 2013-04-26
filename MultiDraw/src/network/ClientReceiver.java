@@ -42,13 +42,14 @@ public class ClientReceiver extends Thread {
 				String cmd = strIn.substring(0, strIn.indexOf(" "));
 				String[] words;
 				words = strIn.split(" ");
+				System.out.println("strIn: " + strIn);
 				switch (Integer.parseInt(cmd)) {
 					case Protocol.ALOHA:
-						controller.pauseSender();
-						System.out.println("Paused");
+//						controller.pauseSender();
+//						System.out.println("Paused");
 						receiveImage(Integer.parseInt(words[1]));
-						System.out.println("Unpaused");
-						controller.unpauseSender();
+//						System.out.println("Unpaused");
+//						controller.unpauseSender();
 						break;
 					case Protocol.DRAW_LINE:
 						if (words.length > 4) {
