@@ -1,5 +1,15 @@
 package gui;
 
+import gui.buttons.BrushButton;
+import gui.buttons.ColorButton;
+import gui.buttons.DrawLineButton;
+import gui.buttons.EllipseButton;
+import gui.buttons.EraseButton;
+import gui.buttons.PaintbucketButton;
+import gui.buttons.PenButton;
+import gui.buttons.RectangleButton;
+import gui.buttons.TextButton;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -138,11 +148,14 @@ public class MultiDrawFrame extends JFrame {
 		chat.setForeground(new Color(60, 60, 60));
 
 		DefaultListModel listModel = new DefaultListModel();
-		
+
 		connectedUsersList = new JList(listModel);
-		connectedUsersList.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, USERS_LIST_HEIGHT));
-		connectedUsersList.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-		connectedUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		connectedUsersList.setPreferredSize(new Dimension(
+				RIGHT_PANEL_WIDTH - 8, USERS_LIST_HEIGHT));
+		connectedUsersList.setBorder(BorderFactory
+				.createLineBorder(Color.LIGHT_GRAY));
+		connectedUsersList
+				.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		connectedUsersList.setSelectedIndex(0);
 		connectedUsersList.setVisibleRowCount(5);
 
@@ -212,10 +225,38 @@ public class MultiDrawFrame extends JFrame {
 		BrushSizeSlider brushSizeSlider = new BrushSizeSlider(paintpanel);
 		leftPanel.add(brushSizeSlider);
 
-		// Draw line button
-		DrawLineButton drawLineButton = new DrawLineButton("Line", paintpanel);
-		leftPanel.add(drawLineButton);
+		// Pen button
+		PenButton penButton = new PenButton(paintpanel);
+		leftPanel.add(penButton);
 
+		// Brush button
+		BrushButton brushButton = new BrushButton(paintpanel);
+		leftPanel.add(brushButton);
+
+		// Paint bucket button
+		PaintbucketButton paintbucketButton = new PaintbucketButton(paintpanel);
+		leftPanel.add(paintbucketButton);
+		
+		// Erase button
+		EraseButton eraseButton = new EraseButton(paintpanel);
+		leftPanel.add(eraseButton);
+
+		// Text Button
+		TextButton textButton = new TextButton(paintpanel);
+		leftPanel.add(textButton);
+
+		// Draw line button
+		DrawLineButton drawLineButton = new DrawLineButton(paintpanel);
+		leftPanel.add(drawLineButton);
+		
+		// Rectangle button
+		RectangleButton rectangleButton = new RectangleButton(paintpanel);
+		leftPanel.add(rectangleButton);
+		
+		// Ellipse button
+		EllipseButton ellipseButton = new EllipseButton(paintpanel);
+		leftPanel.add(ellipseButton);
+		
 		// Color button
 		JLabel colorLabel = new JLabel("Color");
 		colorLabel.setForeground(new Color(60, 60, 60));
@@ -238,12 +279,14 @@ public class MultiDrawFrame extends JFrame {
 	}
 
 	public void updateUsersList(String[] words) {
-		DefaultListModel model = (DefaultListModel) connectedUsersList.getModel();
+		DefaultListModel model = (DefaultListModel) connectedUsersList
+				.getModel();
 		model.clear();
 		for (int i = 1; i < words.length; i++) {
 			model.addElement(words[i]);
-//			System.out.println("Inserting \"" + words[i] + "\" at index " + i);
-//			model.insertElementAt(words[i], i-1);
+			// System.out.println("Inserting \"" + words[i] + "\" at index " +
+			// i);
+			// model.insertElementAt(words[i], i-1);
 		}
 	}
 }

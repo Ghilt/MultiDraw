@@ -1,4 +1,6 @@
-package gui;
+package gui.buttons;
+
+import gui.PaintPanel;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
