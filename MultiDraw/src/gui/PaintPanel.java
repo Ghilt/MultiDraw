@@ -101,54 +101,6 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		bufImage = blur.filter(bufImage, bufDest);
 	}
 
-	private void drawStuff(MouseEvent e) {
-		// Set mouse coordinates
-		currentX = e.getX();
-		currentY = e.getY();
-
-		// Need something better than -90000 here... Ugly.
-		if (previousX == -90000 && previousY == -90000) {
-			previousX = currentX;
-			previousY = currentY;
-		}
-
-		Graphics2D g2 = bufImage.createGraphics();
-		g2.setStroke(stroke);
-
-		// Right-click for eraser, don't know if values are the same for all mice, seems weird.
-		switch (e.getModifiers()) {
-			case 4:
-				g2.setColor(Color.WHITE);
-				break;
-			case 16:
-				g2.setColor(brushColor);
-				break;
-		}
-		
-		// Check if we are waiting a shape to be drawn (works only for lines for the moment)
-		if (waitForShape) {
-			if (p1 == null) {
-				p1 = new Point(e.getX(), e.getY());
-			} else if (p2 == null) {
-				p2 = new Point(e.getX(), e.getY());
-			
-				waitForShape = false;
-				g2.drawLine(p1.x, p1.y, p2.x, p2.y);
-				p1 = null;
-				p2 = null;
-			}
-		} else {
-			// TOOLS
-			g2.drawLine(previousX, previousY, currentX, currentY); // Brush tool
-		}
-
-		// Set previous coordinates
-		previousX = currentX;
-		previousY = currentY;
-
-		repaint();
-	}
-
 	// returns brushColor
 	public Color getBrushColor() {
 		return this.brushColor;
@@ -171,6 +123,11 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		buffer.put(send);
 	}
 
+	public void sendFileForInsertingtoSever(File f){
+		buffer.bufferFile(f);
+		buffer.put(Protocol.SEND_FILE + " " + f.length());
+	}
+	
 	// returns stroke
 	public Stroke getStroke() {
 		return stroke;
@@ -274,10 +231,6 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		Graphics2D gc = bufImage.createGraphics();
 		gc.drawImage(img, null, 0, 0);
 		repaint();
-		
-		buffer.bufferFile(f);
-		buffer.put(Protocol.SEND_FILE + " " + f.length());
 	
-		
 	}
 }
