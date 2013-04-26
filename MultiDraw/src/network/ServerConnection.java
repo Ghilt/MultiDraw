@@ -64,6 +64,7 @@ public class ServerConnection extends Thread {
 		words = strIn.split(" ");
 		switch (Integer.parseInt(cmd)) {
 			case Protocol.ALOHA:
+				sendUsers();
 				state.setDisabled(true);
 				sendImage();
 				state.setDisabled(false);
@@ -104,6 +105,14 @@ public class ServerConnection extends Thread {
 		}
 
 		return strIn;
+	}
+
+	private void sendUsers() {
+		String list = Protocol.USERLIST + " ";
+		for (ServerConnection cc : connections) {
+			list += cc.getHostName() + " ";
+		}
+		writeToAll(list);
 	}
 
 	public void sendImage() {

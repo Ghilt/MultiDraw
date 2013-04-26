@@ -1,6 +1,5 @@
 package gui;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,9 +13,11 @@ import java.awt.event.KeyListener;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -26,6 +27,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.text.JTextComponent;
 
 import utils.Protocol;
 
@@ -42,6 +46,7 @@ public class MultiDrawFrame extends JFrame {
 	private SendBuffer buffer;
 	private PaintPanel paintpanel;
 	private JTextPane chatWindow;
+	private JList connectedUsersList;
 
 	/**
 	 * Blabla
@@ -132,12 +137,14 @@ public class MultiDrawFrame extends JFrame {
 		JLabel chat = new JLabel("Chat");
 		chat.setForeground(new Color(60, 60, 60));
 
-		JTextArea connectedUsersList = new JTextArea();
-		connectedUsersList.setPreferredSize(new Dimension(
-				RIGHT_PANEL_WIDTH - 8, USERS_LIST_HEIGHT));
-		connectedUsersList.setBorder(BorderFactory
-				.createLineBorder(Color.LIGHT_GRAY));
-		connectedUsersList.setEditable(false);
+		DefaultListModel listModel = new DefaultListModel();
+		
+		connectedUsersList = new JList(listModel);
+		connectedUsersList.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, USERS_LIST_HEIGHT));
+		connectedUsersList.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+		connectedUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		connectedUsersList.setSelectedIndex(0);
+		connectedUsersList.setVisibleRowCount(5);
 
 		chatWindow = new JTextPane();
 		chatWindow.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8,
@@ -228,5 +235,15 @@ public class MultiDrawFrame extends JFrame {
 
 	public JTextPane getChatPanel() {
 		return chatWindow;
+	}
+
+	public void updateUsersList(String[] words) {
+		DefaultListModel model = (DefaultListModel) connectedUsersList.getModel();
+		model.clear();
+		for (int i = 1; i < words.length; i++) {
+			model.addElement(words[i]);
+//			System.out.println("Inserting \"" + words[i] + "\" at index " + i);
+//			model.insertElementAt(words[i], i-1);
+		}
 	}
 }

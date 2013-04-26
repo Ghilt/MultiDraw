@@ -51,4 +51,8 @@ public class Controller {
 	public void insertImage(BufferedImage img) {
 		frame.getPaintPanel().insertPicture(img);
 	}
+
+	public void updateUsersList(String[] words) {
+		frame.updateUsersList(words);
+	}
 }

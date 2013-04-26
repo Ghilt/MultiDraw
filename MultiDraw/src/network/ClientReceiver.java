@@ -46,6 +46,9 @@ public class ClientReceiver extends Thread {
 					case Protocol.ALOHA:
 						receiveImage(Integer.parseInt(words[1]));
 						break;
+					case Protocol.USERLIST:
+						controller.updateUsersList(words);
+						break;
 					case Protocol.DRAW_LINE:
 						if (words.length > 4) {
 							int x1, y1, x2, y2, rgb, width;
@@ -80,6 +83,7 @@ public class ClientReceiver extends Thread {
 			e.printStackTrace();
 		}
 	}
+
 
 	private void receiveImage(int size) {
 		try {
