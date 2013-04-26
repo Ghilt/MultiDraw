@@ -87,7 +87,6 @@ public class MultiDrawFrame extends JFrame {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();
 					paintpanel.sendFileForInsertingtoSever(file);
-					paintpanel.insertPicture(file);
 				}
 			}
 		});

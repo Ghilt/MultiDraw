@@ -9,12 +9,17 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import network.SendBuffer;
+import sun.awt.image.BufImgSurfaceData;
 import utils.ImageWrapper;
 import utils.Protocol;
 
@@ -88,9 +93,20 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		buffer.put(send);
 	}
 
-	public void sendFileForInsertingtoSever(File f){
-		buffer.bufferFile(f);
-		buffer.put(Protocol.SEND_FILE + " " + f.length());
+	public void sendFileForInsertingtoSever(File f) {
+		try {
+			System.out.println("File loaded, sending to server");
+			BufferedImage img = ImageIO.read(f);		
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(img, "PNG", baos);
+			baos.flush();
+			byte[] imageInByte = baos.toByteArray();
+			baos.close();
+			buffer.putImage(imageInByte);
+			buffer.put(Protocol.SEND_FILE + " " + imageInByte.length);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// experimental
@@ -107,7 +123,11 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		bufImage.insertPicture(file);
 		repaint();
 	}
-
+	
+	public void insertPicture(BufferedImage img) {
+		bufImage.insertPicture(img);
+		repaint();
+	}
 	/*
 	 * This method doesn't actually draw anything, it just puts a draw command into the SendBuffer.
 	 */
@@ -175,5 +195,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	public void mouseEntered (MouseEvent e) {}
 	public void mouseExited  (MouseEvent e) {}
 	public void mouseClicked (MouseEvent e) {}
+
+	
 
 }

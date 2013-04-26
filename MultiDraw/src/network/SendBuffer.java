@@ -1,16 +1,11 @@
 package network;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 public class SendBuffer {
 	Vector<String> buffer;
 	private int size;
-	private File file;
+	private byte[] image;
 
 	public SendBuffer(int size) {
 		this.size = size;
@@ -42,15 +37,14 @@ public class SendBuffer {
 		return cmd;
 	}
 
-	public void bufferFile(File f) {
-		this.file = f;
-		
+	public byte[] popImage() {
+		byte[] img = image;
+		image = null;
+		return img;
 	}
 
-	public File popFile() {
-		File f = file;
-		file = null;
-		return f;
+	public void putImage(byte[] imageInByte) {
+		image = imageInByte;
 	}
 
 	

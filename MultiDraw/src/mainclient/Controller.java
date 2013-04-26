@@ -1,6 +1,7 @@
 package mainclient;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.text.BadLocationException;
@@ -39,11 +40,15 @@ public class Controller {
 		frame.getPaintPanel().drawLine(x1, y1, x2, y2, rgb, width);
 	}
 	
-	public void sendFile() {
-		sender.sendFile();
+	public void sendImage() {
+		sender.sendImage();
 	}
 
 	public void setSender(ClientSender sender) {
 		this.sender = sender;
+	}
+
+	public void insertImage(BufferedImage img) {
+		frame.getPaintPanel().insertPicture(img);
 	}
 }

@@ -46,6 +46,10 @@ public class ImageWrapper extends BufferedImage {
 		g2.drawImage(img, null, 0, 0);
 	}
 
+	public void insertPicture(BufferedImage img) {
+		g2.drawImage(img, null, 0, 0);
+	}
+
 	public void blur() {
 		float[] blurKernel = { 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f,
 				1 / 9f, 1 / 9f, 1 / 9f };

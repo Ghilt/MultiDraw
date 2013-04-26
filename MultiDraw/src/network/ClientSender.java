@@ -1,11 +1,10 @@
 package network;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import utils.Protocol;
 
 public class ClientSender extends Thread {
 	private Socket s;
@@ -15,6 +14,7 @@ public class ClientSender extends Thread {
 	public ClientSender(Socket s, SendBuffer buffer) {
 		this.s = s;
 		this.buffer = buffer;
+		buffer.put(Protocol.ALOHA + " ");
 	}
 
 	public void run() {
@@ -29,25 +29,17 @@ public class ClientSender extends Thread {
 		} catch (IOException e) {
 			System.out.println("Connection error, bailing out...");
 		}
-	}
+	}	
 	
-	public void sendFile() {
+	public void sendImage() {
 		try {
-			File file = buffer.popFile();
-			System.out.println("Client has started sending file: " + file);
-	
-			int bytesToSend = (int) file.length();
-			byte[] mybytearray = new byte[bytesToSend];
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-			bis.read(mybytearray, 0, mybytearray.length);
+			byte[] image = buffer.popImage();
+			System.out.println("Client has started sending image");
 			OutputStream os = s.getOutputStream();
-			System.out.println("Trying to sen it all in one go! nbr of bytes " + file.length());
-			os.write(mybytearray, 0, mybytearray.length);
+			System.out.println("Trying to sen it all(BufferedImage) in one go! nbr of bytes ");
+			os.write(image, 0, image.length);
 			os.flush();
-	
-			System.out.println("Client has finished sending");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
