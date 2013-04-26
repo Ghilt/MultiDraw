@@ -1,6 +1,5 @@
 package network;
 
-import interfaces.Protocol;
 
 import java.awt.Color;
 import java.io.BufferedOutputStream;
@@ -14,6 +13,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import tools.ToolProperties;
+import utils.Protocol;
 
 public class ServerConnection extends Thread {
 	private Socket s;
@@ -21,7 +21,6 @@ public class ServerConnection extends Thread {
 	private BufferedReader in;
 	private ArrayList<ServerConnection> connections;
 	private ToolProperties tp;
-	private boolean uglyAs;
 
 	public ServerConnection(Socket s, ArrayList<ServerConnection> connections) {
 		super();
@@ -32,12 +31,11 @@ public class ServerConnection extends Thread {
 
 	@Override
 	public void run() {
-		uglyAs = true;
 		try {
 			out = new PrintWriter(s.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			String strIn = "";
-			while ((strIn = in.readLine()) != null && uglyAs) {
+			while ((strIn = in.readLine()) != null) {
 				parseCommand(strIn);
 			}
 		} catch (IOException e) {
@@ -58,7 +56,6 @@ public class ServerConnection extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-//			uglyAs = false;
 			break;
 		case Protocol.DRAW_LINE:
 			strIn += " " + tp.getColor() + " " + tp.getBrushSize();

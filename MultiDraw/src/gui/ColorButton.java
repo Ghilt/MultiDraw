@@ -7,7 +7,6 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 
 public class ColorButton extends JButton implements ActionListener  {
-	private JColorChooser jcc;
 	private PaintPanel paintPanel;
 
 	public ColorButton(String name, PaintPanel paintpanel) {
@@ -17,7 +16,7 @@ public class ColorButton extends JButton implements ActionListener  {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		Color color =  JColorChooser.showDialog(null, "Choose Color", paintPanel.getBrushColor());
+		Color color = JColorChooser.showDialog(null, "Choose Color", paintPanel.getBrushColor());
 		if (color != null) {
 			this.setBackground(color);
 			paintPanel.sendChangeBrushcolorCommandToserver(color);
