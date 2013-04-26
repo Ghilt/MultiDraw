@@ -24,7 +24,7 @@ class MultiDrawClient {
 		
 		Socket s = null;
 		try {
-			s = new Socket("panter-1", 30002);
+			s = new Socket("localhost", 30002);
 		} catch (UnknownHostException e) {
 			System.out.println("Did not find a host at the specified address.");
 		} catch (IOException e) {
