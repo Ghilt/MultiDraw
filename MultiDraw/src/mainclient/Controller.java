@@ -6,10 +6,13 @@ import java.io.File;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
+import network.ClientSender;
+
 import gui.MultiDrawFrame;
 
 public class Controller {
 	private MultiDrawFrame frame;
+	private ClientSender sender;
 	
 	public Controller() {
 		
@@ -35,8 +38,12 @@ public class Controller {
 	public void drawLine(int x1, int y1, int x2, int y2, int rgb, int width) {
 		frame.getPaintPanel().drawLine(x1, y1, x2, y2, rgb, width);
 	}
+	
+	public void sendFile() {
+		sender.sendFile();
+	}
 
-	public File getFile() {
-		return frame.getPaintPanel().getBuffer().getFile();
+	public void setSender(ClientSender sender) {
+		this.sender = sender;
 	}
 }

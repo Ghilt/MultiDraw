@@ -58,7 +58,7 @@ public class ServerConnection extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			uglyAs = false;
+//			uglyAs = false;
 			break;
 		case Protocol.DRAW_LINE:
 			strIn += " " + tp.getColor() + " " + tp.getBrushSize();
@@ -79,12 +79,16 @@ public class ServerConnection extends Thread {
 			write(Protocol.SEND_FILE + " " +size);
 		    byte[] mybytearray = new byte[size];
 		    InputStream is = s.getInputStream();
-		    FileOutputStream fos = new FileOutputStream("s.jpg");
-		    BufferedOutputStream bos = new BufferedOutputStream(fos);
-		    int bytesRead = is.read(mybytearray, 0, mybytearray.length);
-		    bos.write(mybytearray, 0, bytesRead);
+		    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("s.png"));
+		    int totalBytesRead = 0;
+		    int bytesRead = 0;
+		    while (totalBytesRead < size && bytesRead != -1) {
+		    	bytesRead = is.read(mybytearray, totalBytesRead, mybytearray.length - totalBytesRead);
+		    	bos.write(mybytearray, totalBytesRead, bytesRead);
+		    	totalBytesRead += bytesRead;
+		    }
 		    bos.close();
-		    s.close();
+//		    s.close();
 		    System.out.println("Filetransfer ended received");
 	}
 

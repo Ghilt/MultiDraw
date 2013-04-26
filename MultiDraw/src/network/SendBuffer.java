@@ -47,8 +47,10 @@ public class SendBuffer {
 		
 	}
 
-	public File getFile() {
-		return file;
+	public File popFile() {
+		File f = file;
+		file = null;
+		return f;
 	}
 
 	

@@ -275,14 +275,9 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		gc.drawImage(img, null, 0, 0);
 		repaint();
 		
-		buffer.put(Protocol.SEND_FILE + " " + f.length());
 		buffer.bufferFile(f);
+		buffer.put(Protocol.SEND_FILE + " " + f.length());
 	
 		
 	}
-
-	public SendBuffer getBuffer() {
-		return buffer;
-	}
-
 }

@@ -36,6 +36,7 @@ class MultiDrawClient {
 		MultiDrawFrame mainframe = new MultiDrawFrame(buffer);
 		
 		controller.setFrame(mainframe);
+		controller.setSender(sender);
 		receiver.start();
 		sender.start();
 	}
