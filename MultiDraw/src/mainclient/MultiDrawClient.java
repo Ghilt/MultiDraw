@@ -7,6 +7,8 @@ import java.net.UnknownHostException;
 
 import javax.swing.UIManager;
 
+import utils.Controller;
+
 import network.ClientReceiver;
 import network.ClientSender;
 import network.SendBuffer;

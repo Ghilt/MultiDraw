@@ -1,4 +1,4 @@
-package mainclient;
+package utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

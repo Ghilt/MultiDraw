@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 
 import javax.imageio.ImageIO;
 
-import mainclient.Controller;
+import utils.Controller;
 import utils.Protocol;
 
 public class ClientReceiver extends Thread {
