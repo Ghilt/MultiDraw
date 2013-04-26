@@ -6,8 +6,10 @@ public class SendBuffer {
 	Vector<String> buffer;
 	private int size;
 	private byte[] image;
+	boolean paused;
 
 	public SendBuffer(int size) {
+		paused = false;
 		this.size = size;
 		buffer = new Vector<String>(size);
 	}
@@ -26,7 +28,7 @@ public class SendBuffer {
 
 	public synchronized String pop() {
 		try {
-			while (buffer.size() == 0) {
+			while (buffer.size() == 0 || paused) {
 				wait();
 			}
 		} catch (InterruptedException e) {
@@ -47,5 +49,12 @@ public class SendBuffer {
 		image = imageInByte;
 	}
 
+	public synchronized void unpause() {
+		notifyAll();
+		paused = false;
+	}
+	public synchronized void pause() {
+		paused = true;
+	}
 	
 }

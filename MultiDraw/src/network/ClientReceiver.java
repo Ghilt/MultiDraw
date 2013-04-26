@@ -44,7 +44,11 @@ public class ClientReceiver extends Thread {
 				words = strIn.split(" ");
 				switch (Integer.parseInt(cmd)) {
 					case Protocol.ALOHA:
+						controller.pauseSender();
+						System.out.println("Paused");
 						receiveImage(Integer.parseInt(words[1]));
+						System.out.println("Unpaused");
+						controller.unpauseSender();
 						break;
 					case Protocol.DRAW_LINE:
 						if (words.length > 4) {
@@ -77,7 +81,6 @@ public class ClientReceiver extends Thread {
 			in.close();
 			s.close();
 		} catch (IOException e) {
-			
 			e.printStackTrace();
 		}
 	}
