@@ -14,8 +14,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.sun.nio.sctp.SendFailedNotification;
-
 import mainclient.Controller;
 
 public class ClientReceiver extends Thread {
