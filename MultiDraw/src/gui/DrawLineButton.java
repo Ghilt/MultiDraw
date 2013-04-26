@@ -15,8 +15,7 @@ public class DrawLineButton extends JButton implements ActionListener {
 		addActionListener(this);
 	}
 	
-	// Changed to this, more clear imho
 	public void actionPerformed(ActionEvent e) {
-		paintpanel.drawLine();
+		paintpanel.enableStraightLine();
 	}
 }

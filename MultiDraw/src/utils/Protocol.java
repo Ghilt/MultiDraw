@@ -1,4 +1,4 @@
-package interfaces;
+package utils;
 
 public interface Protocol {	
 	// Chat commands

@@ -1,6 +1,5 @@
 package network;
 
-import interfaces.Protocol;
 
 import java.awt.Color;
 import java.io.BufferedOutputStream;
@@ -14,6 +13,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import tools.ToolProperties;
+import utils.Protocol;
 
 public class ServerConnection extends Thread {
 	private Socket s;

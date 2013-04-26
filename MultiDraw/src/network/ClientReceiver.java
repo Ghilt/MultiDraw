@@ -1,5 +1,4 @@
 package network;
-import interfaces.Protocol;
 
 import java.awt.Color;
 import java.io.BufferedInputStream;
@@ -11,6 +10,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import utils.Protocol;
 
 import mainclient.Controller;
 

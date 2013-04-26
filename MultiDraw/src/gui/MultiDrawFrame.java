@@ -1,6 +1,5 @@
 package gui;
 
-import interfaces.Protocol;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,6 +26,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+
+import utils.Protocol;
 
 import network.SendBuffer;
 
@@ -86,6 +87,7 @@ public class MultiDrawFrame extends JFrame {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();
 					paintpanel.sendFileForInsertingtoSever(file);
+					paintpanel.insertPicture(file);
 				}
 			}
 		});
