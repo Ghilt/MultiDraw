@@ -1,6 +1,5 @@
-package gui.buttons;
+package gui;
 
-import gui.PaintPanel;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -22,6 +21,8 @@ public class ColorButton extends JButton implements ActionListener  {
 		if (color != null) {
 			this.setBackground(color);
 			paintPanel.sendChangeBrushcolorCommandToserver(color);
+			paintPanel.setBrushColor(color);
 		}
 	}
+	
 }

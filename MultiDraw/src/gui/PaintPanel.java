@@ -1,6 +1,5 @@
 package gui;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -23,7 +22,8 @@ import sun.awt.image.BufImgSurfaceData;
 import utils.ImageWrapper;
 import utils.Protocol;
 
-public class PaintPanel extends JPanel implements MouseListener, MouseMotionListener {
+public class PaintPanel extends JPanel implements MouseListener,
+		MouseMotionListener {
 	private ImageWrapper bufImage;
 
 	// Canvas size
@@ -45,9 +45,11 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	// Current brush properties
 	private Color brushColor = Color.BLACK;
 	
+	// Current selected tool
+	private String currentTool = "PEN";
+
 	// Buffer for outgoing commands
 	private SendBuffer buffer;
-
 
 	/**
 	 * A "canvas" used to draw on.
@@ -58,10 +60,45 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.buffer = buffer;
-		
+
 		// Initializing bufImage
 		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
 		repaint();
+	}
+
+	// change tools handler
+	public void changeTool(String tool) {
+		
+		//reset the color if the last tool was an eraser
+		if (currentTool == "ERASER" && tool != "ERASER") {
+			sendChangeBrushcolorCommandToserver(brushColor);
+		} else if (waitForShape && tool.split("_")[0] != "SHAPE") {
+			waitForShape = false;
+		}
+		
+		if (tool.equals("PEN")) {
+
+		} else if (tool.equals("BRUSH")) {
+
+		} else if (tool.equals("BUCKET")) {
+
+		} else if (tool.equals("ERASER")) {
+			sendChangeBrushcolorCommandToserver(Color.WHITE);
+			
+		} else if (tool.equals("TEXT")) {
+			
+		} else if (tool.equals("SHAPE_LINE")) {
+			waitForShape = true;
+			
+		} else if (tool.equals("SHAPE_RECTANGLE")) {
+			
+		} else if (tool.equals("SHAPE_ELLIPSE")) {
+			
+		} else {
+			System.out.println("Unable to recognize tool in changeTool method");
+		}
+		
+		currentTool = tool;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -80,23 +117,21 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	public void setBrushColor(Color color) {
 		brushColor = color;
 	}
-	
+
 	public void sendChangeBrushSizeCommandToserver(int size) {
-		String send = Protocol.CHANGE_BRUSH_SIZE + " " 
-				+ size;
+		String send = Protocol.CHANGE_BRUSH_SIZE + " " + size;
 		buffer.put(send);
 	}
-	
-	public void sendChangeBrushcolorCommandToserver(Color color){
-		String send = Protocol.CHANGE_BRUSH_COLOR + " " 
-				+ color.getRGB();
+
+	public void sendChangeBrushcolorCommandToserver(Color color) {
+		String send = Protocol.CHANGE_BRUSH_COLOR + " " + color.getRGB();
 		buffer.put(send);
 	}
 
 	public void sendFileForInsertingtoSever(File f) {
 		try {
 			System.out.println("File loaded, sending to server");
-			BufferedImage img = ImageIO.read(f);		
+			BufferedImage img = ImageIO.read(f);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(img, "PNG", baos);
 			baos.flush();
@@ -108,46 +143,46 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 			e.printStackTrace();
 		}
 	}
-	
+
 	// experimental
 	public void enableStraightLine() {
 		waitForShape = true;
 	}
 
-	public void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
+	public void drawLine(int previousX, int previousY, int currentX,
+			int currentY, int rgb, int width) {
 		bufImage.drawLine(previousX, previousY, currentX, currentY, rgb, width);
 		repaint();
 	}
-	
+
 	public void insertPicture(File file) {
 		bufImage.insertPicture(file);
 		repaint();
 	}
-	
+
 	public void insertPicture(BufferedImage img) {
 		bufImage.insertPicture(img);
 		repaint();
 	}
+
 	/*
-	 * This method doesn't actually draw anything, it just puts a draw command into the SendBuffer.
+	 * This method doesn't actually draw anything, it just puts a draw command
+	 * into the SendBuffer.
 	 */
 	private void drawBrush(MouseEvent e) {
 		// Set mouse coordinates
 		currentX = e.getX();
 		currentY = e.getY();
-		
+
 		// Need something better than -90000 here... Ugly.
 		if (previousX == -90000 && previousY == -90000) {
 			previousX = currentX;
 			previousY = currentY;
 		}
-		
-		String send = Protocol.DRAW_LINE + " " 
-					+ previousX + " " 
-					+ previousY + " " 
-					+ currentX + " " 
-					+ currentY;
-		
+
+		String send = Protocol.DRAW_LINE + " " + previousX + " " + previousY
+				+ " " + currentX + " " + currentY;
+
 		buffer.put(send);
 
 		// Set previous coordinates
@@ -156,8 +191,9 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	}
 
 	public void mousePressed(MouseEvent e) {
-//		drawStuff(e);
-		// Check if we are waiting a shape to be drawn (works only for lines for the moment)
+		// drawStuff(e);
+		// Check if we are waiting a shape to be drawn (works only for lines for
+		// the moment)
 		if (waitForShape) {
 			if (p1 == null) {
 				p1 = new Point(e.getX(), e.getY());
@@ -165,19 +201,17 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 				previousY = p1.y;
 			} else if (p2 == null) {
 				p2 = new Point(e.getX(), e.getY());
-				waitForShape = false;
 				drawBrush(e);
 				p1 = null;
 				p2 = null;
 			}
-		}
-		if (!waitForShape) {
+		} else {
 			drawBrush(e);
 		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
-//		drawStuff(e);
+		// drawStuff(e);
 		if (!waitForShape) {
 			drawBrush(e);
 		}
@@ -191,11 +225,16 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		}
 	}
 
-	public void mouseMoved   (MouseEvent e) {}
-	public void mouseEntered (MouseEvent e) {}
-	public void mouseExited  (MouseEvent e) {}
-	public void mouseClicked (MouseEvent e) {}
+	public void mouseMoved(MouseEvent e) {
+	}
 
-	
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mouseClicked(MouseEvent e) {
+	}
 
 }

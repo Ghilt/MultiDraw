@@ -1,15 +1,5 @@
 package gui;
 
-import gui.buttons.BrushButton;
-import gui.buttons.ColorButton;
-import gui.buttons.DrawLineButton;
-import gui.buttons.EllipseButton;
-import gui.buttons.EraseButton;
-import gui.buttons.PaintbucketButton;
-import gui.buttons.PenButton;
-import gui.buttons.RectangleButton;
-import gui.buttons.TextButton;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,13 +23,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
-import javax.swing.ListModel;
+
 import javax.swing.ListSelectionModel;
-import javax.swing.text.JTextComponent;
 
 import utils.Protocol;
 
@@ -52,6 +41,7 @@ public class MultiDrawFrame extends JFrame {
 	private static final int CHATWINDOW_HEIGHT = 510;
 	private static final int LEFT_PANEL_HEIGHT = 800;
 	private static final int LEFT_PANEL_WIDTH = 80;
+	private static final int LEFT_ICON_BUTTONS_HEIGHT = 200;
 
 	private SendBuffer buffer;
 	private PaintPanel paintpanel;
@@ -225,38 +215,12 @@ public class MultiDrawFrame extends JFrame {
 		BrushSizeSlider brushSizeSlider = new BrushSizeSlider(paintpanel);
 		leftPanel.add(brushSizeSlider);
 
-		// Pen button
-		PenButton penButton = new PenButton(paintpanel);
-		leftPanel.add(penButton);
+		IconButtons iconButtons = new IconButtons(paintpanel);
+		iconButtons.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH,
+				LEFT_ICON_BUTTONS_HEIGHT));
+		leftPanel.add(iconButtons);
 
-		// Brush button
-		BrushButton brushButton = new BrushButton(paintpanel);
-		leftPanel.add(brushButton);
 
-		// Paint bucket button
-		PaintbucketButton paintbucketButton = new PaintbucketButton(paintpanel);
-		leftPanel.add(paintbucketButton);
-		
-		// Erase button
-		EraseButton eraseButton = new EraseButton(paintpanel);
-		leftPanel.add(eraseButton);
-
-		// Text Button
-		TextButton textButton = new TextButton(paintpanel);
-		leftPanel.add(textButton);
-
-		// Draw line button
-		DrawLineButton drawLineButton = new DrawLineButton(paintpanel);
-		leftPanel.add(drawLineButton);
-		
-		// Rectangle button
-		RectangleButton rectangleButton = new RectangleButton(paintpanel);
-		leftPanel.add(rectangleButton);
-		
-		// Ellipse button
-		EllipseButton ellipseButton = new EllipseButton(paintpanel);
-		leftPanel.add(ellipseButton);
-		
 		// Color button
 		JLabel colorLabel = new JLabel("Color");
 		colorLabel.setForeground(new Color(60, 60, 60));
