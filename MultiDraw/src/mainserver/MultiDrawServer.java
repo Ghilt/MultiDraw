@@ -9,12 +9,11 @@ import utils.ImageWrapper;
 import utils.ServerState;
 
 public class MultiDrawServer {
-	private static ArrayList<ServerConnection> connections;
 	private static ImageWrapper image;
 	private static ServerState state;
 	
 	public static void main(String[] args) {
-		connections = new ArrayList<ServerConnection>();
+
 		image = new ImageWrapper(900, 780);
 		state = new ServerState();
 		
@@ -25,9 +24,9 @@ public class MultiDrawServer {
 			Socket s;
 			while ((s = server.accept()) != null) {
 				System.out.println("Connected : " + s.getInetAddress().getHostAddress());
-				ServerConnection conn = new ServerConnection(s, connections, image, state);
+				ServerConnection conn = new ServerConnection(s, image, state);
 				conn.start();
-				connections.add(conn);
+				state.addConnection(conn);
 			}
 			server.close();
 		} catch (IOException e) {

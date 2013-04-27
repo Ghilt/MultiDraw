@@ -25,17 +25,16 @@ public class ServerConnection extends Thread {
 	private Socket s;
 	private PrintWriter out;
 	private BufferedReader in;
-	private ArrayList<ServerConnection> connections;
+
 	private ImageWrapper image;
 	private ToolProperties tp;
 	private ServerState state;
 
-	public ServerConnection(Socket s, ArrayList<ServerConnection> connections, ImageWrapper image, ServerState state) {
+	public ServerConnection(Socket s, ImageWrapper image, ServerState state) {
 		super();
 		this.s = s;
 		this.state = state;
 		this.image = image;
-		this.connections = connections;
 		this.tp = new ToolProperties(Color.BLACK.getRGB(), 10);
 	}
 
@@ -48,7 +47,7 @@ public class ServerConnection extends Thread {
 				parseCommand(strIn);
 			}
 		} catch (IOException e) {
-			this.connections.remove(this);
+//			this.connections.remove(this);
 //			for (ServerConnection cc : connections) {
 //				cc.sendUsers();
 //			}
@@ -76,7 +75,7 @@ public class ServerConnection extends Thread {
 				BufferedImage img = receiveImage(Integer.parseInt(words[1]));
 				image.insertPicture(img);
 				state.setDisabled(true);
-				for (ServerConnection cc : connections) {
+				for (ServerConnection cc :  state.getConnections()) {
 					cc.sendImage();
 				}
 				state.setDisabled(false);
@@ -108,7 +107,7 @@ public class ServerConnection extends Thread {
 
 	private void sendUsers() {
 		String list = Protocol.USERLIST + " ";
-		for (ServerConnection cc : connections) {
+		for (ServerConnection cc :  state.getConnections()) {
 			list += cc.name + " ";
 		}
 		writeToAll(list);
@@ -173,7 +172,7 @@ public class ServerConnection extends Thread {
 	}
 
 	public void writeToAll(String msg) {
-		for (ServerConnection cc : connections) {
+		for (ServerConnection cc : state.getConnections()) {
 			cc.write(msg);
 		}
 	}
