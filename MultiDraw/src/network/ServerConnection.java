@@ -126,8 +126,22 @@ public class ServerConnection extends Thread {
 
 			OutputStream os = s.getOutputStream();
 //			System.out.println("Trying to sen it all(BufferedImage) in one go! nbr of bytes ");
-			os.write(imageInByte, 0, imageInByte.length);
-			os.flush();
+			
+			int sizeToSend = 500;
+			int totalSent = 0;
+			
+			while(totalSent < imageInByte.length){
+				if(imageInByte.length - totalSent < 500){
+					os.write(imageInByte, totalSent, imageInByte.length - totalSent);
+				} else {
+					os.write(imageInByte, totalSent, sizeToSend);
+				}
+				os.flush();
+				totalSent += 500;
+				
+			}
+			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
