@@ -1,15 +1,14 @@
 package utils;
 
+import gui.MultiDrawFrame;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
 import network.ClientSender;
-
-import gui.MultiDrawFrame;
 
 public class Controller {
 	private MultiDrawFrame frame;

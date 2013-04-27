@@ -24,5 +24,4 @@ public class ColorButton extends JButton implements ActionListener  {
 			paintPanel.setBrushColor(color);
 		}
 	}
-	
 }

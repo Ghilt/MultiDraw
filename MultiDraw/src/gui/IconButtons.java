@@ -23,34 +23,31 @@ public class IconButtons extends JPanel {
 	public IconButtons(PaintPanel paintpanel) {
 		btnGroup = new ButtonGroup();
 		this.paintpanel = paintpanel;
+		this.setOpaque(false);
 		BtnListener btnListener = new BtnListener();
 
 		try {
-
 			// pen button
 			JButton penButton = new JButton();
-			Image img = ImageIO.read(getClass().getResource(
-					"/res/icons/pen.png"));
+			Image img = ImageIO.read(getClass().getResource("/res/icons/pen.png"));
 			penButton.setIcon(new ImageIcon(img));
 			penButton.setActionCommand("PEN");
-			penButton.setEnabled(false);  // temporary disabled
+			penButton.setEnabled(false); // temporary disabled
 			btnGroup.add(penButton);
 
 			// brush button
 			JButton brushButton = new JButton();
-			img = ImageIO.read(getClass().getResource(
-					"/res/icons/paintbrush.png"));
+			img = ImageIO.read(getClass().getResource("/res/icons/paintbrush.png"));
 			brushButton.setIcon(new ImageIcon(img));
 			brushButton.setActionCommand("BRUSH"); 
 			btnGroup.add(brushButton);
 
 			// paint bucket button
 			JButton bucketButton = new JButton();
-			img = ImageIO.read(getClass().getResource(
-					"/res/icons/paint_bucket.png"));
+			img = ImageIO.read(getClass().getResource("/res/icons/paint_bucket.png"));
 			bucketButton.setIcon(new ImageIcon(img));
 			bucketButton.setActionCommand("BUCKET");
-			bucketButton.setEnabled(false);  // temporary disabled
+			bucketButton.setEnabled(false); // temporary disabled
 			btnGroup.add(bucketButton);
 
 			// eraser button
@@ -77,20 +74,18 @@ public class IconButtons extends JPanel {
 
 			// rectangle button
 			JButton rectangleButton = new JButton();
-			img = ImageIO.read(getClass().getResource(
-					"/res/icons/rectangle.png"));
+			img = ImageIO.read(getClass().getResource("/res/icons/rectangle.png"));
 			rectangleButton.setIcon(new ImageIcon(img));
-			rectangleButton.setActionCommand("SHAPE_RECTANGLE");  // temporary disabled
+			rectangleButton.setActionCommand("SHAPE_RECTANGLE"); // temporary disabled
 			rectangleButton.setEnabled(false);
 			btnGroup.add(rectangleButton);
 
 			// ellipse button
 			JButton ellipseButton = new JButton();
-			img = ImageIO
-					.read(getClass().getResource("/res/icons/ellipse.png"));
+			img = ImageIO.read(getClass().getResource("/res/icons/ellipse.png"));
 			ellipseButton.setIcon(new ImageIcon(img));
 			ellipseButton.setActionCommand("SHAPE_ELLIPSE"); 
-			ellipseButton.setEnabled(false);  // temporary disabled
+			ellipseButton.setEnabled(false); // temporary disabled
 			btnGroup.add(ellipseButton);
 
 			Enumeration<AbstractButton> buttons = btnGroup.getElements();
@@ -101,23 +96,20 @@ public class IconButtons extends JPanel {
 				b.addActionListener(btnListener);
 				this.add(b);
 			}
-
 		} catch (Exception ex) {
 			System.out.println("Exception: " + ex.getMessage());
 		}
-
 	}
 
 	private class BtnListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			JButton pressedButton = ((JButton) e.getSource());
+			JButton pressedButton = ((JButton)e.getSource());
 
 			// Show visually which button was pressed down
 			pressedButton.getModel().setPressed(true);
 
 			String tool = e.getActionCommand();
 			paintpanel.changeTool(tool);
-			
 		}
 	}
 }

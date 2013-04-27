@@ -16,7 +16,6 @@ public class ImageWrapper extends BufferedImage {
 	private int sizeX;
 	private int sizeY;
 	private Graphics2D g2;
-	public boolean disabled;
 
 	// Temporary storage for convolution filters (blur etc.)
 	private BufferedImage bufDest;
@@ -26,9 +25,8 @@ public class ImageWrapper extends BufferedImage {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.g2 = createGraphics();
-		this.disabled = false;
 		g2.setColor(Color.WHITE);
-		g2.fillRect(0, 0, sizeX, sizeY);
+		g2.fillRect(0, 0, this.sizeX, this.sizeY);
 	}
 	
 	public void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
@@ -40,12 +38,12 @@ public class ImageWrapper extends BufferedImage {
 	public void insertPicture(File f) {
 		BufferedImage img = null;
 		try {
-		    img = ImageIO.read(f);
+			img = ImageIO.read(f);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		g2.drawImage(img, null, 0, 0);
+		if (img != null)
+			g2.drawImage(img, null, 0, 0);
 	}
 
 	public void insertPicture(BufferedImage img) {
@@ -53,8 +51,11 @@ public class ImageWrapper extends BufferedImage {
 	}
 
 	public void blur() {
-		float[] blurKernel = { 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f,
-				1 / 9f, 1 / 9f, 1 / 9f };
+		float[] blurKernel = { 
+			1/9f, 1/9f, 1/9f,
+			1/9f, 1/9f, 1/9f,
+			1/9f, 1/9f, 1/9f
+		};
 
 		BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
 		blur.filter(this, bufDest);

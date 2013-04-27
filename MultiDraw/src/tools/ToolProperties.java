@@ -1,7 +1,5 @@
 package tools;
 
-import java.awt.Color;
-
 public class ToolProperties {
 
 	

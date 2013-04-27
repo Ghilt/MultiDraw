@@ -14,16 +14,13 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import network.SendBuffer;
-import sun.awt.image.BufImgSurfaceData;
 import utils.ImageWrapper;
 import utils.Protocol;
 
-public class PaintPanel extends JPanel implements MouseListener,
-		MouseMotionListener {
+public class PaintPanel extends JPanel implements MouseListener, MouseMotionListener {
 	private ImageWrapper bufImage;
 
 	// Canvas size
@@ -56,7 +53,6 @@ public class PaintPanel extends JPanel implements MouseListener,
 	 */
 	public PaintPanel(SendBuffer buffer) {
 		setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
-		this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.buffer = buffer;
