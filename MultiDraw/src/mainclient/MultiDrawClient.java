@@ -29,9 +29,11 @@ class MultiDrawClient {
 		try {
 			s = new Socket("localhost", 30002);
 		} catch (UnknownHostException e) {
-			System.out.println("Did not find a host at the specified address.");
+			System.err.println("Did not find a host at the specified address.");
+			System.exit(1);
 		} catch (IOException e) {
-			System.out.println("Connection error.");
+			System.err.println("Connection error.");
+			System.exit(1);
 		}
 		
 		SendBuffer buffer = new SendBuffer(10);
