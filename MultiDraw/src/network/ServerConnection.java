@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import sun.misc.Cleaner;
 import tools.ToolProperties;
 import utils.ImageWrapper;
 import utils.Protocol;
@@ -29,6 +30,7 @@ public class ServerConnection extends Thread {
 	private ImageWrapper image;
 	private ToolProperties tp;
 	private ServerState state;
+	private boolean clientDisabled ; 
 
 	public ServerConnection(Socket s, ArrayList<ServerConnection> connections, ImageWrapper image, ServerState state) {
 		super();
@@ -37,6 +39,7 @@ public class ServerConnection extends Thread {
 		this.image = image;
 		this.connections = connections;
 		this.tp = new ToolProperties(Color.BLACK.getRGB(), 10);
+		this.clientDisabled = false;
 	}
 
 	public void run() {
@@ -58,31 +61,48 @@ public class ServerConnection extends Thread {
 
 	private String parseCommand(String strIn) {
 		String cmd = strIn.substring(0, strIn.indexOf(" "));
+		System.out.println("s:   " + strIn);
 		String[] words;
 		words = strIn.split(" ");
 		switch (Integer.parseInt(cmd)) {
 			case Protocol.ALOHA:
 				this.name = words[1];
-				sendUsers();
-				state.setDisabled(true);
-				sendImage();
-				state.setDisabled(false);
+				writeToAll(Protocol.DISABLE + " ");
+//				sendUsers();
+//				state.setDisabled(true);
+//				sendImage();
+//				state.setDisabled(false);
 			break;
 			case Protocol.CHAT_MESSAGE:
 				writeToAll(strIn);
+				break;
+			case Protocol.ENABLE_ACK:
+				clientDisabled = false;
+				break;
+			case Protocol.DISABLE_ACK:
+				clientDisabled = true;
+				if (allDisabled()){// should be in serverstate together with connections
+					System.out.println("All is disabled2: sending image");	
+//					for (ServerConnection cc : connections) {
+					sendImage();
+//					}
+					System.out.println("image sent to : " + this.name);	
+					System.out.println("undisabling all");
+					writeToAll(Protocol.ENABLE + " ");
+				}
 				break;
 			case Protocol.SEND_FILE:
 				write(Protocol.SEND_FILE + " ");
 				BufferedImage img = receiveImage(Integer.parseInt(words[1]));
 				image.insertPicture(img);
-				state.setDisabled(true);
+//				state.setDisabled(true);
 				for (ServerConnection cc : connections) {
 					cc.sendImage();
 				}
-				state.setDisabled(false);
+//				state.setDisabled(false);
 				break;
 			case Protocol.DRAW_LINE:
-				if(!state.isDisabled()){
+//				if(!state.isDisabled()){
 					strIn += " " + tp.getColor() + " " + tp.getBrushSize();
 					writeToAll(strIn);
 					if (words.length > 4) {
@@ -93,7 +113,7 @@ public class ServerConnection extends Thread {
 						y2 = Integer.parseInt(words[4]);
 						image.drawLine(x1, y1, x2, y2, tp.getColor(), tp.getBrushSize());
 					}
-				}
+//				}
 				break;
 			case Protocol.CHANGE_BRUSH_COLOR:
 				tp.setColor(Integer.parseInt(words[1]));
@@ -104,6 +124,14 @@ public class ServerConnection extends Thread {
 		}
 
 		return strIn;
+	}
+
+	private boolean allDisabled() {
+		boolean all = true;
+		for (ServerConnection cc : connections) {
+			all = all && cc.clientDisabled;
+		}
+		return all;
 	}
 
 	private void sendUsers() {

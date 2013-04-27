@@ -42,6 +42,8 @@ public class Controller {
 	public void sendImage() {
 		sender.sendImage();
 	}
+	
+	
 
 	public void setSender(ClientSender sender) {
 		this.sender = sender;
@@ -53,5 +55,20 @@ public class Controller {
 
 	public void updateUsersList(String[] words) {
 		frame.updateUsersList(words);
+	}
+
+	public void sendDisableAck() {
+		sender.getBuffer().put(Protocol.DISABLE_ACK + " ");
+		
+	}
+
+	public void disableSending(boolean b) {
+		sender.getBuffer().disable(b);
+		
+	}
+
+	public void sendEnableAck() {
+		sender.getBuffer().put(Protocol.ENABLE_ACK + " ");
+		
 	}
 }

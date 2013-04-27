@@ -39,12 +39,21 @@ public class ClientReceiver extends Thread {
 		try {
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
+				System.out.println("Strin:    "   + strIn);
 				String cmd = strIn.substring(0, strIn.indexOf(" "));
 				String[] words;
 				words = strIn.split(" ");
 				switch (Integer.parseInt(cmd)) {
 					case Protocol.ALOHA:
 						receiveImage(Integer.parseInt(words[1]));
+						break;
+					case Protocol.DISABLE:
+						controller.sendDisableAck();
+						controller.disableSending(true);
+						break;
+					case Protocol.ENABLE:
+						controller.disableSending(false);
+						controller.sendEnableAck();
 						break;
 					case Protocol.USERLIST:
 						controller.updateUsersList(words);

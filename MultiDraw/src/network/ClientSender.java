@@ -25,8 +25,10 @@ public class ClientSender extends Thread {
 			out = s.getOutputStream();
 			PrintWriter writer = new PrintWriter(out, true);
 			while (true) {
-				writer.println(buffer.pop());
-				writer.flush();
+				if(!buffer.isDisabled()){
+					writer.println(buffer.pop());
+					writer.flush();
+				}
 			}
 		} catch (IOException e) {
 			System.out.println("Connection error, bailing out...");
@@ -48,5 +50,9 @@ public class ClientSender extends Thread {
 	
 	public String getClientName() {
 		return clientName;
+	}
+
+	public SendBuffer getBuffer() {
+		return buffer;
 	}
 }
