@@ -48,7 +48,7 @@ public class ServerConnection extends Thread {
 				parseCommand(strIn);
 			}
 		} catch (IOException e) {
-			this.connections.remove(this);
+//			this.connections.remove(this);
 //			for (ServerConnection cc : connections) {
 //				cc.sendUsers();
 //			}

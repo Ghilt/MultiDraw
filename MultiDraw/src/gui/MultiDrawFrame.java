@@ -104,8 +104,18 @@ public class MultiDrawFrame extends JFrame {
 
 	private JPanel makeCenterPanel() {
 		paintpanel = new PaintPanel(buffer);
-		JScrollPane scroller = new JScrollPane(paintpanel);
-		scroller.setPreferredSize(new Dimension(400, 400));
+		paintpanel.setBounds(0, 0, PaintPanel.SIZE_X, PaintPanel.SIZE_Y);
+		
+		InvisiblePanel invisiblePanel = new InvisiblePanel(paintpanel);
+		invisiblePanel.setBounds(0, 0, PaintPanel.SIZE_X, PaintPanel.SIZE_Y);
+		
+		JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(PaintPanel.SIZE_X, PaintPanel.SIZE_Y));
+        
+        layeredPane.add(paintpanel, new Integer(1));
+        layeredPane.add(invisiblePanel, new Integer(2));
+		
+		JScrollPane scroller = new JScrollPane(layeredPane);
 		scroller.setBorder(BorderFactory.createEmptyBorder());
 
 		JPanel centerPanel = new JPanel();

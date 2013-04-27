@@ -24,8 +24,8 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	private ImageWrapper bufImage;
 
 	// Canvas size
-	private static final int SIZE_X = 900;
-	private static final int SIZE_Y = 780;
+	public static final int SIZE_X = 900;
+	public static final int SIZE_Y = 780;
 
 	// Mouse pointer coordinates
 	private int currentX = 0;
@@ -59,6 +59,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 
 		// Initializing bufImage
 		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+		bufImage.setWhiteBackground();
 		repaint();
 	}
 
