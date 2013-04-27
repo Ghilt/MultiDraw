@@ -49,9 +49,9 @@ public class ServerConnection extends Thread {
 			}
 		} catch (IOException e) {
 			this.connections.remove(this);
-			for (ServerConnection cc : connections) {
-				cc.sendUsers();
-			}
+//			for (ServerConnection cc : connections) {
+//				cc.sendUsers();
+//			}
 			System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
 		}
 	}
@@ -63,7 +63,7 @@ public class ServerConnection extends Thread {
 		switch (Integer.parseInt(cmd)) {
 			case Protocol.ALOHA:
 				this.name = words[1];
-				sendUsers();
+//				sendUsers();
 				state.setDisabled(true);
 				sendImage();
 				state.setDisabled(false);
@@ -82,7 +82,7 @@ public class ServerConnection extends Thread {
 				state.setDisabled(false);
 				break;
 			case Protocol.DRAW_LINE:
-				if(!state.isDisabled()){
+				if (!state.isDisabled()) {
 					strIn += " " + tp.getColor() + " " + tp.getBrushSize();
 					writeToAll(strIn);
 					if (words.length > 4) {
@@ -116,32 +116,28 @@ public class ServerConnection extends Thread {
 
 	public void sendImage() {
 		try {
+			// Read image into byte[]
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(image, "PNG", baos);
 			baos.flush();
 			byte[] imageInByte = baos.toByteArray();
 			baos.close();
-
+			
+			// Send ALOHA and image size
 			write(Protocol.ALOHA + " " + imageInByte.length);
 
+			// Send image
+			System.out.println("Server sending image with size: " + imageInByte.length);
 			OutputStream os = s.getOutputStream();
-//			System.out.println("Trying to sen it all(BufferedImage) in one go! nbr of bytes ");
-			
-			int sizeToSend = 500;
+			int sizeToSend = 250;
 			int totalSent = 0;
-			
 			while(totalSent < imageInByte.length){
-				if(imageInByte.length - totalSent < 500){
-					os.write(imageInByte, totalSent, imageInByte.length - totalSent);
-				} else {
-					os.write(imageInByte, totalSent, sizeToSend);
-				}
+				if (imageInByte.length - totalSent < sizeToSend)
+					sizeToSend = imageInByte.length - totalSent;
+				os.write(imageInByte, totalSent, sizeToSend);
 				os.flush();
-				totalSent += 500;
-				
+				totalSent += sizeToSend;
 			}
-			
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -150,18 +146,19 @@ public class ServerConnection extends Thread {
 	private BufferedImage receiveImage(int size) {
 		BufferedImage im = null;
 		try {
-			System.out.println("Starting to receive image with size: " + size);
+			System.out.println("Server receiving image with size: " + size);
 			byte[] mybytearray = new byte[size];
 			InputStream is = s.getInputStream();
 			int totalBytesRead = 0;
+			int bytesToRead = 250;
 			int bytesRead = 0;
-
-			while (totalBytesRead < size && bytesRead != -1) {
-				bytesRead = is.read(mybytearray, totalBytesRead, mybytearray.length - totalBytesRead);
+			while (totalBytesRead < size) {
+				if (bytesToRead > size - totalBytesRead)
+					bytesToRead = size - totalBytesRead;
+				bytesRead = is.read(mybytearray, totalBytesRead, bytesToRead);
 				totalBytesRead += bytesRead;
-//				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead);
+				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead + ". " + (size - totalBytesRead) + " remaining.");
 			}
-
 			InputStream in = new ByteArrayInputStream(mybytearray);
 			im = ImageIO.read(in);
 		} catch (IOException e) {

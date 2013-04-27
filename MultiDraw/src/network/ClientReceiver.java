@@ -39,6 +39,7 @@ public class ClientReceiver extends Thread {
 		try {
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
+				System.out.println("Client received strIn: " + strIn);
 				String cmd = strIn.substring(0, strIn.indexOf(" "));
 				String[] words;
 				words = strIn.split(" ");
@@ -84,17 +85,20 @@ public class ClientReceiver extends Thread {
 		}
 	}
 
-
 	private void receiveImage(int size) {
 		try {
+			System.out.println("Client receiving image with size: " + size);
 			byte[] mybytearray = new byte[size];
 			InputStream is = s.getInputStream();
 			int totalBytesRead = 0;
+			int bytesToRead = 250;
 			int bytesRead = 0;
-			while (totalBytesRead < size && bytesRead != -1) {
-				bytesRead = is.read(mybytearray, totalBytesRead, mybytearray.length - totalBytesRead);
+			while (totalBytesRead < size) {
+				if (bytesToRead > size - totalBytesRead)
+					bytesToRead = size - totalBytesRead;
+				bytesRead = is.read(mybytearray, totalBytesRead, bytesToRead);
 				totalBytesRead += bytesRead;
-				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead);
+				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead + ". " + (size - totalBytesRead) + " remaining.");
 			}
 			InputStream in = new ByteArrayInputStream(mybytearray);
 			BufferedImage image = ImageIO.read(in);

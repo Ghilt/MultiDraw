@@ -35,12 +35,19 @@ public class ClientSender extends Thread {
 	
 	public void sendImage() {
 		try {
-			byte[] image = buffer.popImage();
-			System.out.println("Client has started sending image");
+			// Send image
+			byte[] imageInByte = buffer.popImage();
+			System.out.println("Client sending image with size: " + imageInByte.length);
 			OutputStream os = s.getOutputStream();
-			System.out.println("Trying to sen it all(BufferedImage) in one go! nbr of bytes ");
-			os.write(image, 0, image.length);
-			os.flush();
+			int sizeToSend = 250;
+			int totalSent = 0;
+			while(totalSent < imageInByte.length){
+				if (imageInByte.length - totalSent < sizeToSend)
+					sizeToSend = imageInByte.length - totalSent;
+				os.write(imageInByte, totalSent, sizeToSend);
+				os.flush();
+				totalSent += sizeToSend;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
