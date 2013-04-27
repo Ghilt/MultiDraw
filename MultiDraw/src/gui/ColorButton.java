@@ -11,20 +11,22 @@ import javax.swing.JPanel;
 
 public class ColorButton extends JPanel implements MouseListener  {
 	private PaintPanel paintPanel;
+	private int typeOfBrush;
 
-	public ColorButton(PaintPanel paintpanel) {
+	public ColorButton(PaintPanel paintpanel, int typeOfBrush) {
 		super();
+		this.typeOfBrush = typeOfBrush;
 		this.paintPanel = paintpanel;
 		this.addMouseListener(this);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		Color color = JColorChooser.showDialog(null, "Choose Color", paintPanel.getBrushColor());
+		Color color = JColorChooser.showDialog(null, "Choose Color", paintPanel.getBrushColor(typeOfBrush));
 		if (color != null) {
 			this.setBackground(color);
-			paintPanel.sendChangeBrushcolorCommandToserver(color);
-			paintPanel.setBrushColor(color);
+			paintPanel.sendChangeBrushcolorCommandToserver(color, typeOfBrush);
+			paintPanel.setBrushColor(color,typeOfBrush);
 		}
 	}
 

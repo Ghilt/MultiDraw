@@ -22,9 +22,10 @@ public class Controller {
 		this.frame = frame;
 	}
 
-	public void setBrushColor(Color color) {
-		frame.getPaintPanel().setBrushColor(color);
+	public void setBrushColor(Color color, int type) {
+		frame.getPaintPanel().setBrushColor(color , type);
 	}
+	
 
 	public void putChatMessage(String msg) {
 		StyledDocument doc = frame.getChatPanel().getStyledDocument();
@@ -35,8 +36,8 @@ public class Controller {
 		}
 	}
 
-	public void drawLine(int x1, int y1, int x2, int y2, int rgb, int width) {
-		frame.getPaintPanel().drawLine(x1, y1, x2, y2, rgb, width);
+	public void drawLine(int x1, int y1, int x2, int y2, int brushType, int rgb, int width) {
+		frame.getPaintPanel().drawLine(x1, y1, x2, y2,brushType, rgb, width);
 	}
 	
 	public void sendImage() {

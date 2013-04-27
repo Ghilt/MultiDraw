@@ -52,21 +52,29 @@ public class ClientReceiver extends Thread {
 						break;
 					case Protocol.DRAW_LINE:
 						if (words.length > 4) {
-							int x1, y1, x2, y2, rgb, width;
+							int x1, y1, x2, y2,brushtype, rgb, width;
 							x1 = Integer.parseInt(words[1]);
 							y1 = Integer.parseInt(words[2]);
 							x2 = Integer.parseInt(words[3]);
 							y2 = Integer.parseInt(words[4]);
-							rgb = Integer.parseInt(words[5]);
-							width = Integer.parseInt(words[6]);
-							controller.drawLine(x1, y1, x2, y2, rgb, width);
+							brushtype = Integer.parseInt(words[5]);
+							rgb = Integer.parseInt(words[6]);
+							width = Integer.parseInt(words[7]);
+							controller.drawLine(x1, y1, x2, y2,brushtype ,rgb, width);
 						}
 						break;
-					case Protocol.CHANGE_BRUSH_COLOR:
+					case Protocol.BRUSH_COLOR_1:
 						if (words.length > 1) {
 							int rgb;
 							rgb = Integer.parseInt(words[1]);
-							controller.setBrushColor(new Color(rgb));
+							controller.setBrushColor(new Color(rgb),Protocol.BRUSH_COLOR_1);
+						}
+						break;
+					case Protocol.BRUSH_COLOR_2:
+						if (words.length > 1) {
+							int rgb;
+							rgb = Integer.parseInt(words[1]);
+							controller.setBrushColor(new Color(rgb),Protocol.BRUSH_COLOR_2);
 						}
 						break;
 					case Protocol.CHAT_MESSAGE:

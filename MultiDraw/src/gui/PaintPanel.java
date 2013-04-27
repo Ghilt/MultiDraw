@@ -40,13 +40,16 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 											// for mouse press
 
 	// Current brush properties
-	private Color brushColor = Color.BLACK;
+	private Color brushColor1 = Color.BLACK;
+	private Color brushColor2 = Color.WHITE;
 	
 	// Current selected tool
 	private String currentTool = "PEN";
 
 	// Buffer for outgoing commands
 	private SendBuffer buffer;
+
+	private byte buttonPressed;
 
 	/**
 	 * A "canvas" used to draw on.
@@ -67,7 +70,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		
 		//reset the color if the last tool was an eraser
 		if (currentTool == "ERASER" && tool != "ERASER") {
-			sendChangeBrushcolorCommandToserver(brushColor);
+			sendChangeBrushcolorCommandToserver(brushColor1,Protocol.BRUSH_COLOR_1);
 		} else if (waitForShape && tool.split("_")[0] != "SHAPE") {
 			waitForShape = false;
 		}
@@ -79,7 +82,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		} else if (tool.equals("BUCKET")) {
 
 		} else if (tool.equals("ERASER")) {
-			sendChangeBrushcolorCommandToserver(Color.WHITE);
+			sendChangeBrushcolorCommandToserver(Color.WHITE, Protocol.BRUSH_COLOR_1);
 			
 		} else if (tool.equals("TEXT")) {
 			
@@ -105,22 +108,35 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	}
 
 	// returns brushColor
-	public Color getBrushColor() {
-		return this.brushColor;
+	public Color getBrushColor(int type) {
+		if(type == Protocol.BRUSH_COLOR_1){
+			return this.brushColor1;
+		} else if(type == Protocol.BRUSH_COLOR_2){
+			return this.brushColor2;
+		} else {
+			return null;
+		}
 	}
 
+
+	
 	// sets brushColor
-	public void setBrushColor(Color color) {
-		brushColor = color;
+	public void setBrushColor(Color color, int type) {
+		if(type == Protocol.BRUSH_COLOR_1){
+			brushColor1 = color;
+		} else if(type == Protocol.BRUSH_COLOR_2){
+			brushColor2 = color;
+		}
 	}
 
+	
 	public void sendChangeBrushSizeCommandToserver(int size) {
 		String send = Protocol.CHANGE_BRUSH_SIZE + " " + size;
 		buffer.put(send);
 	}
 
-	public void sendChangeBrushcolorCommandToserver(Color color) {
-		String send = Protocol.CHANGE_BRUSH_COLOR + " " + color.getRGB();
+	public void sendChangeBrushcolorCommandToserver(Color color, int brush) {
+		String send = brush + " " + color.getRGB() ;
 		buffer.put(send);
 	}
 
@@ -146,7 +162,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	}
 
 	public void drawLine(int previousX, int previousY, int currentX,
-			int currentY, int rgb, int width) {
+			int currentY,int brushType, int rgb, int width) {
 		bufImage.drawLine(previousX, previousY, currentX, currentY, rgb, width);
 		repaint();
 	}
@@ -170,6 +186,8 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		currentX = e.getX();
 		currentY = e.getY();
 
+		
+
 		// Need something better than -90000 here... Ugly.
 		if (previousX == -90000 && previousY == -90000) {
 			previousX = currentX;
@@ -177,7 +195,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		}
 
 		String send = Protocol.DRAW_LINE + " " + previousX + " " + previousY
-				+ " " + currentX + " " + currentY;
+				+ " " + currentX + " " + currentY + " " + buttonPressed;
 
 		buffer.put(send);
 
@@ -187,6 +205,12 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	}
 
 	public void mousePressed(MouseEvent e) {
+		if(e.getButton() == MouseEvent.BUTTON1){
+			buttonPressed = Protocol.BRUSH_COLOR_1;
+		} else {
+			buttonPressed = Protocol.BRUSH_COLOR_2;	
+		}
+		System.out.println(" buttonpress :            " + e.getButton());
 		// drawStuff(e);
 		// Check if we are waiting a shape to be drawn (works only for lines for
 		// the moment)

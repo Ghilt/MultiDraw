@@ -9,6 +9,7 @@ public interface Protocol {
 	
 	// Paint commands
 	public static final byte DRAW_LINE = 10;
-	public static final byte CHANGE_BRUSH_COLOR = 11;
-	public static final byte CHANGE_BRUSH_SIZE = 12;
+	public static final byte BRUSH_COLOR_1 = 11;
+	public static final byte BRUSH_COLOR_2 = 12;
+	public static final byte CHANGE_BRUSH_SIZE = 13;
 }

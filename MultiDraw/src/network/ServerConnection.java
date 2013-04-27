@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -35,7 +34,7 @@ public class ServerConnection extends Thread {
 		this.s = s;
 		this.state = state;
 		this.image = image;
-		this.tp = new ToolProperties(Color.BLACK.getRGB(), 10);
+		this.tp = new ToolProperties(Color.BLACK.getRGB(),Color.WHITE.getRGB(), 10);
 	}
 
 	public void run() {
@@ -82,20 +81,27 @@ public class ServerConnection extends Thread {
 				break;
 			case Protocol.DRAW_LINE:
 				if (!state.isDisabled()) {
-					strIn += " " + tp.getColor() + " " + tp.getBrushSize();
-					writeToAll(strIn);
-					if (words.length > 4) {
-						int x1, y1, x2, y2;
+					if (words.length > 5) {
+						int x1, y1, x2, y2, brushSize, color;
+						byte brushType;
 						x1 = Integer.parseInt(words[1]);
 						y1 = Integer.parseInt(words[2]);
 						x2 = Integer.parseInt(words[3]);
 						y2 = Integer.parseInt(words[4]);
-						image.drawLine(x1, y1, x2, y2, tp.getColor(), tp.getBrushSize());
+						brushType = Byte.parseByte(words[5]);
+						color = tp.getBrushColor(brushType);
+						brushSize =  tp.getBrushSize();
+						image.drawLine(x1, y1, x2, y2, color, brushSize);
+						strIn += " " + color + " " + brushSize;
+						writeToAll(strIn);
 					}
 				}
 				break;
-			case Protocol.CHANGE_BRUSH_COLOR:
-				tp.setColor(Integer.parseInt(words[1]));
+			case Protocol.BRUSH_COLOR_1:
+				tp.setColor(Integer.parseInt(words[1]),Protocol.BRUSH_COLOR_1);
+				break;
+			case Protocol.BRUSH_COLOR_2:
+				tp.setColor(Integer.parseInt(words[1]),Protocol.BRUSH_COLOR_2);
 				break;
 			case Protocol.CHANGE_BRUSH_SIZE:
 				tp.setBrushWidth(Integer.parseInt(words[1]));
