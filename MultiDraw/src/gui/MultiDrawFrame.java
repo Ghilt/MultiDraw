@@ -210,11 +210,11 @@ public class MultiDrawFrame extends JFrame {
 		
 		ColorButton colorButton1 = new ColorButton("", paintpanel);
 		colorButton1.setBackground(Color.BLACK);
-		colorButton1.setBounds(5, 5, 50, 50);
+		colorButton1.setBounds(12, 0, 40, 40);
 		
 		ColorButton colorButton2 = new ColorButton("", paintpanel);
 		colorButton2.setBackground(Color.WHITE);
-		colorButton2.setBounds(20, 20, 50, 50);
+		colorButton2.setBounds(27, 15, 40, 40);
 		
 		layeredPane.add(colorButton1, new Integer(2));
 		layeredPane.add(colorButton2, new Integer(1));
