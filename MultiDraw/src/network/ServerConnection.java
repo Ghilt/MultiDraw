@@ -2,13 +2,9 @@ package network;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,6 +21,7 @@ import utils.Protocol;
 import utils.ServerState;
 
 public class ServerConnection extends Thread {
+	private String name;
 	private Socket s;
 	private PrintWriter out;
 	private BufferedReader in;
@@ -33,8 +30,7 @@ public class ServerConnection extends Thread {
 	private ToolProperties tp;
 	private ServerState state;
 
-	public ServerConnection(Socket s, ArrayList<ServerConnection> connections,
-			ImageWrapper image, ServerState state) {
+	public ServerConnection(Socket s, ArrayList<ServerConnection> connections, ImageWrapper image, ServerState state) {
 		super();
 		this.s = s;
 		this.state = state;
@@ -43,7 +39,6 @@ public class ServerConnection extends Thread {
 		this.tp = new ToolProperties(Color.BLACK.getRGB(), 10);
 	}
 
-	@Override
 	public void run() {
 		try {
 			out = new PrintWriter(s.getOutputStream(), true);
@@ -53,8 +48,11 @@ public class ServerConnection extends Thread {
 				parseCommand(strIn);
 			}
 		} catch (IOException e) {
-			System.out.println("Disconnected: "
-					+ s.getInetAddress().getHostAddress());
+			this.connections.remove(this);
+			for (ServerConnection cc : connections) {
+				cc.sendUsers();
+			}
+			System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
 		}
 	}
 
@@ -64,6 +62,7 @@ public class ServerConnection extends Thread {
 		words = strIn.split(" ");
 		switch (Integer.parseInt(cmd)) {
 			case Protocol.ALOHA:
+				this.name = words[1];
 				sendUsers();
 				state.setDisabled(true);
 				sendImage();
@@ -110,7 +109,7 @@ public class ServerConnection extends Thread {
 	private void sendUsers() {
 		String list = Protocol.USERLIST + " ";
 		for (ServerConnection cc : connections) {
-			list += cc.getHostName() + " ";
+			list += cc.name + " ";
 		}
 		writeToAll(list);
 	}
@@ -144,11 +143,9 @@ public class ServerConnection extends Thread {
 			int bytesRead = 0;
 
 			while (totalBytesRead < size && bytesRead != -1) {
-				bytesRead = is.read(mybytearray, totalBytesRead,
-						mybytearray.length - totalBytesRead);
+				bytesRead = is.read(mybytearray, totalBytesRead, mybytearray.length - totalBytesRead);
 				totalBytesRead += bytesRead;
-				// System.out.println(totalBytesRead + " / " + size +
-				// " read & bytesread = " + bytesRead);
+//				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead);
 			}
 
 			InputStream in = new ByteArrayInputStream(mybytearray);

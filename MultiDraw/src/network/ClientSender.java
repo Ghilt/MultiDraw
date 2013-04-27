@@ -7,14 +7,16 @@ import java.net.Socket;
 import utils.Protocol;
 
 public class ClientSender extends Thread {
+	private String clientName;
 	private Socket s;
 	private OutputStream out;
 	private SendBuffer buffer;
 
-	public ClientSender(Socket s, SendBuffer buffer) {
+	public ClientSender(String myName, Socket s, SendBuffer buffer) {
+		this.clientName = myName;
 		this.s = s;
 		this.buffer = buffer;
-		buffer.put(Protocol.ALOHA + " ");
+		buffer.put(Protocol.ALOHA + " " + myName);
 	}
 
 	public void run() {
@@ -42,5 +44,9 @@ public class ClientSender extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getClientName() {
+		return clientName;
 	}
 }
