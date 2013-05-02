@@ -20,6 +20,6 @@ public class BrushSizeSlider extends JSlider implements ChangeListener{
 	
 	public void stateChanged(ChangeEvent ce) {
 		int size = this.getValue();
-		paintPanel.sendChangeBrushSizeCommandToserver(size);
+		paintPanel.setBrushWidth(size);
 	}
 }

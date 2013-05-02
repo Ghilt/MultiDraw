@@ -41,12 +41,14 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 
 	// Current brush properties
 	private Color brushColor = Color.BLACK;
+	private int brushWidth = 10;
 	
 	// Current selected tool
 	private String currentTool = "PEN";
 
 	// Buffer for outgoing commands
 	private SendBuffer buffer;
+
 
 	/**
 	 * A "canvas" used to draw on.
@@ -103,6 +105,17 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 
 		Graphics2D g2 = (Graphics2D) g; // downcast to Graphics2D
 		g2.drawImage(bufImage, null, 0, 0);
+	}
+	
+	// returns brushColor
+	public int getBrushWidth() {
+		return this.brushWidth;
+	}
+	
+	// returns brushColor
+	public void setBrushWidth(int width) {
+		this.brushWidth = width;
+		sendChangeBrushSizeCommandToserver(width);
 	}
 
 	// returns brushColor
@@ -166,7 +179,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 	 * This method doesn't actually draw anything, it just puts a draw command
 	 * into the SendBuffer.
 	 */
-	private void drawBrush(MouseEvent e) {
+	public void drawBrush(MouseEvent e) {
 		// Set mouse coordinates
 		currentX = e.getX();
 		currentY = e.getY();
@@ -185,6 +198,20 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
 		// Set previous coordinates
 		previousX = currentX;
 		previousY = currentY;
+	}
+	
+	/*
+	 * This method doesn't actually draw anything, it just puts a draw command
+	 * into the SendBuffer.
+	 */
+	public void sendDrawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
+		String send = Protocol.DRAW_LINE + " " + 
+					  previousX + " " + 
+					  previousY + " " + 
+					  currentX + " " + 
+					  currentY;
+
+		buffer.put(send);
 	}
 
 	public void mousePressed(MouseEvent e) {

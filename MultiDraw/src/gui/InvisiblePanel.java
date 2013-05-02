@@ -50,11 +50,8 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g; // downcast to Graphics2D
-		
-		BufferedImage img = new BufferedImage(SIZE_X, SIZE_Y, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D test = img.createGraphics();
-		this.print(test);
-		test.dispose();
+
+		g2.drawImage(bufImage, null, 0, 0);
 	}
 	
 	public void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
@@ -71,43 +68,45 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 			    MouseEvent.MOUSE_PRESSED, // what
 			    System.currentTimeMillis(), // when
 			    0, // no modifiers
-			    e.getX(), e.getY(), // where: at (10, 10}
+			    e.getX(), e.getY(), // where
 			    1, // only 1 click 
 			    false); // not a popup trigger
 
-		paintpanel.dispatchEvent(me);
+//		paintpanel.dispatchEvent(me);
 	}
 
 	public void mouseDragged(MouseEvent e) {
 		if (dragging) {
 			currentX = e.getX();
 			currentY = e.getY();
-			drawLine(previousX, previousY, currentX, currentY, Color.BLACK.getRGB(), 20);
+			drawLine(previousX, previousY, currentX, currentY, paintpanel.getBrushColor().getRGB(), paintpanel.getBrushWidth());
 		}
 		MouseEvent me = new MouseEvent(paintpanel, // which
 			    MouseEvent.MOUSE_DRAGGED, // what
 			    System.currentTimeMillis(), // when
 			    0, // no modifiers
-			    e.getX(), e.getY(), // where: at (10, 10}
+			    e.getX(), e.getY(), // where
 			    1, // only 1 click 
 			    false); // not a popup trigger
 
-		paintpanel.dispatchEvent(me);
+//		paintpanel.dispatchEvent(me);
 	}
 
 	public void mouseReleased(MouseEvent e) {
 		dragging = false;
-		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
 		
 		MouseEvent me = new MouseEvent(paintpanel, // which
 			    MouseEvent.MOUSE_RELEASED, // what
 			    System.currentTimeMillis(), // when
 			    0, // no modifiers
-			    e.getX(), e.getY(), // where: at (10, 10}
+			    e.getX(), e.getY(), // where
 			    1, // only 1 click 
 			    false); // not a popup trigger
 		paintpanel.dispatchEvent(me);
 		
+		paintpanel.sendDrawLine(previousX, previousY, currentX, currentY, paintpanel.getBrushColor().getRGB(), paintpanel.getBrushWidth());
+
+		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
 		repaint();
 	}
 
