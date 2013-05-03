@@ -41,13 +41,15 @@ public class ClientSender extends Thread {
 			OutputStream os = s.getOutputStream();
 			int sizeToSend = 250;
 			int totalSent = 0;
-			while(totalSent < imageInByte.length){
+			while (totalSent < imageInByte.length) {
 				if (imageInByte.length - totalSent < sizeToSend)
 					sizeToSend = imageInByte.length - totalSent;
 				os.write(imageInByte, totalSent, sizeToSend);
 				os.flush();
 				totalSent += sizeToSend;
+				System.out.println(totalSent + " / " + imageInByte.length + " read & bytesread = " + sizeToSend + ". " + (imageInByte.length - totalSent) + " remaining.");
 			}
+			os.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

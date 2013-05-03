@@ -1,6 +1,5 @@
 package network;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -62,11 +61,16 @@ public class ClientReceiver extends Thread {
 							controller.drawLine(x1, y1, x2, y2, rgb, width);
 						}
 						break;
-					case Protocol.CHANGE_BRUSH_COLOR:
-						if (words.length > 1) {
-							int rgb;
-							rgb = Integer.parseInt(words[1]);
-							controller.setBrushColor(new Color(rgb));
+					case Protocol.DRAW_PEN:
+						if (words.length > 4) {
+							int x1, y1, x2, y2, rgb, width;
+							x1 = Integer.parseInt(words[1]);
+							y1 = Integer.parseInt(words[2]);
+							x2 = Integer.parseInt(words[3]);
+							y2 = Integer.parseInt(words[4]);
+							rgb = Integer.parseInt(words[5]);
+							width = Integer.parseInt(words[6]);
+							controller.drawLine(x1, y1, x2, y2, rgb, width);
 						}
 						break;
 					case Protocol.CHAT_MESSAGE:
@@ -90,16 +94,11 @@ public class ClientReceiver extends Thread {
 			System.out.println("Client receiving image with size: " + size);
 			byte[] mybytearray = new byte[size];
 			InputStream is = s.getInputStream();
-			int totalBytesRead = 0;
-			int bytesToRead = 250;
-			int bytesRead = 0;
-			while (totalBytesRead < size) {
-				if (bytesToRead > size - totalBytesRead)
-					bytesToRead = size - totalBytesRead;
-				bytesRead = is.read(mybytearray, totalBytesRead, bytesToRead);
-				totalBytesRead += bytesRead;
-				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead + ". " + (size - totalBytesRead) + " remaining.");
-			}
+			int pos = 0;
+		    do {
+		        pos += is.read(mybytearray, pos, size-pos);
+		        System.out.println(pos + " / " + size + " read");
+		    } while (pos < size);
 			InputStream in = new ByteArrayInputStream(mybytearray);
 			BufferedImage image = ImageIO.read(in);
 			controller.insertImage(image);

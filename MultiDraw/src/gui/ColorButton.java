@@ -2,53 +2,34 @@ package gui;
 
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
-public class ColorButton extends JPanel implements MouseListener  {
-	private PaintPanel paintPanel;
+import tools.ClientToolProperties;
 
-	public ColorButton(PaintPanel paintpanel) {
+public class ColorButton extends JPanel implements MouseListener  {
+	private ClientToolProperties tp;
+
+	public ColorButton(ClientToolProperties tp) {
 		super();
-		this.paintPanel = paintpanel;
+		this.tp = tp;
 		this.addMouseListener(this);
 	}
 
-	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		Color color = JColorChooser.showDialog(null, "Choose Color", paintPanel.getBrushColor());
+		Color color = JColorChooser.showDialog(null, "Choose Color", new Color(tp.getColor()));
 		if (color != null) {
 			this.setBackground(color);
-			paintPanel.sendChangeBrushcolorCommandToserver(color);
-			paintPanel.setBrushColor(color);
+			tp.setColor(color);
 		}
 	}
 
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	// Ignored
+	public void mouseEntered(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent arg0) {}
+	public void mousePressed(MouseEvent arg0) {}
+	public void mouseReleased(MouseEvent arg0) {}
 }

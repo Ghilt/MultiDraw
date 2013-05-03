@@ -25,6 +25,9 @@ public class ImageWrapper extends BufferedImage {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.g2 = createGraphics();
+	}
+	
+	public void setWhiteBackground() {
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, this.sizeX, this.sizeY);
 	}

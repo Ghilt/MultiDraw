@@ -1,6 +1,10 @@
 package mainclient;
 import gui.MultiDrawFrame;
 
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -27,7 +31,7 @@ class MultiDrawClient {
 		System.out.println(myName);
 		Socket s = null;
 		try {
-			s = new Socket("localhost", 30002);
+			s = new Socket("213.113.124.67", 30001);
 		} catch (UnknownHostException e) {
 			System.err.println("Did not find a host at the specified address.");
 			System.exit(1);

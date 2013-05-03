@@ -23,7 +23,7 @@ public class Controller {
 	}
 
 	public void setBrushColor(Color color) {
-		frame.getPaintPanel().setBrushColor(color);
+		frame.getToolProperties().setColor(color);
 	}
 
 	public void putChatMessage(String msg) {

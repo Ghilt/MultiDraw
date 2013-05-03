@@ -32,6 +32,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import network.SendBuffer;
+import tools.ClientToolProperties;
 import utils.Protocol;
 
 public class MultiDrawFrame extends JFrame {
@@ -45,8 +46,10 @@ public class MultiDrawFrame extends JFrame {
 
 	private SendBuffer buffer;
 	private PaintPanel paintpanel;
+	private InvisiblePanel ip;
 	private JTextPane chatWindow;
 	private JList<String> connectedUsersList;
+	private ClientToolProperties tp;
 
 	/**
 	 * Blabla
@@ -58,6 +61,7 @@ public class MultiDrawFrame extends JFrame {
 		this.setPreferredSize(new Dimension(1200, 850));
 		this.setMinimumSize(new Dimension(500, 500));
 		this.setResizable(true);
+		this.tp = new ClientToolProperties(buffer);
 
 		JPanel centerPanel = makeCenterPanel();
 		JPanel leftPanel = makeLeftPanel();
@@ -88,7 +92,7 @@ public class MultiDrawFrame extends JFrame {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();
-					paintpanel.sendFileForInsertingtoSever(file);
+					ip.sendFileForInsertingtoSever(file);
 				}
 			}
 		});
@@ -103,9 +107,19 @@ public class MultiDrawFrame extends JFrame {
 	}
 
 	private JPanel makeCenterPanel() {
-		paintpanel = new PaintPanel(buffer);
-		JScrollPane scroller = new JScrollPane(paintpanel);
-		scroller.setPreferredSize(new Dimension(400, 400));
+		paintpanel = new PaintPanel();
+		paintpanel.setBounds(0, 0, PaintPanel.SIZE_X, PaintPanel.SIZE_Y);
+		
+		ip = new InvisiblePanel(buffer, tp);
+		ip.setBounds(0, 0, PaintPanel.SIZE_X, PaintPanel.SIZE_Y);
+		
+		JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(PaintPanel.SIZE_X, PaintPanel.SIZE_Y));
+        
+        layeredPane.add(paintpanel, new Integer(1));
+        layeredPane.add(ip, new Integer(2));
+		
+		JScrollPane scroller = new JScrollPane(layeredPane);
 		scroller.setBorder(BorderFactory.createEmptyBorder());
 
 		JPanel centerPanel = new JPanel();
@@ -196,11 +210,11 @@ public class MultiDrawFrame extends JFrame {
 		JLabel toolsLabel = new JLabel("Tools");
 
 		// Brush size slider
-		BrushSizeSlider brushSizeSlider = new BrushSizeSlider(paintpanel);
+		BrushSizeSlider brushSizeSlider = new BrushSizeSlider(tp);
 		leftPanel.add(brushSizeSlider);
 
 		// Tool palette
-		IconButtons iconButtons = new IconButtons(paintpanel);
+		ToolPalette iconButtons = new ToolPalette(tp);
 		iconButtons.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_ICON_BUTTONS_HEIGHT));
 
 		// Color button
@@ -210,11 +224,11 @@ public class MultiDrawFrame extends JFrame {
 		JLabel colorLabel = new JLabel("Color");
 		colorLabel.setForeground(new Color(60, 60, 60));
 		
-		ColorButton colorButton1 = new ColorButton(paintpanel);
+		ColorButton colorButton1 = new ColorButton(tp);
 		colorButton1.setBackground(Color.BLACK);
 		colorButton1.setBounds(12, 0, 40, 40);
 		
-		ColorButton colorButton2 = new ColorButton(paintpanel);
+		ColorButton colorButton2 = new ColorButton(tp);
 		colorButton2.setBackground(Color.WHITE);
 		colorButton2.setBounds(27, 15, 40, 40);
 
@@ -237,6 +251,10 @@ public class MultiDrawFrame extends JFrame {
 
 	public PaintPanel getPaintPanel() {
 		return paintpanel;
+	}
+
+	public ClientToolProperties getToolProperties() {
+		return tp;
 	}
 
 	public JTextPane getChatPanel() {

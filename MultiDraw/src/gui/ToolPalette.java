@@ -14,15 +14,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class IconButtons extends JPanel {
+import tools.ClientToolProperties;
+
+public class ToolPalette extends JPanel {
 	private ButtonGroup btnGroup;
-	private PaintPanel paintpanel;
+	private ClientToolProperties tp;
 
 	// Command sent when corresponding button is pressed: PEN, BRUSH, BUCKET,
 	// ERASER, TEXT, SHAPE_LINE, SHAPE_RECTANGLE, SHAPE_ELLIPSE
-	public IconButtons(PaintPanel paintpanel) {
+	public ToolPalette(ClientToolProperties tp) {
 		btnGroup = new ButtonGroup();
-		this.paintpanel = paintpanel;
+		this.tp = tp;
 		this.setOpaque(false);
 		BtnListener btnListener = new BtnListener();
 
@@ -31,22 +33,21 @@ public class IconButtons extends JPanel {
 			JButton penButton = new JButton();
 			Image img = ImageIO.read(getClass().getResource("/res/icons/pen.png"));
 			penButton.setIcon(new ImageIcon(img));
-			penButton.setActionCommand("PEN");
-			penButton.setEnabled(false); // temporary disabled
+			penButton.setActionCommand(ClientToolProperties.PEN_TOOL + "");
 			btnGroup.add(penButton);
 
 			// brush button
 			JButton brushButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/paintbrush.png"));
 			brushButton.setIcon(new ImageIcon(img));
-			brushButton.setActionCommand("BRUSH"); 
+			brushButton.setActionCommand(ClientToolProperties.BRUSH_TOOL + ""); 
 			btnGroup.add(brushButton);
 
 			// paint bucket button
 			JButton bucketButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/paint_bucket.png"));
 			bucketButton.setIcon(new ImageIcon(img));
-			bucketButton.setActionCommand("BUCKET");
+			bucketButton.setActionCommand(ClientToolProperties.BUCKET_TOOL + "");
 			bucketButton.setEnabled(false); // temporary disabled
 			btnGroup.add(bucketButton);
 
@@ -54,14 +55,15 @@ public class IconButtons extends JPanel {
 			JButton eraserButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/erase.png"));
 			eraserButton.setIcon(new ImageIcon(img));
-			eraserButton.setActionCommand("ERASER");
+			eraserButton.setActionCommand(ClientToolProperties.ERASER_TOOL + "");
+			eraserButton.setEnabled(false); // temporary disabled
 			btnGroup.add(eraserButton);
 
 			// text button
 			JButton textButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/text.png"));
 			textButton.setIcon(new ImageIcon(img));
-			textButton.setActionCommand("TEXT");
+			textButton.setActionCommand(ClientToolProperties.TEXT_TOOL + "");
 			textButton.setEnabled(false); // temporary disabled
 			btnGroup.add(textButton);
 
@@ -69,14 +71,14 @@ public class IconButtons extends JPanel {
 			JButton lineButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/line.png"));
 			lineButton.setIcon(new ImageIcon(img));
-			lineButton.setActionCommand("SHAPE_LINE");
+			lineButton.setActionCommand(ClientToolProperties.LINE_TOOL + "");
 			btnGroup.add(lineButton);
 
 			// rectangle button
 			JButton rectangleButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/rectangle.png"));
 			rectangleButton.setIcon(new ImageIcon(img));
-			rectangleButton.setActionCommand("SHAPE_RECTANGLE"); // temporary disabled
+			rectangleButton.setActionCommand(ClientToolProperties.RECTANGLE_TOOL + ""); // temporary disabled
 			rectangleButton.setEnabled(false);
 			btnGroup.add(rectangleButton);
 
@@ -84,7 +86,7 @@ public class IconButtons extends JPanel {
 			JButton ellipseButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/ellipse.png"));
 			ellipseButton.setIcon(new ImageIcon(img));
-			ellipseButton.setActionCommand("SHAPE_ELLIPSE"); 
+			ellipseButton.setActionCommand(ClientToolProperties.ELLIPSE_TOOL + ""); 
 			ellipseButton.setEnabled(false); // temporary disabled
 			btnGroup.add(ellipseButton);
 
@@ -108,8 +110,8 @@ public class IconButtons extends JPanel {
 			// Show visually which button was pressed down
 			pressedButton.getModel().setPressed(true);
 
-			String tool = e.getActionCommand();
-			paintpanel.changeTool(tool);
+			int tool = Integer.parseInt(e.getActionCommand());
+			tp.changeTool(tool);
 		}
 	}
 }

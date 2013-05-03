@@ -15,11 +15,12 @@ public class MultiDrawServer {
 	public static void main(String[] args) {
 
 		image = new ImageWrapper(900, 780);
+		image.setWhiteBackground();
 		state = new ServerState();
 		
 		try {
 			System.out.println("Server commenciated!");
-			ServerSocket server = new ServerSocket(30002);
+			ServerSocket server = new ServerSocket(30001);
 			
 			Socket s;
 			while ((s = server.accept()) != null) {
