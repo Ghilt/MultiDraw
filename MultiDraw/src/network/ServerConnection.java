@@ -34,7 +34,7 @@ public class ServerConnection extends Thread {
 		this.s = s;
 		this.state = state;
 		this.image = image;
-		this.tp = new ToolProperties(Color.BLACK.getRGB(), 10);
+		this.tp = new ToolProperties(Color.BLACK.getRGB(),Color.WHITE.getRGB(), 10);
 	}
 
 	public void run() {
@@ -46,7 +46,7 @@ public class ServerConnection extends Thread {
 				parseCommand(strIn);
 			}
 		} catch (IOException e) {
-//			this.connections.remove(this);
+			this.state.removeConnection(this);
 //			for (ServerConnection cc : connections) {
 //				cc.sendUsers();
 //			}
@@ -62,9 +62,9 @@ public class ServerConnection extends Thread {
 			case Protocol.ALOHA:
 				this.name = words[1];
 //				sendUsers();
-//				state.setDisabled(true);
+				state.setDisabled(true);
 				sendImage();
-//				state.setDisabled(false);
+				state.setDisabled(false);
 			break;
 			case Protocol.CHAT_MESSAGE:
 				writeToAll(strIn);
@@ -81,35 +81,53 @@ public class ServerConnection extends Thread {
 				state.setDisabled(false);
 				break;
 			case Protocol.DRAW_LINE:
-//				if (!state.isDisabled()) {
-					strIn += " " + tp.getColor() + " " + tp.getBrushWidth();
-					writeToAll(strIn);
-					if (words.length > 4) {
-						int x1, y1, x2, y2;
+				if (!state.isDisabled()) {
+					if (words.length > 5) {
+						int x1, y1, x2, y2, color, width;
+						byte brushType;
 						x1 = Integer.parseInt(words[1]);
 						y1 = Integer.parseInt(words[2]);
 						x2 = Integer.parseInt(words[3]);
 						y2 = Integer.parseInt(words[4]);
-						image.drawLine(x1, y1, x2, y2, tp.getColor(), tp.getBrushWidth());
+						brushType = Byte.parseByte(words[5]);
+						color = tp.getColor(brushType);
+						width = tp.getBrushWidth();
+						image.drawLine(x1, y1, x2, y2, color, width);
+						
+						String strOut = Protocol.DRAW_LINE + " " + 
+										x1 + " " +  y1 + " " +
+										x2 + " " +  y2 + " " +
+										color + " " + width;
+						writeToAll(strOut);
 					}
-//				}
+				}
 				break;
 			case Protocol.DRAW_PEN:
-//				if (!state.isDisabled()) {
-					strIn += " " + tp.getColor() + " " + 1;
-					writeToAll(strIn);
-					if (words.length > 4) {
-						int x1, y1, x2, y2;
+				if (!state.isDisabled()) {
+					if (words.length > 5) {
+						int x1, y1, x2, y2, color;
+						byte brushType;
 						x1 = Integer.parseInt(words[1]);
 						y1 = Integer.parseInt(words[2]);
 						x2 = Integer.parseInt(words[3]);
 						y2 = Integer.parseInt(words[4]);
-						image.drawLine(x1, y1, x2, y2, tp.getColor(), 1);
+						brushType = Byte.parseByte(words[5]);
+						color = tp.getColor(brushType);
+						image.drawLine(x1, y1, x2, y2, color, 1);
+
+						String strOut = Protocol.DRAW_LINE + " " + 
+										x1 + " " +  y1 + " " +
+										x2 + " " +  y2 + " " +
+										color + " " + 1;
+						writeToAll(strOut);
 					}
-//				}
+				}
 				break;
-			case Protocol.CHANGE_BRUSH_COLOR:
-				tp.setColor(Integer.parseInt(words[1]));
+			case Protocol.BRUSH_COLOR_1:
+				tp.setColor(Integer.parseInt(words[1]), Protocol.BRUSH_COLOR_1);
+				break;
+			case Protocol.BRUSH_COLOR_2:
+				tp.setColor(Integer.parseInt(words[1]), Protocol.BRUSH_COLOR_2);
 				break;
 			case Protocol.CHANGE_BRUSH_SIZE:
 				tp.setBrushWidth(Integer.parseInt(words[1]));

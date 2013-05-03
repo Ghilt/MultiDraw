@@ -223,12 +223,12 @@ public class MultiDrawFrame extends JFrame {
         
 		JLabel colorLabel = new JLabel("Color");
 		colorLabel.setForeground(new Color(60, 60, 60));
-		
-		ColorButton colorButton1 = new ColorButton(tp);
+
+		ColorButton colorButton1 = new ColorButton(tp, Protocol.BRUSH_COLOR_1);
 		colorButton1.setBackground(Color.BLACK);
 		colorButton1.setBounds(12, 0, 40, 40);
 		
-		ColorButton colorButton2 = new ColorButton(tp);
+		ColorButton colorButton2 = new ColorButton(tp, Protocol.BRUSH_COLOR_2);
 		colorButton2.setBackground(Color.WHITE);
 		colorButton2.setBounds(27, 15, 40, 40);
 

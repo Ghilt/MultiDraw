@@ -12,18 +12,20 @@ import tools.ClientToolProperties;
 
 public class ColorButton extends JPanel implements MouseListener  {
 	private ClientToolProperties tp;
+	private int typeOfBrush;
 
-	public ColorButton(ClientToolProperties tp) {
+	public ColorButton(ClientToolProperties tp, int typeOfBrush) {
 		super();
+		this.typeOfBrush = typeOfBrush;
 		this.tp = tp;
 		this.addMouseListener(this);
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
-		Color color = JColorChooser.showDialog(null, "Choose Color", new Color(tp.getColor()));
+		Color color = JColorChooser.showDialog(null, "Choose Color", new Color(tp.getColor(typeOfBrush)));
 		if (color != null) {
 			this.setBackground(color);
-			tp.setColor(color);
+			tp.setColor(color.getRGB(), typeOfBrush);
 		}
 	}
 

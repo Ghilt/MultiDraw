@@ -22,10 +22,10 @@ public class Controller {
 		this.frame = frame;
 	}
 
-	public void setBrushColor(Color color) {
-		frame.getToolProperties().setColor(color);
+	public void setBrushColor(Color color, int type) {
+		frame.getToolProperties().setColor(color, type);
 	}
-
+	
 	public void putChatMessage(String msg) {
 		StyledDocument doc = frame.getChatPanel().getStyledDocument();
 		try {

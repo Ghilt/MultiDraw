@@ -24,6 +24,10 @@ public class ServerState {
 	public void addConnection(ServerConnection conn) {
 		connections.add(conn);
 	}
+	
+	public void removeConnection(ServerConnection conn) {
+		connections.remove(conn);
+	}
 
 	public ArrayList<ServerConnection> getConnections() { // borde kanske inte lämna ut denna utan modifiera listan här inne istället kanske
 		return connections;

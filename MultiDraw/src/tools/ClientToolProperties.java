@@ -17,40 +17,52 @@ public class ClientToolProperties {
 	public static final int ELLIPSE_TOOL = 8;
 
 	private int width;
-	private int color;
+	private int color1;
+	private int color2;
 	private int tool;
 	private SendBuffer buffer;
-
-	public ClientToolProperties(int color, int width) {
-		this.color = color;
-		this.width = width;
-		this.tool = BRUSH_TOOL;
-	}
 	
 	public ClientToolProperties(SendBuffer buffer) {
-		this.color = Color.BLACK.getRGB();
+		this.color1 = Color.BLACK.getRGB();
+		this.color2 = Color.WHITE.getRGB();
 		this.width = 10;
 		this.tool = BRUSH_TOOL;
 		this.buffer = buffer;
 	}
 
-	public int getColor() {
-		return color;
+	public int getColor(int type) {
+		if (type == Protocol.BRUSH_COLOR_1) {
+			return color1;
+		} else if (type == Protocol.BRUSH_COLOR_2) {
+			return color2;
+		}
+		return -1;
 	}
 
-	public void setColor(int color) {
-		String send = Protocol.CHANGE_BRUSH_COLOR + " " + color;
-		buffer.put(send);
-		this.color = color;
+	public void setColor(int color, int type) {
+		if (type == Protocol.BRUSH_COLOR_1) {
+			this.color1 = color;
+			String send = Protocol.BRUSH_COLOR_1 + " " + color;
+			buffer.put(send);
+		} else if (type == Protocol.BRUSH_COLOR_2) {
+			this.color2 = color;
+			String send = Protocol.BRUSH_COLOR_2 + " " + color;
+			buffer.put(send);
+		}
 	}
 	
-	public void setColor(Color color) {
-		int c = color.getRGB();
-		String send = Protocol.CHANGE_BRUSH_COLOR + " " + c;
-		buffer.put(send);
-		this.color = c;
+	public void setColor(Color color, int type) {
+		if (type == Protocol.BRUSH_COLOR_1) {
+			this.color1 = color.getRGB();
+			String send = Protocol.BRUSH_COLOR_1 + " " + color.getRGB();
+			buffer.put(send);
+		} else if (type == Protocol.BRUSH_COLOR_2) {
+			this.color2 = color.getRGB();
+			String send = Protocol.BRUSH_COLOR_2 + " " + color.getRGB();
+			buffer.put(send);
+		}
 	}
-
+	
 	public void setBrushWidth(int width) {
 		String send = Protocol.CHANGE_BRUSH_SIZE + " " + width;
 		buffer.put(send);

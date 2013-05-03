@@ -31,6 +31,8 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	private int previousX = -90000;
 	private int previousY = -90000;
 	
+	private int colorType = Protocol.BRUSH_COLOR_1;
+	
 	// Information about currently selected tool
 	private ClientToolProperties tp;
 
@@ -73,7 +75,8 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 					  previousX + " " + 
 					  previousY + " " + 
 					  currentX + " " + 
-					  currentY;
+					  currentY + " " +
+					  colorType;
 
 		buffer.put(send);
 	}
@@ -87,7 +90,8 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 					  previousX + " " + 
 					  previousY + " " + 
 					  currentX + " " + 
-					  currentY;
+					  currentY + " " +
+					  colorType;
 
 		buffer.put(send);
 	}
@@ -109,20 +113,24 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	}
 
 	public void mousePressed(MouseEvent e) {
+		// Clear top layer
+		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+		repaint();
+		
+		colorType = Protocol.BRUSH_COLOR_1;
+		if (e.getButton() == 2 || e.getButton() == 3) { // getButton returnerar olika beroende på mus.. MouseEvent.BUTTON2 är inte högerklick för mig t.ex.
+			colorType = Protocol.BRUSH_COLOR_2;
+		}
+		previousX = e.getX();
+		previousY = e.getY();
 		switch (tp.getTool()) {
 			case ClientToolProperties.BRUSH_TOOL:
-				previousX = e.getX();
-				previousY = e.getY();
-				sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(), tp.getBrushWidth());
+				sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), tp.getBrushWidth());
 				break;
 			case ClientToolProperties.PEN_TOOL:
-				previousX = e.getX();
-				previousY = e.getY();
-				sendDrawPen(previousX, previousY, e.getX(), e.getY(), tp.getColor(), 1);
+				sendDrawPen(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), 1);
 				break;
 			case ClientToolProperties.LINE_TOOL:
-				previousX = e.getX();
-				previousY = e.getY();
 				break;
 		}
 	}
@@ -130,42 +138,51 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	public void mouseDragged(MouseEvent e) {
 		switch (tp.getTool()) {
 			case ClientToolProperties.BRUSH_TOOL:
-				sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(), tp.getBrushWidth());
+				if (previousX != -90000) {
+					sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), tp.getBrushWidth());
+				}
 				previousX = e.getX();
 				previousY = e.getY();
 				break;
 			case ClientToolProperties.PEN_TOOL:
-				sendDrawPen(previousX, previousY, e.getX(), e.getY(), tp.getColor(), 1);
+				if (previousX != -90000) {
+					sendDrawPen(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), 1);
+				}
 				previousX = e.getX();
 				previousY = e.getY();
 				break;
 			case ClientToolProperties.LINE_TOOL:
-				drawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(), tp.getBrushWidth());
+				if (previousX != -90000) {
+					drawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), tp.getBrushWidth());
+				}
 				break;
 		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		switch (tp.getTool()) {
-			case ClientToolProperties.LINE_TOOL:
-				sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(), tp.getBrushWidth());
-				bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
-				repaint();
-				break;
+		if (previousX != -90000) {
+			switch (tp.getTool()) {
+				case ClientToolProperties.LINE_TOOL:
+					sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), tp.getBrushWidth());
+					bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+					repaint();
+					break;
+			}
 		}
 		
 		// Reset previous
 		previousX = -90000;
 		previousY = -90000;
+		colorType = Protocol.BRUSH_COLOR_1;
 	}
 
 	public void mouseMoved(MouseEvent e) {
 		switch (tp.getTool()) {
 			case ClientToolProperties.BRUSH_TOOL:
-				drawLine(e.getX(), e.getY(), e.getX(), e.getY(), tp.getColor(), tp.getBrushWidth());
+				drawLine(e.getX(), e.getY(), e.getX(), e.getY(), tp.getColor(Protocol.BRUSH_COLOR_1), tp.getBrushWidth());
 				break;
 			case ClientToolProperties.LINE_TOOL:
-				drawLine(e.getX(), e.getY(), e.getX(), e.getY(), tp.getColor(), tp.getBrushWidth());
+				drawLine(e.getX(), e.getY(), e.getX(), e.getY(), tp.getColor(Protocol.BRUSH_COLOR_1), tp.getBrushWidth());
 				break;
 		}
 	}
@@ -181,9 +198,6 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 
 	public void mouseClicked(MouseEvent e) {
 	}
-	
-	
-	
 	
 
 	/*

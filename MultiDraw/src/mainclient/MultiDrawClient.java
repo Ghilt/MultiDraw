@@ -1,10 +1,6 @@
 package mainclient;
 import gui.MultiDrawFrame;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
