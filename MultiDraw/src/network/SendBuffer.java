@@ -1,6 +1,14 @@
 package network;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
+
+import utils.Protocol;
 
 public class SendBuffer {
 	Vector<String> buffer;
@@ -47,4 +55,19 @@ public class SendBuffer {
 		image = imageInByte;
 	}
 	
+	public void putImportedImage(File f) {
+		try {
+			System.out.println("File loaded, sending to server");
+			BufferedImage img = ImageIO.read(f);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(img, "PNG", baos);
+			baos.flush();
+			byte[] imageInByte = baos.toByteArray();
+			baos.close();
+			putImage(imageInByte);
+			put(Protocol.SEND_FILE + " " + imageInByte.length);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -96,22 +96,6 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		buffer.put(send);
 	}
 
-	public void sendFileForInsertingtoSever(File f) {
-		try {
-			System.out.println("File loaded, sending to server");
-			BufferedImage img = ImageIO.read(f);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(img, "PNG", baos);
-			baos.flush();
-			byte[] imageInByte = baos.toByteArray();
-			baos.close();
-			buffer.putImage(imageInByte);
-			buffer.put(Protocol.SEND_FILE + " " + imageInByte.length);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void mousePressed(MouseEvent e) {
 		// Clear top layer
 		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
@@ -198,30 +182,4 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 
 	public void mouseClicked(MouseEvent e) {
 	}
-	
-
-	/*
-	 * This method doesn't actually draw anything, it just puts a draw command
-	 * into the SendBuffer.
-	 */
-//	public void drawBrush(MouseEvent e) {
-//		// Set mouse coordinates
-//		currentX = e.getX();
-//		currentY = e.getY();
-//
-//		// Need something better than -90000 here... Ugly.
-//		if (previousX == -90000 && previousY == -90000) {
-//			previousX = currentX;
-//			previousY = currentY;
-//		}
-//
-//		String send = Protocol.DRAW_LINE + " " + previousX + " " + previousY + " " + currentX + " " + currentY;
-//
-//		buffer.put(send);
-//
-//		// Set previous coordinates
-//		previousX = currentX;
-//		previousY = currentY;
-//	}
-
 }

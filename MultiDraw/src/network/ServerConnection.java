@@ -168,7 +168,7 @@ public class ServerConnection extends Thread {
 				os.write(imageInByte, totalSent, sizeToSend);
 				os.flush();
 				totalSent += sizeToSend;
-				System.out.println(totalSent + " / " + imageInByte.length + " read & bytesread = " + sizeToSend + ". " + (imageInByte.length - totalSent) + " remaining.");
+				System.out.println(totalSent + " / " + imageInByte.length + " sent. " + (imageInByte.length - totalSent) + " remaining.");
 			}
 			os.flush();
 		} catch (IOException e) {

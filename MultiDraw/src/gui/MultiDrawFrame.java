@@ -92,7 +92,7 @@ public class MultiDrawFrame extends JFrame {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();
-					ip.sendFileForInsertingtoSever(file);
+					buffer.putImportedImage(file);
 				}
 			}
 		});
