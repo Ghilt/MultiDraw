@@ -16,13 +16,13 @@ import javax.swing.JPanel;
 
 import tools.ClientToolProperties;
 
-public class IconButtons extends JPanel {
+public class ToolPalette extends JPanel {
 	private ButtonGroup btnGroup;
 	private ClientToolProperties tp;
 
 	// Command sent when corresponding button is pressed: PEN, BRUSH, BUCKET,
 	// ERASER, TEXT, SHAPE_LINE, SHAPE_RECTANGLE, SHAPE_ELLIPSE
-	public IconButtons(ClientToolProperties tp) {
+	public ToolPalette(ClientToolProperties tp) {
 		btnGroup = new ButtonGroup();
 		this.tp = tp;
 		this.setOpaque(false);

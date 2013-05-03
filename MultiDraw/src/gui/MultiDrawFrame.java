@@ -214,7 +214,7 @@ public class MultiDrawFrame extends JFrame {
 		leftPanel.add(brushSizeSlider);
 
 		// Tool palette
-		IconButtons iconButtons = new IconButtons(tp);
+		ToolPalette iconButtons = new ToolPalette(tp);
 		iconButtons.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_ICON_BUTTONS_HEIGHT));
 
 		// Color button

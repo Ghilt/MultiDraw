@@ -174,6 +174,9 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	}
 
 	public void mouseExited(MouseEvent e) {
+		// Clear top layer
+		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+		repaint();
 	}
 
 	public void mouseClicked(MouseEvent e) {
