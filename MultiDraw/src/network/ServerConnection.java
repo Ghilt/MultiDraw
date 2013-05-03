@@ -64,9 +64,9 @@ public class ServerConnection extends Thread {
 			case Protocol.ALOHA:
 				this.name = words[1];
 //				sendUsers();
-				state.setDisabled(true);
+//				state.setDisabled(true);
 				sendImage();
-				state.setDisabled(false);
+//				state.setDisabled(false);
 			break;
 			case Protocol.CHAT_MESSAGE:
 				writeToAll(strIn);
@@ -75,15 +75,15 @@ public class ServerConnection extends Thread {
 				write(Protocol.SEND_FILE + " ");
 				BufferedImage img = receiveImage(Integer.parseInt(words[1]));
 				image.insertPicture(img);
-				state.setDisabled(true);
+//				state.setDisabled(true);
 				for (ServerConnection cc : connections) {
 					cc.sendImage();
 				}
-				state.setDisabled(false);
+//				state.setDisabled(false);
 				break;
 			case Protocol.DRAW_LINE:
-				if (!state.isDisabled()) {
-					strIn += " " + tp.getColor() + " " + tp.getBrushSize();
+//				if (!state.isDisabled()) {
+					strIn += " " + tp.getColor() + " " + tp.getBrushWidth();
 					writeToAll(strIn);
 					if (words.length > 4) {
 						int x1, y1, x2, y2;
@@ -91,9 +91,23 @@ public class ServerConnection extends Thread {
 						y1 = Integer.parseInt(words[2]);
 						x2 = Integer.parseInt(words[3]);
 						y2 = Integer.parseInt(words[4]);
-						image.drawLine(x1, y1, x2, y2, tp.getColor(), tp.getBrushSize());
+						image.drawLine(x1, y1, x2, y2, tp.getColor(), tp.getBrushWidth());
 					}
-				}
+//				}
+				break;
+			case Protocol.DRAW_PEN:
+//				if (!state.isDisabled()) {
+					strIn += " " + tp.getColor() + " " + 1;
+					writeToAll(strIn);
+					if (words.length > 4) {
+						int x1, y1, x2, y2;
+						x1 = Integer.parseInt(words[1]);
+						y1 = Integer.parseInt(words[2]);
+						x2 = Integer.parseInt(words[3]);
+						y2 = Integer.parseInt(words[4]);
+						image.drawLine(x1, y1, x2, y2, tp.getColor(), 1);
+					}
+//				}
 				break;
 			case Protocol.CHANGE_BRUSH_COLOR:
 				tp.setColor(Integer.parseInt(words[1]));

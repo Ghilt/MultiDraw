@@ -1,6 +1,5 @@
 package network;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -62,11 +61,16 @@ public class ClientReceiver extends Thread {
 							controller.drawLine(x1, y1, x2, y2, rgb, width);
 						}
 						break;
-					case Protocol.CHANGE_BRUSH_COLOR:
-						if (words.length > 1) {
-							int rgb;
-							rgb = Integer.parseInt(words[1]);
-							controller.setBrushColor(new Color(rgb));
+					case Protocol.DRAW_PEN:
+						if (words.length > 4) {
+							int x1, y1, x2, y2, rgb, width;
+							x1 = Integer.parseInt(words[1]);
+							y1 = Integer.parseInt(words[2]);
+							x2 = Integer.parseInt(words[3]);
+							y2 = Integer.parseInt(words[4]);
+							rgb = Integer.parseInt(words[5]);
+							width = Integer.parseInt(words[6]);
+							controller.drawLine(x1, y1, x2, y2, rgb, width);
 						}
 						break;
 					case Protocol.CHAT_MESSAGE:

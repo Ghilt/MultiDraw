@@ -1,8 +1,6 @@
 package tools;
 
 public class ToolProperties {
-
-	
 	private int width;
 	private int color;
 
@@ -15,15 +13,15 @@ public class ToolProperties {
 		return color;
 	}
 
-	public void setColor(int clr) {
-		this.color = clr;
+	public void setColor(int color) {
+		this.color = color;
 	}
 
 	public void setBrushWidth(int width) {
 		this.width = width;
 	}
 
-	public int getBrushSize() {
+	public int getBrushWidth() {
 		return width;
 	}
 }

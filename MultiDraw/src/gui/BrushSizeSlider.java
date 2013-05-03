@@ -6,12 +6,14 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import tools.ClientToolProperties;
+
 public class BrushSizeSlider extends JSlider implements ChangeListener{
-	private PaintPanel paintPanel;
+	private ClientToolProperties tp;
 	
-	public BrushSizeSlider(PaintPanel paintPanel) {
+	public BrushSizeSlider(ClientToolProperties tp) {
 		super();
-		this.paintPanel = paintPanel;
+		this.tp = tp;
 		this.setValue(10);
 		this.addChangeListener(this);
 		this.setPreferredSize(new Dimension(80,20));
@@ -20,6 +22,6 @@ public class BrushSizeSlider extends JSlider implements ChangeListener{
 	
 	public void stateChanged(ChangeEvent ce) {
 		int size = this.getValue();
-		paintPanel.setBrushWidth(size);
+		tp.setBrushWidth(size);
 	}
 }
