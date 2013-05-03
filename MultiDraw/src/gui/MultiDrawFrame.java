@@ -209,13 +209,15 @@ public class MultiDrawFrame extends JFrame {
 		// Tools label
 		JLabel toolsLabel = new JLabel("Tools");
 
+		// Tool palette
+		ToolPalette toolPalette = new ToolPalette(tp);
+		toolPalette.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_ICON_BUTTONS_HEIGHT));
+
+		// Tools label
+		JLabel brushSizeLabel = new JLabel("Brush Size");
+		
 		// Brush size slider
 		BrushSizeSlider brushSizeSlider = new BrushSizeSlider(tp);
-		leftPanel.add(brushSizeSlider);
-
-		// Tool palette
-		ToolPalette iconButtons = new ToolPalette(tp);
-		iconButtons.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_ICON_BUTTONS_HEIGHT));
 
 		// Color button
 		JLayeredPane layeredPane = new JLayeredPane();
@@ -243,7 +245,9 @@ public class MultiDrawFrame extends JFrame {
 		layeredPane.add(colorButton2, new Integer(1));
 
 		leftPanel.add(toolsLabel);
-		leftPanel.add(iconButtons);
+		leftPanel.add(toolPalette);
+		leftPanel.add(brushSizeLabel);
+		leftPanel.add(brushSizeSlider);
 		leftPanel.add(colorLabel);
 		leftPanel.add(layeredPane);
 		return leftPanel;
