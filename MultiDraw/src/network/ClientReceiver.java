@@ -39,7 +39,7 @@ public class ClientReceiver extends Thread {
 		try {
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
-//				System.out.println("Client received strIn: " + strIn);
+				System.out.println("Client received strIn: " + strIn);
 				String cmd = strIn.substring(0, strIn.indexOf(" "));
 				String[] words;
 				words = strIn.split(" ");
@@ -51,7 +51,7 @@ public class ClientReceiver extends Thread {
 						controller.updateUsersList(words);
 						break;
 					case Protocol.DRAW_LINE:
-						if (words.length > 4) {
+						if (words.length > 5) {
 							int x1, y1, x2, y2, rgb, width;
 							x1 = Integer.parseInt(words[1]);
 							y1 = Integer.parseInt(words[2]);
@@ -63,7 +63,7 @@ public class ClientReceiver extends Thread {
 						}
 						break;
 					case Protocol.DRAW_PEN:
-						if (words.length > 4) {
+						if (words.length > 5) {
 							int x1, y1, x2, y2, rgb, width;
 							x1 = Integer.parseInt(words[1]);
 							y1 = Integer.parseInt(words[2]);
@@ -72,6 +72,28 @@ public class ClientReceiver extends Thread {
 							rgb = Integer.parseInt(words[5]);
 							width = Integer.parseInt(words[6]);
 							controller.drawLine(x1, y1, x2, y2, rgb, width);
+						}
+						break;
+					case Protocol.DRAW_RECTANGLE:
+						if (words.length > 4) {
+							int x1, y1, x2, y2, rgb;
+							x1 = Integer.parseInt(words[1]);
+							y1 = Integer.parseInt(words[2]);
+							x2 = Integer.parseInt(words[3]);
+							y2 = Integer.parseInt(words[4]);
+							rgb = Integer.parseInt(words[5]);
+							controller.drawRectangle(x1, y1, x2, y2, rgb);
+						}
+						break;
+					case Protocol.DRAW_ELLIPSE:
+						if (words.length > 4) {
+							int x1, y1, x2, y2, rgb;
+							x1 = Integer.parseInt(words[1]);
+							y1 = Integer.parseInt(words[2]);
+							x2 = Integer.parseInt(words[3]);
+							y2 = Integer.parseInt(words[4]);
+							rgb = Integer.parseInt(words[5]);
+							controller.drawEllipse(x1, y1, x2, y2, rgb);
 						}
 						break;
 					case Protocol.BRUSH_COLOR_1:

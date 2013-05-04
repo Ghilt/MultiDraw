@@ -123,6 +123,48 @@ public class ServerConnection extends Thread {
 					}
 				}
 				break;
+			case Protocol.DRAW_RECTANGLE:
+				if (!state.isDisabled()) {
+					if (words.length > 5) {
+						int x1, y1, x2, y2, color;
+						byte brushType;
+						x1 = Integer.parseInt(words[1]);
+						y1 = Integer.parseInt(words[2]);
+						x2 = Integer.parseInt(words[3]);
+						y2 = Integer.parseInt(words[4]);
+						brushType = Byte.parseByte(words[5]);
+						color = tp.getColor(brushType);
+						image.drawRectangle(x1, y1, x2, y2, color);
+						
+						String strOut = Protocol.DRAW_RECTANGLE + " " + 
+										x1 + " " +  y1 + " " +
+										x2 + " " +  y2 + " " +
+										color;
+						writeToAll(strOut);
+					}
+				}
+				break;
+			case Protocol.DRAW_ELLIPSE:
+				if (!state.isDisabled()) {
+					if (words.length > 5) {
+						int x1, y1, x2, y2, color;
+						byte brushType;
+						x1 = Integer.parseInt(words[1]);
+						y1 = Integer.parseInt(words[2]);
+						x2 = Integer.parseInt(words[3]);
+						y2 = Integer.parseInt(words[4]);
+						brushType = Byte.parseByte(words[5]);
+						color = tp.getColor(brushType);
+						image.drawEllipse(x1, y1, x2, y2, color);
+						
+						String strOut = Protocol.DRAW_ELLIPSE + " " + 
+										x1 + " " +  y1 + " " +
+										x2 + " " +  y2 + " " +
+										color;
+						writeToAll(strOut);
+					}
+				}
+				break;
 			case Protocol.BRUSH_COLOR_1:
 				tp.setColor(Integer.parseInt(words[1]), Protocol.BRUSH_COLOR_1);
 				break;

@@ -17,8 +17,8 @@ public class PaintPanel extends JPanel {
 	public static final int SIZE_X = 900;
 	public static final int SIZE_Y = 780;
 
-	/**
-	 * A "canvas" used to draw on.
+	/*
+	 * A canvas for displaying BufferedImages
 	 */
 	public PaintPanel() {
 		setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
@@ -38,6 +38,16 @@ public class PaintPanel extends JPanel {
 
 	public void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
 		bufImage.drawLine(previousX, previousY, currentX, currentY, rgb, width);
+		repaint();
+	}
+
+	public void drawRectangle(int x1, int y1, int x2, int y2, int rgb) {
+		bufImage.drawRectangle(x1, y1, x2, y2, rgb);
+		repaint();
+	}
+
+	public void drawEllipse(int x1, int y1, int x2, int y2, int rgb) {
+		bufImage.drawEllipse(x1, y1, x2, y2, rgb);
 		repaint();
 	}
 

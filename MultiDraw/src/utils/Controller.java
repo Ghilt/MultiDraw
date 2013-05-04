@@ -38,6 +38,14 @@ public class Controller {
 	public void drawLine(int x1, int y1, int x2, int y2, int rgb, int width) {
 		frame.getPaintPanel().drawLine(x1, y1, x2, y2, rgb, width);
 	}
+
+	public void drawRectangle(int x1, int y1, int x2, int y2, int rgb) {
+		frame.getPaintPanel().drawRectangle(x1, y1, x2, y2, rgb);
+	}
+
+	public void drawEllipse(int x1, int y1, int x2, int y2, int rgb) {
+		frame.getPaintPanel().drawEllipse(x1, y1, x2, y2, rgb);
+	}
 	
 	public void sendImage() {
 		sender.sendImage();

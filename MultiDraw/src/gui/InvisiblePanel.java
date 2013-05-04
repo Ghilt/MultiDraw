@@ -6,12 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import network.SendBuffer;
@@ -60,9 +55,21 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		g2.drawImage(bufImage, null, 0, 0);
 	}
 	
-	public void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
+	private void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
 		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
 		bufImage.drawLine(previousX, previousY, currentX, currentY, rgb, width);
+		repaint();
+	}
+
+	private void drawRectangle(int previousX, int previousY, int currentX, int currentY, int rgb) {
+		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+		bufImage.drawRectangle(previousX, previousY, currentX, currentY, rgb);
+		repaint();
+	}
+
+	private void drawEllipse(int previousX, int previousY, int currentX, int currentY, int rgb) {
+		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+		bufImage.drawEllipse(previousX, previousY, currentX, currentY, rgb);
 		repaint();
 	}
 	
@@ -70,7 +77,22 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	 * This method doesn't actually draw anything, it just puts a draw command
 	 * into the SendBuffer.
 	 */
-	public void sendDrawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
+	private void sendDrawPen(int previousX, int previousY, int currentX, int currentY) {
+		String send = Protocol.DRAW_PEN + " " + 
+					  previousX + " " + 
+					  previousY + " " + 
+					  currentX + " " + 
+					  currentY + " " +
+					  colorType;
+
+		buffer.put(send);
+	}
+	
+	/*
+	 * This method doesn't actually draw anything, it just puts a draw command
+	 * into the SendBuffer.
+	 */
+	private void sendDrawLine(int previousX, int previousY, int currentX, int currentY) {
 		String send = Protocol.DRAW_LINE + " " + 
 					  previousX + " " + 
 					  previousY + " " + 
@@ -85,8 +107,23 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	 * This method doesn't actually draw anything, it just puts a draw command
 	 * into the SendBuffer.
 	 */
-	public void sendDrawPen(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
-		String send = Protocol.DRAW_PEN + " " + 
+	private void sendDrawRectangle(int previousX, int previousY, int currentX, int currentY) {
+		String send = Protocol.DRAW_RECTANGLE + " " + 
+					  previousX + " " + 
+					  previousY + " " + 
+					  currentX + " " + 
+					  currentY + " " +
+					  colorType;
+
+		buffer.put(send);
+	}
+	
+	/*
+	 * This method doesn't actually draw anything, it just puts a draw command
+	 * into the SendBuffer.
+	 */
+	private void sendDrawEllipse(int previousX, int previousY, int currentX, int currentY) {
+		String send = Protocol.DRAW_ELLIPSE + " " + 
 					  previousX + " " + 
 					  previousY + " " + 
 					  currentX + " " + 
@@ -109,12 +146,14 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		previousY = e.getY();
 		switch (tp.getTool()) {
 			case ClientToolProperties.BRUSH_TOOL:
-				sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), tp.getBrushWidth());
+				sendDrawLine(previousX, previousY, e.getX(), e.getY());
 				break;
 			case ClientToolProperties.PEN_TOOL:
-				sendDrawPen(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), 1);
+				sendDrawPen(previousX, previousY, e.getX(), e.getY());
 				break;
 			case ClientToolProperties.LINE_TOOL:
+				break;
+			case ClientToolProperties.RECTANGLE_TOOL:
 				break;
 		}
 	}
@@ -123,14 +162,14 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		switch (tp.getTool()) {
 			case ClientToolProperties.BRUSH_TOOL:
 				if (previousX != -90000) {
-					sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), tp.getBrushWidth());
+					sendDrawLine(previousX, previousY, e.getX(), e.getY());
 				}
 				previousX = e.getX();
 				previousY = e.getY();
 				break;
 			case ClientToolProperties.PEN_TOOL:
 				if (previousX != -90000) {
-					sendDrawPen(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), 1);
+					sendDrawPen(previousX, previousY, e.getX(), e.getY());
 				}
 				previousX = e.getX();
 				previousY = e.getY();
@@ -140,6 +179,16 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 					drawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), tp.getBrushWidth());
 				}
 				break;
+			case ClientToolProperties.RECTANGLE_TOOL:
+				if (previousX != -90000) {
+					drawRectangle(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType));
+				}
+				break;
+			case ClientToolProperties.ELLIPSE_TOOL:
+				if (previousX != -90000) {
+					drawEllipse(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType));
+				}
+				break;
 		}
 	}
 
@@ -147,7 +196,17 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		if (previousX != -90000) {
 			switch (tp.getTool()) {
 				case ClientToolProperties.LINE_TOOL:
-					sendDrawLine(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType), tp.getBrushWidth());
+					sendDrawLine(previousX, previousY, e.getX(), e.getY());
+					bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+					repaint();
+					break;
+				case ClientToolProperties.RECTANGLE_TOOL:
+					sendDrawRectangle(previousX, previousY, e.getX(), e.getY());
+					bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+					repaint();
+					break;
+				case ClientToolProperties.ELLIPSE_TOOL:
+					sendDrawEllipse(previousX, previousY, e.getX(), e.getY());
 					bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
 					repaint();
 					break;

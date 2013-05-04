@@ -38,6 +38,46 @@ public class ImageWrapper extends BufferedImage {
 		g2.drawLine(previousX, previousY, currentX, currentY);
 	}
 
+	public void drawRectangle(int x1, int y1, int x2, int y2, int rgb) {
+		g2.setColor(new Color(rgb));
+		int x, y, width, height;
+		if (x1 < x2) {
+			x = x1;
+			width = x2 - x1;
+		} else {
+			x = x2;
+			width = x1 - x2;
+		}
+		if (y1 < y2) {
+			y = y1;
+			height = y2 - y1;
+		} else {
+			y = y2;
+			height = y1 - y2;
+		}
+		g2.fillRect(x, y, width, height);
+	}
+
+	public void drawEllipse(int x1, int y1, int x2, int y2, int rgb) {
+		g2.setColor(new Color(rgb));
+		int x, y, width, height;
+		if (x1 < x2) {
+			x = x1;
+			width = x2 - x1;
+		} else {
+			x = x2;
+			width = x1 - x2;
+		}
+		if (y1 < y2) {
+			y = y1;
+			height = y2 - y1;
+		} else {
+			y = y2;
+			height = y1 - y2;
+		}
+		g2.fillOval(x, y, width, height);
+	}
+
 	public void insertPicture(File f) {
 		BufferedImage img = null;
 		try {

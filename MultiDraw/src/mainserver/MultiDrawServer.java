@@ -12,7 +12,6 @@ public class MultiDrawServer {
 	private static ServerState state;
 	
 	public static void main(String[] args) {
-
 		image = new ImageWrapper(900, 780);
 		image.setWhiteBackground();
 		state = new ServerState();

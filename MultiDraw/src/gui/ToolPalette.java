@@ -40,7 +40,7 @@ public class ToolPalette extends JPanel {
 			JButton brushButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/paintbrush.png"));
 			brushButton.setIcon(new ImageIcon(img));
-			brushButton.setActionCommand(ClientToolProperties.BRUSH_TOOL + ""); 
+			brushButton.setActionCommand(ClientToolProperties.BRUSH_TOOL + "");
 			btnGroup.add(brushButton);
 
 			// paint bucket button
@@ -78,16 +78,14 @@ public class ToolPalette extends JPanel {
 			JButton rectangleButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/rectangle.png"));
 			rectangleButton.setIcon(new ImageIcon(img));
-			rectangleButton.setActionCommand(ClientToolProperties.RECTANGLE_TOOL + ""); // temporary disabled
-			rectangleButton.setEnabled(false);
+			rectangleButton.setActionCommand(ClientToolProperties.RECTANGLE_TOOL + "");
 			btnGroup.add(rectangleButton);
 
 			// ellipse button
 			JButton ellipseButton = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/ellipse.png"));
 			ellipseButton.setIcon(new ImageIcon(img));
-			ellipseButton.setActionCommand(ClientToolProperties.ELLIPSE_TOOL + ""); 
-			ellipseButton.setEnabled(false); // temporary disabled
+			ellipseButton.setActionCommand(ClientToolProperties.ELLIPSE_TOOL + "");
 			btnGroup.add(ellipseButton);
 
 			Enumeration<AbstractButton> buttons = btnGroup.getElements();
