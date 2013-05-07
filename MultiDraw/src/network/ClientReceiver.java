@@ -131,11 +131,10 @@ public class ClientReceiver extends Thread {
 		try {
 			System.out.println("Client receiving image with size: " + size);
 			byte[] mybytearray = new byte[size];
-			InputStream is = s.getInputStream();
-			BufferedInputStream bufis = new BufferedInputStream(is);
+			BufferedInputStream bis = new BufferedInputStream(s.getInputStream());
 			int pos = 0;
 		    do {
-		        pos += bufis.read(mybytearray, pos, size-pos);
+		        pos += bis.read(mybytearray, pos, size-pos);
 		        System.out.println(pos + " / " + size + " read");
 		    } while (pos < size);
 			InputStream in = new ByteArrayInputStream(mybytearray);

@@ -1,4 +1,5 @@
 package network;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -38,18 +39,18 @@ public class ClientSender extends Thread {
 			// Send image
 			byte[] imageInByte = buffer.popImage();
 			System.out.println("Client sending image with size: " + imageInByte.length);
-			OutputStream os = s.getOutputStream();
-			int sizeToSend = 250;
+			BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream());
+			int sizeToSend = 500;
 			int totalSent = 0;
 			while (totalSent < imageInByte.length) {
 				if (imageInByte.length - totalSent < sizeToSend)
 					sizeToSend = imageInByte.length - totalSent;
-				os.write(imageInByte, totalSent, sizeToSend);
-				os.flush();
+				bos.write(imageInByte, totalSent, sizeToSend);
+				bos.flush();
 				totalSent += sizeToSend;
 				System.out.println(totalSent + " / " + imageInByte.length + " read & bytesread = " + sizeToSend + ". " + (imageInByte.length - totalSent) + " remaining.");
 			}
-			os.flush();
+			bos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

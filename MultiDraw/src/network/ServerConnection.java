@@ -2,13 +2,14 @@ package network;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -47,9 +48,9 @@ public class ServerConnection extends Thread {
 			}
 		} catch (IOException e) {
 			this.state.removeConnection(this);
-//			for (ServerConnection cc : connections) {
-//				cc.sendUsers();
-//			}
+			for (ServerConnection cc : state.getConnections()) {
+				cc.sendUsers();
+			}
 			System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
 		}
 	}
@@ -61,7 +62,7 @@ public class ServerConnection extends Thread {
 		switch (Integer.parseInt(cmd)) {
 			case Protocol.ALOHA:
 				this.name = words[1];
-//				sendUsers();
+				sendUsers();
 				state.setDisabled(true);
 				sendImage();
 				state.setDisabled(false);
@@ -75,7 +76,6 @@ public class ServerConnection extends Thread {
 				image.insertPicture(img);
 				state.setDisabled(true);
 				for (ServerConnection cc :  state.getConnections()) {
-
 					cc.sendImage();
 				}
 				state.setDisabled(false);
@@ -201,18 +201,18 @@ public class ServerConnection extends Thread {
 
 			// Send image
 			System.out.println("Server sending image with size: " + imageInByte.length);
-			OutputStream os = s.getOutputStream();
-			int sizeToSend = 250;
+			BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream());
+			int sizeToSend = 500;
 			int totalSent = 0;
 			while(totalSent < imageInByte.length){
 				if (imageInByte.length - totalSent < sizeToSend)
 					sizeToSend = imageInByte.length - totalSent;
-				os.write(imageInByte, totalSent, sizeToSend);
-				os.flush();
+				bos.write(imageInByte, totalSent, sizeToSend);
+				bos.flush();
 				totalSent += sizeToSend;
 				System.out.println(totalSent + " / " + imageInByte.length + " sent. " + (imageInByte.length - totalSent) + " remaining.");
 			}
-			os.flush();
+			bos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -223,14 +223,14 @@ public class ServerConnection extends Thread {
 		try {
 			System.out.println("Server receiving image with size: " + size);
 			byte[] mybytearray = new byte[size];
-			InputStream is = s.getInputStream();
+			BufferedInputStream bis = new BufferedInputStream(s.getInputStream());
 			int totalBytesRead = 0;
 			int bytesToRead = 250;
 			int bytesRead = 0;
 			while (totalBytesRead < size) {
 				if (bytesToRead > size - totalBytesRead)
 					bytesToRead = size - totalBytesRead;
-				bytesRead = is.read(mybytearray, totalBytesRead, bytesToRead);
+				bytesRead = bis.read(mybytearray, totalBytesRead, bytesToRead);
 				totalBytesRead += bytesRead;
 				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead + ". " + (size - totalBytesRead) + " remaining.");
 			}
