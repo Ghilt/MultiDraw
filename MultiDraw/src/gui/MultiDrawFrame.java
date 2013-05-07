@@ -42,13 +42,13 @@ public class MultiDrawFrame extends JFrame {
 	private static final int CHATWINDOW_HEIGHT = 510;
 	private static final int LEFT_PANEL_HEIGHT = 800;
 	private static final int LEFT_PANEL_WIDTH = 80;
-	private static final int LEFT_ICON_BUTTONS_HEIGHT = 150;
+	private static final int LEFT_ICON_BUTTONS_HEIGHT = 180;
 
 	private SendBuffer buffer;
 	private PaintPanel paintpanel;
 	private InvisiblePanel ip;
 	private JTextPane chatWindow;
-	private JList<String> connectedUsersList;
+	private JList connectedUsersList;
 	private ClientToolProperties tp;
 
 	/**
@@ -110,7 +110,7 @@ public class MultiDrawFrame extends JFrame {
 		paintpanel = new PaintPanel();
 		paintpanel.setBounds(0, 0, PaintPanel.SIZE_X, PaintPanel.SIZE_Y);
 		
-		ip = new InvisiblePanel(buffer, tp);
+		ip = new InvisiblePanel(buffer, tp, paintpanel);
 		ip.setBounds(0, 0, PaintPanel.SIZE_X, PaintPanel.SIZE_Y);
 		
 		JLayeredPane layeredPane = new JLayeredPane();
@@ -145,9 +145,9 @@ public class MultiDrawFrame extends JFrame {
 		chat.setForeground(new Color(60, 60, 60));
 		chat.setHorizontalAlignment(SwingConstants.CENTER);
 
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		DefaultListModel listModel = new DefaultListModel();
 
-		connectedUsersList = new JList<String>(listModel);
+		connectedUsersList = new JList(listModel);
 		connectedUsersList.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, USERS_LIST_HEIGHT));
 		connectedUsersList.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		connectedUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -233,6 +233,8 @@ public class MultiDrawFrame extends JFrame {
 		ColorButton colorButton2 = new ColorButton(tp, Protocol.BRUSH_COLOR_2);
 		colorButton2.setBackground(Color.WHITE);
 		colorButton2.setBounds(27, 15, 40, 40);
+		
+		tp.setColorbuttons(colorButton1, colorButton2);
 
 		Border outlineBorder = BorderFactory.createLineBorder(Color.BLACK);
 		Border inlineBorder = BorderFactory.createLineBorder(Color.WHITE);
@@ -266,7 +268,7 @@ public class MultiDrawFrame extends JFrame {
 	}
 
 	public void updateUsersList(String[] words) {
-		DefaultListModel<String> model = (DefaultListModel<String>) connectedUsersList.getModel();
+		DefaultListModel model = (DefaultListModel) connectedUsersList.getModel();
 		model.clear();
 		for (int i = 1; i < words.length; i++) {
 			model.addElement(words[i]);

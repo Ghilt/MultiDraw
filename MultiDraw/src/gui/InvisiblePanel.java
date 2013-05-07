@@ -17,6 +17,7 @@ import utils.Protocol;
 public class InvisiblePanel extends JPanel implements MouseListener, MouseMotionListener {
 	private SendBuffer buffer;
 	private ImageWrapper bufImage;
+	
 
 	// Canvas size
 	public static final int SIZE_X = 900;
@@ -30,12 +31,15 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	
 	// Information about currently selected tool
 	private ClientToolProperties tp;
+	private PaintPanel paintPanel;
 
 	/**
 	 * A "canvas" used to draw on.
+	 * @param paintpanel 
 	 */
-	public InvisiblePanel(SendBuffer buffer, ClientToolProperties tp) {
+	public InvisiblePanel(SendBuffer buffer, ClientToolProperties tp, PaintPanel paintpanel) {
 		super();
+		this.paintPanel = paintpanel;
 		this.setPreferredSize(new Dimension(SIZE_X, SIZE_Y));
 		this.setOpaque(false);
 		this.addMouseListener(this);
@@ -139,7 +143,7 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		repaint();
 		
 		colorType = Protocol.BRUSH_COLOR_1;
-		if (e.getButton() == 2 || e.getButton() == 3) { // getButton returnerar olika beroende på mus.. MouseEvent.BUTTON2 är inte högerklick för mig t.ex.
+		if (e.getButton() == 2 || e.getButton() == 3) { // getButton returnerar olika beroende pï¿½ mus.. MouseEvent.BUTTON2 ï¿½r inte hï¿½gerklick fï¿½r mig t.ex.
 			colorType = Protocol.BRUSH_COLOR_2;
 		}
 		previousX = e.getX();
@@ -155,6 +159,11 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 				break;
 			case ClientToolProperties.RECTANGLE_TOOL:
 				break;
+			case ClientToolProperties.COLORPICKER_TOOL:
+				int rgb = paintPanel.getColor(e.getPoint());
+				tp.setColor(rgb,colorType);
+				tp.setTool(ClientToolProperties.BRUSH_TOOL);
+				break;	
 		}
 	}
 

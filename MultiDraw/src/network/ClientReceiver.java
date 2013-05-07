@@ -2,6 +2,7 @@ package network;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -131,9 +132,10 @@ public class ClientReceiver extends Thread {
 			System.out.println("Client receiving image with size: " + size);
 			byte[] mybytearray = new byte[size];
 			InputStream is = s.getInputStream();
+			BufferedInputStream bufis = new BufferedInputStream(is);
 			int pos = 0;
 		    do {
-		        pos += is.read(mybytearray, pos, size-pos);
+		        pos += bufis.read(mybytearray, pos, size-pos);
 		        System.out.println(pos + " / " + size + " read");
 		    } while (pos < size);
 			InputStream in = new ByteArrayInputStream(mybytearray);

@@ -3,6 +3,7 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -59,5 +60,9 @@ public class PaintPanel extends JPanel {
 	public void insertPicture(BufferedImage img) {
 		bufImage.insertPicture(img);
 		repaint();
+	}
+
+	public int getColor(Point point) {
+		return bufImage.getRGB(point.x, point.y);
 	}
 }

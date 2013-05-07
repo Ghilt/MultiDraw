@@ -29,7 +29,7 @@ public class ServerState {
 		connections.remove(conn);
 	}
 
-	public ArrayList<ServerConnection> getConnections() { // borde kanske inte lämna ut denna utan modifiera listan här inne istället kanske
+	public ArrayList<ServerConnection> getConnections() { // borde kanske inte lï¿½mna ut denna utan modifiera listan hï¿½r inne istï¿½llet kanske
 		return connections;
 	}
 }

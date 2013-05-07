@@ -1,5 +1,7 @@
 package tools;
 
+import gui.ColorButton;
+
 import java.awt.Color;
 
 import utils.Protocol;
@@ -15,12 +17,15 @@ public class ClientToolProperties {
 	public static final int TEXT_TOOL = 6;
 	public static final int RECTANGLE_TOOL = 7;
 	public static final int ELLIPSE_TOOL = 8;
+	public static final int COLORPICKER_TOOL = 9;
 
 	private int width;
 	private int color1;
 	private int color2;
 	private int tool;
 	private SendBuffer buffer;
+	private ColorButton colorButton1;
+	private ColorButton colorButton2;
 	
 	public ClientToolProperties(SendBuffer buffer) {
 		this.color1 = Color.BLACK.getRGB();
@@ -43,10 +48,12 @@ public class ClientToolProperties {
 		if (type == Protocol.BRUSH_COLOR_1) {
 			this.color1 = color;
 			String send = Protocol.BRUSH_COLOR_1 + " " + color;
+			colorButton1.setBackground(new Color(color));
 			buffer.put(send);
 		} else if (type == Protocol.BRUSH_COLOR_2) {
 			this.color2 = color;
 			String send = Protocol.BRUSH_COLOR_2 + " " + color;
+			colorButton2.setBackground(new Color(color));
 			buffer.put(send);
 		}
 	}
@@ -55,10 +62,12 @@ public class ClientToolProperties {
 		if (type == Protocol.BRUSH_COLOR_1) {
 			this.color1 = color.getRGB();
 			String send = Protocol.BRUSH_COLOR_1 + " " + color.getRGB();
+			colorButton1.setBackground(color);
 			buffer.put(send);
 		} else if (type == Protocol.BRUSH_COLOR_2) {
 			this.color2 = color.getRGB();
 			String send = Protocol.BRUSH_COLOR_2 + " " + color.getRGB();
+			colorButton2.setBackground(color);
 			buffer.put(send);
 		}
 	}
@@ -83,5 +92,10 @@ public class ClientToolProperties {
 
 	public void changeTool(int tool) {
 		this.tool = tool;
+	}
+
+	public void setColorbuttons(ColorButton colorButton1,ColorButton colorButton2) {
+		this.colorButton1 = colorButton1;
+		this.colorButton2 = colorButton2;
 	}
 }
