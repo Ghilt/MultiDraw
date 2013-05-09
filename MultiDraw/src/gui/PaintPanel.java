@@ -65,4 +65,8 @@ public class PaintPanel extends JPanel {
 	public int getColor(Point point) {
 		return bufImage.getRGB(point.x, point.y);
 	}
+
+	public BufferedImage getImage() {
+		return bufImage;
+	}
 }

@@ -40,7 +40,7 @@ public class ClientReceiver extends Thread {
 		try {
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
-				System.out.println("Client received strIn: " + strIn);
+//				System.out.println("Client received strIn: " + strIn);
 				String cmd = strIn.substring(0, strIn.indexOf(" "));
 				String[] words;
 				words = strIn.split(" ");
@@ -72,6 +72,18 @@ public class ClientReceiver extends Thread {
 							y2 = Integer.parseInt(words[4]);
 							rgb = Integer.parseInt(words[5]);
 							width = Integer.parseInt(words[6]);
+							controller.drawLine(x1, y1, x2, y2, rgb, width);
+						}
+						break;
+					case Protocol.ERASE:
+						if (words.length > 4) {
+							int x1, y1, x2, y2, rgb, width;
+							x1 = Integer.parseInt(words[1]);
+							y1 = Integer.parseInt(words[2]);
+							x2 = Integer.parseInt(words[3]);
+							y2 = Integer.parseInt(words[4]);
+							width = Integer.parseInt(words[5]);
+							rgb = Color.WHITE.getRGB();
 							controller.drawLine(x1, y1, x2, y2, rgb, width);
 						}
 						break;

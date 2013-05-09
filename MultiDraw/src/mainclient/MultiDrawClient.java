@@ -14,13 +14,6 @@ import utils.Controller;
 
 class MultiDrawClient {
 	public static void main(String[] args) {
-//		try {
-//			// Fix look and feel of GUI.
-//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		
 		String myName = "";
 		while (myName.length() <= 0)
 			myName = JOptionPane.showInputDialog("Enter a nickname");

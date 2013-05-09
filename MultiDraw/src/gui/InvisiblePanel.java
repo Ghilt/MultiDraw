@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -76,6 +77,13 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		bufImage.drawEllipse(previousX, previousY, currentX, currentY, rgb);
 		repaint();
 	}
+
+	private void drawDotWithBorder(int previousX, int previousY, int currentX, int currentY, int rgb, int borderRgb, int width) {
+		bufImage = new ImageWrapper(SIZE_X, SIZE_Y);
+		bufImage.drawLine(previousX, previousY, currentX, currentY, borderRgb, width);
+		bufImage.drawLine(previousX, previousY, currentX, currentY, rgb, width-2);
+		repaint();
+	}
 	
 	/*
 	 * This method doesn't actually draw anything, it just puts a draw command
@@ -103,6 +111,20 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 					  currentX + " " + 
 					  currentY + " " +
 					  colorType;
+
+		buffer.put(send);
+	}
+	
+	/*
+	 * This method doesn't actually draw anything, it just puts a draw command
+	 * into the SendBuffer.
+	 */
+	private void sendErase(int previousX, int previousY, int currentX, int currentY) {
+		String send = Protocol.ERASE + " " + 
+					  previousX + " " + 
+					  previousY + " " + 
+					  currentX + " " + 
+					  currentY;
 
 		buffer.put(send);
 	}
@@ -163,6 +185,9 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 				int rgb = paintPanel.getColor(e.getPoint());
 				tp.setColor(rgb,colorType);
 				tp.setTool(ClientToolProperties.BRUSH_TOOL);
+				break;
+			case ClientToolProperties.ERASER_TOOL:
+				sendErase(previousX, previousY, e.getX(), e.getY());
 				break;	
 		}
 	}
@@ -197,6 +222,14 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 				if (previousX != -90000) {
 					drawEllipse(previousX, previousY, e.getX(), e.getY(), tp.getColor(colorType));
 				}
+				break;
+			case ClientToolProperties.ERASER_TOOL:
+				if (previousX != -90000) {
+					sendErase(previousX, previousY, e.getX(), e.getY());
+				}
+				previousX = e.getX();
+				previousY = e.getY();
+				drawDotWithBorder(e.getX(), e.getY(), e.getX(), e.getY(), Color.WHITE.getRGB(), Color.BLACK.getRGB(), tp.getBrushWidth());
 				break;
 		}
 	}
@@ -235,6 +268,9 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 				break;
 			case ClientToolProperties.LINE_TOOL:
 				drawLine(e.getX(), e.getY(), e.getX(), e.getY(), tp.getColor(Protocol.BRUSH_COLOR_1), tp.getBrushWidth());
+				break;
+			case ClientToolProperties.ERASER_TOOL:
+				drawDotWithBorder(e.getX(), e.getY(), e.getX(), e.getY(), Color.WHITE.getRGB(), Color.BLACK.getRGB(), tp.getBrushWidth());
 				break;
 		}
 	}

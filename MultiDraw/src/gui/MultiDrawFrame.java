@@ -7,8 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -20,6 +23,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -41,7 +45,7 @@ public class MultiDrawFrame extends JFrame {
 	private static final int USERS_LIST_HEIGHT = 200;
 	private static final int CHATWINDOW_HEIGHT = 510;
 	private static final int LEFT_PANEL_HEIGHT = 800;
-	private static final int LEFT_PANEL_WIDTH = 80;
+	private static final int LEFT_PANEL_WIDTH = 90;
 	private static final int LEFT_ICON_BUTTONS_HEIGHT = 180;
 
 	private SendBuffer buffer;
@@ -58,7 +62,7 @@ public class MultiDrawFrame extends JFrame {
 		this.buffer = buffer;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");
-		this.setPreferredSize(new Dimension(1200, 850));
+		this.setPreferredSize(new Dimension(1230, 870));
 		this.setMinimumSize(new Dimension(500, 500));
 		this.setResizable(true);
 		this.tp = new ClientToolProperties(buffer);
@@ -82,7 +86,7 @@ public class MultiDrawFrame extends JFrame {
 	private JMenuBar makeMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
-		JMenuItem importPic = new JMenuItem("Import image...", KeyEvent.VK_T);
+		JMenuItem importPic = new JMenuItem("Import image...");
 		importPic.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.ALT_MASK));
 		importPic.getAccessibleContext().setAccessibleDescription("Import image...");
 		importPic.addActionListener(new ActionListener() {
@@ -97,6 +101,33 @@ public class MultiDrawFrame extends JFrame {
 			}
 		});
 		fileMenu.add(importPic);
+		
+		JMenuItem savePic = new JMenuItem("Save image");
+		savePic.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		savePic.getAccessibleContext().setAccessibleDescription("Save image");
+		savePic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BufferedImage bi = paintpanel.getImage();
+				JFileChooser fc = new JFileChooser();
+				int returnVal = fc.showOpenDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+				    try {
+						File file = fc.getSelectedFile();
+						if (!file.exists()) {
+							ImageIO.write(bi, "png", file);
+						} else {
+							int reply = JOptionPane.showConfirmDialog(null, file.getAbsolutePath() + "\nAre you sure you wish to overwrite this file?", "Confirm save", JOptionPane.YES_NO_OPTION);
+							if (reply == JOptionPane.YES_OPTION) {
+								ImageIO.write(bi, "png", file);
+							}
+						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		fileMenu.add(savePic);
 
 		JMenu editMenu = new JMenu("Edit");
 		JMenu aboutMenu = new JMenu("About");

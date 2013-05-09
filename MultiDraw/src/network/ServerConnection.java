@@ -123,6 +123,26 @@ public class ServerConnection extends Thread {
 					}
 				}
 				break;
+			case Protocol.ERASE:
+				if (!state.isDisabled()) {
+					if (words.length > 4) {
+						int x1, y1, x2, y2, color, width;
+						x1 = Integer.parseInt(words[1]);
+						y1 = Integer.parseInt(words[2]);
+						x2 = Integer.parseInt(words[3]);
+						y2 = Integer.parseInt(words[4]);
+						color = Color.WHITE.getRGB();
+						width = tp.getBrushWidth();
+						image.drawLine(x1, y1, x2, y2, color, width);
+						
+						String strOut = Protocol.ERASE + " " + 
+										x1 + " " +  y1 + " " +
+										x2 + " " +  y2 + " " +
+										width;
+						writeToAll(strOut);
+					}
+				}
+				break;
 			case Protocol.DRAW_RECTANGLE:
 				if (!state.isDisabled()) {
 					if (words.length > 5) {
