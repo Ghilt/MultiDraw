@@ -7,8 +7,9 @@
 -Fixa så att pipetten återgår till det verktyg man hade tidigare när man valt färg
 -Fixa chatten så att man ser vem som skriver vad
 -Fixa chatten så att man ser vem man är inloggad som
+-paint bucket verkar krånglig att implementera, kanske plocka bort?
 
-Text example:
+insert text example:
 public void paint(Graphics g)
 {
    g.drawString("abc", 25, 25);
