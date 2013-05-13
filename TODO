@@ -1,3 +1,15 @@
 - Implementera sÃ¥ att servern delar ut den nuvarande bilden till klienter som ansluter mitt i en session.
 
 - Klienten avslutar ansultningen till servern när man stänger klienten
+
+
+-Fixa så att valt verktyg förblir nedtryckt när man väljer färg eller ändrar brush size
+-Fixa så att pipetten återgår till det verktyg man hade tidigare när man valt färg
+-Fixa chatten så att man ser vem som skriver vad
+-Fixa chatten så att man ser vem man är inloggad som
+
+Text example:
+public void paint(Graphics g)
+{
+   g.drawString("abc", 25, 25);
+}
