@@ -21,15 +21,17 @@ public class ServerState {
 		this.disabled = disabled;
 	}
 
-	public void addConnection(ServerConnection conn) {
+	public synchronized void addConnection(ServerConnection conn) {
 		connections.add(conn);
 	}
 	
-	public void removeConnection(ServerConnection conn) {
+	public synchronized void removeConnection(ServerConnection conn) {
 		connections.remove(conn);
 	}
 
-	public ArrayList<ServerConnection> getConnections() { // borde kanske inte l�mna ut denna utan modifiera listan h�r inne ist�llet kanske
-		return connections;
+	public synchronized ArrayList<ServerConnection> getConnections() { // borde kanske inte l�mna ut denna utan modifiera listan h�r inne ist�llet kanske
+		ArrayList<ServerConnection> temp = new ArrayList<ServerConnection>();
+		temp.addAll(connections);
+		return temp;
 	}
 }
