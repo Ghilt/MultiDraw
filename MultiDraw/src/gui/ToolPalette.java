@@ -49,13 +49,13 @@ public class ToolPalette extends JPanel {
 			colorPicker.setActionCommand(ClientToolProperties.COLORPICKER_TOOL + "");
 			btnGroup.add(colorPicker);
 
-			// paint bucket button
-			JButton bucketButton = new JButton();
-			img = ImageIO.read(getClass().getResource("/res/icons/paint_bucket.png"));
-			bucketButton.setIcon(new ImageIcon(img));
-			bucketButton.setActionCommand(ClientToolProperties.BUCKET_TOOL + "");
-			bucketButton.setEnabled(false); // temporary disabled
-			btnGroup.add(bucketButton);
+			// paint bucket button (scrapped)
+//			JButton bucketButton = new JButton();
+//			img = ImageIO.read(getClass().getResource("/res/icons/paint_bucket.png"));
+//			bucketButton.setIcon(new ImageIcon(img));
+//			bucketButton.setActionCommand(ClientToolProperties.BUCKET_TOOL + "");
+//			bucketButton.setEnabled(false); // temporary disabled
+//			btnGroup.add(bucketButton);
 
 			// eraser button
 			JButton eraserButton = new JButton();
