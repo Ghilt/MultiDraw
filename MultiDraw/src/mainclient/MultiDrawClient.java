@@ -1,6 +1,7 @@
 package mainclient;
 
 import gui.MultiDrawFrame;
+import gui.ToolPalette;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -45,17 +46,23 @@ class MultiDrawClient {
 		myPanel.add(nick);
 		myPanel.add(new JLabel("Host: "));
 		myPanel.add(address);
-		myPanel.setPreferredSize(new Dimension(390,60));
+		myPanel.setPreferredSize(new Dimension(380,60));
 
 		
-	
 		
-		ImageIcon img = new ImageIcon();
+		Image img = null;
+		try {
+			img = ImageIO.read(ToolPalette.class.getResource("/res/icons/paintbrush.png"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		ImageIcon imgic = new ImageIcon(img);
 		
 		while(nick.getText().length() <= 0){
 			
 			int result = JOptionPane.showConfirmDialog(null, myPanel,"Connect to an AOJA Mainframe", 
-					JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,img);
+					JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,imgic);
 			if (result == JOptionPane.OK_OPTION) {
 				myName = nick.getText();
 			} else {
