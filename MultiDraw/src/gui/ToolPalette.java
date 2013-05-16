@@ -45,7 +45,7 @@ public class ToolPalette extends JPanel {
 			// colorPicker button
 			JButton colorPicker = new JButton();
 			img = ImageIO.read(getClass().getResource("/res/icons/pipette.png"));
-			colorPicker.setIcon(new ImageIcon(img)); // replace this ugly artwork
+			colorPicker.setIcon(new ImageIcon(img)); 
 			colorPicker.setActionCommand(ClientToolProperties.COLORPICKER_TOOL + "");
 			btnGroup.add(colorPicker);
 
