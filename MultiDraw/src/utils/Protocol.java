@@ -13,6 +13,7 @@ public interface Protocol {
 	public static final byte DRAW_RECTANGLE = 12;
 	public static final byte DRAW_ELLIPSE = 13;
 	public static final byte ERASE = 14;
+	public static final byte DRAW_TEXT = 15;
 	
 	// Tool properties
 	public static final byte BRUSH_COLOR_1 = 20;

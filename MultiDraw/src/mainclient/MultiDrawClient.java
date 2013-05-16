@@ -3,6 +3,7 @@ package mainclient;
 import gui.MultiDrawFrame;
 import gui.ToolPalette;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -47,8 +48,7 @@ class MultiDrawClient {
 		myPanel.add(new JLabel("Host: "));
 		myPanel.add(address);
 		myPanel.setPreferredSize(new Dimension(380,60));
-
-		
+		//myPanel.setBackground(new Color(190,155,200));
 		
 		Image img = null;
 		try {

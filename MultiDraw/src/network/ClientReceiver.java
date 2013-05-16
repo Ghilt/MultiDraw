@@ -109,6 +109,17 @@ public class ClientReceiver extends Thread {
 							controller.drawEllipse(x1, y1, x2, y2, rgb);
 						}
 						break;
+					case Protocol.DRAW_TEXT:
+						if (words.length > 3) {
+							int x, y, color;
+							char c;
+							x = Integer.parseInt(words[1]);
+							y = Integer.parseInt(words[2]);
+							c = words[3].charAt(0);
+							color = Integer.parseInt(words[4]);
+							controller.drawText(x, y, c, color);
+						}
+						break;
 					case Protocol.BRUSH_COLOR_1:
 						if (words.length > 1) {
 							int rgb;

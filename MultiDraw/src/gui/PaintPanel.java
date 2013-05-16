@@ -52,6 +52,10 @@ public class PaintPanel extends JPanel {
 		repaint();
 	}
 
+	public void drawText(int x, int y, char c, int rgb) {
+		bufImage.drawText(x, y, c, rgb);
+	}
+
 	public void insertPicture(File file) {
 		bufImage.insertPicture(file);
 		repaint();

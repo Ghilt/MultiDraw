@@ -1,13 +1,12 @@
 - Implementera sÃ¥ att servern delar ut den nuvarande bilden till klienter som ansluter mitt i en session.
 
-- Klienten avslutar ansultningen till servern när man stänger klienten
+- Klienten avslutar ansultningen till servern nï¿½r man stï¿½nger klienten
 
 
--Fixa så att valt verktyg förblir nedtryckt när man väljer färg eller ändrar brush size
--Fixa så att pipetten återgår till det verktyg man hade tidigare när man valt färg
--Fixa chatten så att man ser vem som skriver vad
--Fixa chatten så att man ser vem man är inloggad som
--paint bucket verkar krånglig att implementera, kanske plocka bort?
+-Fixa sï¿½ att valt verktyg fï¿½rblir nedtryckt nï¿½r man vï¿½ljer fï¿½rg eller ï¿½ndrar brush size
+-Fixa sï¿½ att pipetten ï¿½tergï¿½r till det verktyg man hade tidigare nï¿½r man valt fï¿½rg
+-Fixa chatten sï¿½ att man ser vem som skriver vad
+-Fixa chatten sï¿½ att man ser vem man ï¿½r inloggad som
 
 insert text example:
 public void paint(Graphics g)

@@ -78,6 +78,11 @@ public class ImageWrapper extends BufferedImage {
 		g2.fillOval(x, y, width, height);
 	}
 
+	public void drawText(int x, int y, char c, int color) {
+		g2.setColor(new Color(color));
+		g2.drawString(c + "", x, y);
+	}
+
 	public void insertPicture(File f) {
 		BufferedImage img = null;
 		try {

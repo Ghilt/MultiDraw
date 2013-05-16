@@ -57,6 +57,7 @@ public class ServerConnection extends Thread {
 
 	private String parseCommand(String strIn) {
 		String cmd = strIn.substring(0, strIn.indexOf(" "));
+		strIn = strIn.replaceAll("   ", " 32 ");
 		String[] words;
 		words = strIn.split(" ");
 		switch (Integer.parseInt(cmd)) {
@@ -180,6 +181,28 @@ public class ServerConnection extends Thread {
 						String strOut = Protocol.DRAW_ELLIPSE + " " + 
 										x1 + " " +  y1 + " " +
 										x2 + " " +  y2 + " " +
+										color;
+						writeToAll(strOut);
+					}
+				}
+				break;
+			case Protocol.DRAW_TEXT:
+				if (!state.isDisabled()) {
+					if (words.length > 3) {
+						int x, y, color;
+						char c;
+						byte brushType;
+						x = Integer.parseInt(words[1]);
+						y = Integer.parseInt(words[2]);
+						c = words[3].charAt(0);
+						brushType = Byte.parseByte(words[4]);
+						color = tp.getColor(brushType);
+						image.drawText(x, y, c, color);
+						
+						String strOut = Protocol.DRAW_TEXT + " " + 
+										x + " " + 
+										y + " " +
+										c + " " +
 										color;
 						writeToAll(strOut);
 					}

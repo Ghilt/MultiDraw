@@ -46,6 +46,10 @@ public class Controller {
 	public void drawEllipse(int x1, int y1, int x2, int y2, int rgb) {
 		frame.getPaintPanel().drawEllipse(x1, y1, x2, y2, rgb);
 	}
+
+	public void drawText(int x, int y, char c, int rgb) {
+		frame.getPaintPanel().drawText(x, y, c, rgb);
+	}
 	
 	public void sendImage() {
 		sender.sendImage();

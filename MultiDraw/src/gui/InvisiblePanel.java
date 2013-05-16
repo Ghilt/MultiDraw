@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -15,11 +17,10 @@ import tools.ClientToolProperties;
 import utils.ImageWrapper;
 import utils.Protocol;
 
-public class InvisiblePanel extends JPanel implements MouseListener, MouseMotionListener {
+public class InvisiblePanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 	private SendBuffer buffer;
 	private ImageWrapper bufImage;
 	
-
 	// Canvas size
 	public static final int SIZE_X = 900;
 	public static final int SIZE_Y = 780;
@@ -45,6 +46,7 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		this.setOpaque(false);
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
+		this.addKeyListener(this);
 		this.tp = tp;
 		this.buffer = buffer;
 
@@ -158,6 +160,20 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 
 		buffer.put(send);
 	}
+	
+	/*
+	 * This method doesn't actually draw anything, it just puts a draw command
+	 * into the SendBuffer.
+	 */
+	private void sendDrawText(int x, int y, char c) {
+		String send = Protocol.DRAW_TEXT + " " + 
+					  x + " " + 
+					  y + " " + 
+					  c + " " +
+					  colorType;
+
+		buffer.put(send);
+	}
 
 	public void mousePressed(MouseEvent e) {
 		// Clear top layer
@@ -165,7 +181,7 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		repaint();
 		
 		colorType = Protocol.BRUSH_COLOR_1;
-		if (e.getButton() == 2 || e.getButton() == 3) { // getButton returnerar olika beroende p� mus.. MouseEvent.BUTTON2 �r inte h�gerklick f�r mig t.ex.
+		if (e.getButton() == 2 || e.getButton() == 3) { // getButton returnerar olika beroende på mus.. MouseEvent.BUTTON2 är inte högerklick för mig t.ex.
 			colorType = Protocol.BRUSH_COLOR_2;
 		}
 		previousX = e.getX();
@@ -188,6 +204,10 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 				break;
 			case ClientToolProperties.ERASER_TOOL:
 				sendErase(previousX, previousY, e.getX(), e.getY());
+				break;	
+			case ClientToolProperties.TEXT_TOOL:
+				this.setFocusable(true);
+				this.requestFocus();
 				break;	
 		}
 	}
@@ -256,8 +276,10 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		}
 		
 		// Reset previous
-		previousX = -90000;
-		previousY = -90000;
+		if (tp.getTool() != ClientToolProperties.TEXT_TOOL) {
+			previousX = -90000;
+			previousY = -90000;
+		}
 		colorType = Protocol.BRUSH_COLOR_1;
 	}
 
@@ -285,5 +307,25 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 	}
 
 	public void mouseClicked(MouseEvent e) {
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (tp.getTool() != ClientToolProperties.TEXT_TOOL)
+			return;
+		
+		char c = (char)e.getKeyChar();
+		System.out.println(c);
+		sendDrawText(previousX, previousY, c);
+		previousX += tp.getBrushWidth();
+		repaint();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 }

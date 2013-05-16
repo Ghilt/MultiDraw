@@ -69,7 +69,6 @@ public class ToolPalette extends JPanel {
 			img = ImageIO.read(getClass().getResource("/res/icons/text.png"));
 			textButton.setIcon(new ImageIcon(img));
 			textButton.setActionCommand(ClientToolProperties.TEXT_TOOL + "");
-			textButton.setEnabled(false); // temporary disabled
 			btnGroup.add(textButton);
 
 			// line button
