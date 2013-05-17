@@ -89,7 +89,6 @@ public class ServerConnection extends Thread {
 						handleSlashCommand(text);
 						write(send);
 					} else {
-						System.out.println(send);
 						writeToAll(send);
 					}
 				}
@@ -228,7 +227,6 @@ public class ServerConnection extends Thread {
 										y + " " +
 										words[3] + " " +
 										color + " " + width;
-						System.out.println(strOut);
 						writeToAll(strOut);
 					}
 				}
@@ -280,14 +278,14 @@ public class ServerConnection extends Thread {
 			write(Protocol.ALOHA + " " + imageInByte.length);
 			
 			String waitForAck = in.readLine();
-			if(waitForAck == null){
+			if (waitForAck == null || Byte.parseByte(waitForAck) != Protocol.ACK) {
 				disconnection();
-				System.out.println("Error");
+				System.err.println("Error: Expected ACK, received: " + waitForAck);
 				return;
 			}
 
 			// Send image
-			System.out.println("Server sending image with size: " + imageInByte.length);
+			//System.out.println("Server sending image with size: " + imageInByte.length);
 			BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream());
 			int sizeToSend = 500;
 			int totalSent = 0;
@@ -297,7 +295,7 @@ public class ServerConnection extends Thread {
 				bos.write(imageInByte, totalSent, sizeToSend);
 				bos.flush();
 				totalSent += sizeToSend;
-				System.out.println(totalSent + " / " + imageInByte.length + " sent. " + (imageInByte.length - totalSent) + " remaining.");
+				//System.out.println(totalSent + " / " + imageInByte.length + " sent. " + (imageInByte.length - totalSent) + " remaining.");
 			}
 			bos.flush();
 		} catch (IOException e) {
@@ -308,7 +306,7 @@ public class ServerConnection extends Thread {
 	private BufferedImage receiveImage(int size) {
 		BufferedImage im = null;
 		try {
-			System.out.println("Server receiving image with size: " + size);
+			//System.out.println("Server receiving image with size: " + size);
 			byte[] mybytearray = new byte[size];
 			BufferedInputStream bis = new BufferedInputStream(s.getInputStream());
 			int totalBytesRead = 0;
@@ -319,7 +317,7 @@ public class ServerConnection extends Thread {
 					bytesToRead = size - totalBytesRead;
 				bytesRead = bis.read(mybytearray, totalBytesRead, bytesToRead);
 				totalBytesRead += bytesRead;
-				System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead + ". " + (size - totalBytesRead) + " remaining.");
+				//System.out.println(totalBytesRead + " / " + size + " read & bytesread = " + bytesRead + ". " + (size - totalBytesRead) + " remaining.");
 			}
 			InputStream in = new ByteArrayInputStream(mybytearray);
 			im = ImageIO.read(in);
@@ -330,11 +328,11 @@ public class ServerConnection extends Thread {
 	}
 
 	public void write(String in) { // send command to receiver
-		if(out != null){
+		if (out != null) {
 			out.println(in);
 			out.flush();
 		} else {
-			System.out.println("Error, outstream was null");
+			System.err.println("Error, outstream was null");
 			disconnection();
 		}
 	}

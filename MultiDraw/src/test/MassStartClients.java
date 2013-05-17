@@ -1,6 +1,6 @@
 package test;
 
-import gui.MultiDrawFrame;
+import gui.AOJAClientFrame;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -51,7 +51,7 @@ class MssThread extends Thread{
 		Controller controller = new Controller();
 		ClientReceiver receiver = new ClientReceiver(s, controller);
 		ClientSender sender = new ClientSender(getName(), s, buffer);
-		MultiDrawFrame mainframe = new MultiDrawFrame(buffer);
+		AOJAClientFrame mainframe = new AOJAClientFrame(buffer);
 		
 		controller.setFrame(mainframe);
 		controller.setSender(sender);

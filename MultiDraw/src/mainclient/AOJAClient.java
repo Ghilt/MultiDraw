@@ -1,11 +1,13 @@
 package mainclient;
 
-import gui.MultiDrawFrame;
+import gui.AOJAClientFrame;
 import gui.ToolPalette;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -23,12 +25,10 @@ import network.ClientSender;
 import network.SendBuffer;
 import utils.Controller;
 
-class MultiDrawClient {
+class AOJAClient {
 	public static void main(String[] args) {
 		String myName = "";
-
-
-		JTextField nick = new JTextField(25);
+		final JTextField nick = new JTextField(25);
 		JTextField address = new JTextField(25);
 		try {
 			address.setText(InetAddress.getLocalHost().getHostAddress());
@@ -45,7 +45,6 @@ class MultiDrawClient {
 		myPanel.add(new JLabel("Host: "));
 		myPanel.add(address);
 		myPanel.setPreferredSize(new Dimension(380,60));
-		//myPanel.setBackground(new Color(190,155,200));
 		
 		Image img = null;
 		try {
@@ -56,10 +55,10 @@ class MultiDrawClient {
 		
 		ImageIcon imgic = new ImageIcon(img);
 		
-		while(nick.getText().length() <= 0){
-			
-			int result = JOptionPane.showConfirmDialog(null, myPanel,"Connect to an AOJA Mainframe", 
-					JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,imgic);
+		while (nick.getText().length() <= 0) {
+			Object[] options = { "OK", "CANCEL" };
+			int result = JOptionPane.showOptionDialog(null, myPanel, "Connect to an AOJA Mainframe", 
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, imgic, options, "");
 			if (result == JOptionPane.OK_OPTION) {
 				myName = nick.getText();
 			} else {
@@ -68,7 +67,6 @@ class MultiDrawClient {
 		}
 
 		Socket s = null;
-
 		try {
 			s = new Socket(address.getText(), 30001);
 		} catch (UnknownHostException e) {
@@ -83,7 +81,7 @@ class MultiDrawClient {
 		Controller controller = new Controller();
 		ClientReceiver receiver = new ClientReceiver(s, controller);
 		ClientSender sender = new ClientSender(myName, s, buffer);
-		MultiDrawFrame mainframe = new MultiDrawFrame(buffer);
+		AOJAClientFrame mainframe = new AOJAClientFrame(buffer);
 
 		controller.setFrame(mainframe);
 		controller.setSender(sender);

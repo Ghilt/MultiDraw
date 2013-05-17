@@ -39,7 +39,7 @@ import network.SendBuffer;
 import tools.ClientToolProperties;
 import utils.Protocol;
 
-public class MultiDrawFrame extends JFrame {
+public class AOJAClientFrame extends JFrame {
 	private static final int RIGHT_PANEL_WIDTH = 200;
 	private static final int RIGHT_PANEL_HEIGHT = 800;
 	private static final int USERS_LIST_HEIGHT = 200;
@@ -56,9 +56,9 @@ public class MultiDrawFrame extends JFrame {
 	private ClientToolProperties tp;
 
 	/**
-	 * Blabla
+	 * The main frame for the client
 	 */
-	public MultiDrawFrame(SendBuffer buffer) {
+	public AOJAClientFrame(SendBuffer buffer) {
 		this.buffer = buffer;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("AOJA POWER ARTIST CANVAS EDITOR PRO");

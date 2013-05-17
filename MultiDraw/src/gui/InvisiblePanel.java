@@ -336,10 +336,10 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		char c = (char)e.getKeyChar();
 		if ((int)c > 32 && (int)c < 127) {
 			sendDrawText(previousX, previousY, c);
-			previousX += tp.getBrushWidth();
+			previousX += (tp.getBrushWidth() / 3.0) * 2.0;
 		} else if((int)c == 32) {
 			sendDrawText(previousX, previousY, Protocol.CHAR_SPACE);
-			previousX += tp.getBrushWidth();
+			previousX += (tp.getBrushWidth() / 3.0) * 2.0;
 		} else if((int)c == 10) {
 			previousX = textStartX;
 			previousY += tp.getBrushWidth();

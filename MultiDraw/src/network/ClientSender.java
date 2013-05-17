@@ -21,7 +21,7 @@ public class ClientSender extends Thread {
 	}
 
 	public void run() {
-		System.out.println("ClientSender running...");
+//		System.out.println("ClientSender running...");
 		try {
 			out = s.getOutputStream();
 			PrintWriter writer = new PrintWriter(out, true);
@@ -38,7 +38,7 @@ public class ClientSender extends Thread {
 		try {
 			// Send image
 			byte[] imageInByte = buffer.popImage();
-			System.out.println("Client sending image with size: " + imageInByte.length);
+//			System.out.println("Client sending image with size: " + imageInByte.length);
 			BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream());
 			int sizeToSend = 500;
 			int totalSent = 0;
@@ -48,7 +48,7 @@ public class ClientSender extends Thread {
 				bos.write(imageInByte, totalSent, sizeToSend);
 				bos.flush();
 				totalSent += sizeToSend;
-				System.out.println(totalSent + " / " + imageInByte.length + " read & bytesread = " + sizeToSend + ". " + (imageInByte.length - totalSent) + " remaining.");
+//				System.out.println(totalSent + " / " + imageInByte.length + " read & bytesread = " + sizeToSend + ". " + (imageInByte.length - totalSent) + " remaining.");
 			}
 			bos.flush();
 		} catch (IOException e) {

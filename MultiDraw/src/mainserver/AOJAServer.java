@@ -7,7 +7,7 @@ import network.ServerConnection;
 import utils.ImageWrapper;
 import utils.ServerState;
 
-public class MultiDrawServer {
+public class AOJAServer {
 	private static ImageWrapper image;
 	private static ServerState state;
 	
@@ -16,9 +16,14 @@ public class MultiDrawServer {
 		image.setWhiteBackground();
 		state = new ServerState();
 		
+		if (args.length < 1) {
+			System.err.println("Usage: MultiDrawServer <port>");
+			System.exit(1);
+		}
+		
 		try {
 			System.out.println("Server commenciated!");
-			ServerSocket server = new ServerSocket(30001);
+			ServerSocket server = new ServerSocket(Integer.parseInt(args[0]));
 			
 			Socket s;
 			while ((s = server.accept()) != null) {

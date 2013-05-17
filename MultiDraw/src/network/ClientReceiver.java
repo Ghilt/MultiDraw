@@ -36,7 +36,7 @@ public class ClientReceiver extends Thread {
 	}
 
 	public void run() {
-		System.out.println("ClientReceiver running...");
+//		System.out.println("ClientReceiver running...");
 		try {
 			String strIn = "";
 			while ((strIn = in.readLine()) != null) {
@@ -155,18 +155,18 @@ public class ClientReceiver extends Thread {
 
 	private void receiveImage(int size) {
 		try {
-			System.out.println("Client receiving image with size: " + size);
+//			System.out.println("Client receiving image with size: " + size);
 			byte[] mybytearray = new byte[size];
 			BufferedInputStream bis = new BufferedInputStream(s.getInputStream());
 			int pos = 0;
 		    do {
 		        pos += bis.read(mybytearray, pos, size-pos);
-		        System.out.println(pos + " / " + size + " read");
+//		        System.out.println(pos + " / " + size + " read");
 		    } while (pos < size);
 			InputStream in = new ByteArrayInputStream(mybytearray);
 			BufferedImage image = ImageIO.read(in);
 			controller.insertImage(image);
-			System.out.println("Filetransfer ended received");
+//			System.out.println("Filetransfer ended received");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

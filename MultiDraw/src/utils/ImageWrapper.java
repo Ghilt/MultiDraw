@@ -82,7 +82,7 @@ public class ImageWrapper extends BufferedImage {
 
 	public void drawText(int x, int y, char c, int color, int width) {
 		g2.setColor(new Color(color));
-		g2.setFont(new Font("Monospace", Font.PLAIN, width));
+		g2.setFont(new Font("Monospaced", Font.PLAIN, width));
 		g2.drawString(c + "", x, y);
 	}
 

@@ -57,7 +57,7 @@ public class SendBuffer {
 	
 	public void putImportedImage(File f) {
 		try {
-			System.out.println("File loaded, sending to server");
+//			System.out.println("File loaded, sending to server");
 			BufferedImage img = ImageIO.read(f);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(img, "PNG", baos);

@@ -1,6 +1,6 @@
 package utils;
 
-import gui.MultiDrawFrame;
+import gui.AOJAClientFrame;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -11,14 +11,14 @@ import javax.swing.text.StyledDocument;
 import network.ClientSender;
 
 public class Controller {
-	private MultiDrawFrame frame;
+	private AOJAClientFrame frame;
 	private ClientSender sender;
 	
 	public Controller() {
 		
 	}
 	
-	public void setFrame(MultiDrawFrame frame) {
+	public void setFrame(AOJAClientFrame frame) {
 		this.frame = frame;
 	}
 
