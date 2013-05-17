@@ -66,4 +66,8 @@ public class Controller {
 	public void updateUsersList(String[] words) {
 		frame.updateUsersList(words);
 	}
+
+	public void sendAck() {
+		sender.sendAck();
+	}
 }

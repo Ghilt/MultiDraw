@@ -59,4 +59,8 @@ public class ClientSender extends Thread {
 	public String getClientName() {
 		return clientName;
 	}
+
+	public void sendAck() {
+		buffer.put(Protocol.ACK + "");
+	}
 }

@@ -247,8 +247,17 @@ public class ServerConnection extends Thread {
 			byte[] imageInByte = baos.toByteArray();
 			baos.close();
 			
+			
 			// Send ALOHA and image size
 			write(Protocol.ALOHA + " " + imageInByte.length);
+			
+			String waitForAck = in.readLine();
+			System.out.println(waitForAck + "= WAIT FOR ACK");
+			if(waitForAck == null){
+				disconnection();
+				System.out.println("Error");
+				return;
+			}
 
 			// Send image
 			System.out.println("Server sending image with size: " + imageInByte.length);

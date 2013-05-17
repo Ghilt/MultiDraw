@@ -46,6 +46,7 @@ public class ClientReceiver extends Thread {
 				words = strIn.split(" ");
 				switch (Integer.parseInt(cmd)) {
 					case Protocol.ALOHA:
+						controller.sendAck();
 						receiveImage(Integer.parseInt(words[1]));
 						break;
 					case Protocol.USERLIST:
