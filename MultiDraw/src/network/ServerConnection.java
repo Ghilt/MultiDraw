@@ -57,7 +57,6 @@ public class ServerConnection extends Thread {
 
 	private String parseCommand(String strIn) {
 		String cmd = strIn.substring(0, strIn.indexOf(" "));
-		strIn = strIn.replaceAll("   ", " 32 ");
 		String[] words;
 		words = strIn.split(" ");
 		switch (Integer.parseInt(cmd)) {
@@ -194,7 +193,11 @@ public class ServerConnection extends Thread {
 						byte brushType;
 						x = Integer.parseInt(words[1]);
 						y = Integer.parseInt(words[2]);
-						c = words[3].charAt(0);
+						if(words[3].length() != 1){
+							c = interpretAsChar(words[3]);
+						} else {
+							c = words[3].charAt(0);
+						}
 						brushType = Byte.parseByte(words[4]);
 						color = tp.getColor(brushType);
 						image.drawText(x, y, c, color);
@@ -220,6 +223,24 @@ public class ServerConnection extends Thread {
 		}
 
 		return strIn;
+	}
+
+	private char interpretAsChar(String in) {
+		char c = 0;
+		byte code = Byte.parseByte(in);
+		
+		switch (code) {
+		case Protocol.CHAR_SPACE:
+			c = ' ';
+			break;
+		case Protocol.CHAR_ENTER:
+			c = '\n';
+			break;
+		default:
+			break;
+		}
+		
+		return c;
 	}
 
 	private void sendUsers() {
