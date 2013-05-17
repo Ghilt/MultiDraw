@@ -249,7 +249,6 @@ public class ServerConnection extends Thread {
 			byte[] imageInByte = baos.toByteArray();
 			baos.close();
 			
-			
 			// Send ALOHA and image size
 			write(Protocol.ALOHA + " " + imageInByte.length);
 			
