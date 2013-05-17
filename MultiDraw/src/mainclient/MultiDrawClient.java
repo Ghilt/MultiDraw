@@ -3,7 +3,6 @@ package mainclient;
 import gui.MultiDrawFrame;
 import gui.ToolPalette;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -13,7 +12,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,7 +21,6 @@ import javax.swing.JTextField;
 import network.ClientReceiver;
 import network.ClientSender;
 import network.SendBuffer;
-import sun.tools.jar.JarImageSource;
 import utils.Controller;
 
 class MultiDrawClient {
@@ -73,7 +70,7 @@ class MultiDrawClient {
 		Socket s = null;
 
 		try {
-			s = new Socket("localhost", 30001);
+			s = new Socket(address.getText(), 30001);
 		} catch (UnknownHostException e) {
 			System.err.println("Did not find a host at the specified address.");
 			System.exit(1);

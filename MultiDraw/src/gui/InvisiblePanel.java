@@ -336,7 +336,6 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		if (tp.getTool() != ClientToolProperties.TEXT_TOOL)
 			return;
 		char c = (char)e.getKeyChar();
-		System.out.println((int)c);
 		if ((int)c > 32 && (int)c < 127) {
 			sendDrawText(previousX, previousY, c);
 			previousX += tp.getBrushWidth();
