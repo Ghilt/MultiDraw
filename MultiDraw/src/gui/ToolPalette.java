@@ -1,6 +1,8 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +14,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import tools.ClientToolProperties;
 
@@ -26,6 +29,7 @@ public class ToolPalette extends JPanel {
 		this.tp = tp;
 		this.setOpaque(false);
 		BtnListener btnListener = new BtnListener();
+		this.setLayout(new GridLayout(4, 2, 5, 5));
 
 		try {
 			// pen button
@@ -48,14 +52,6 @@ public class ToolPalette extends JPanel {
 			colorPicker.setIcon(new ImageIcon(img)); 
 			colorPicker.setActionCommand(ClientToolProperties.COLORPICKER_TOOL + "");
 			btnGroup.add(colorPicker);
-
-			// paint bucket button (scrapped)
-//			JButton bucketButton = new JButton();
-//			img = ImageIO.read(getClass().getResource("/res/icons/paint_bucket.png"));
-//			bucketButton.setIcon(new ImageIcon(img));
-//			bucketButton.setActionCommand(ClientToolProperties.BUCKET_TOOL + "");
-//			bucketButton.setEnabled(false); // temporary disabled
-//			btnGroup.add(bucketButton);
 
 			// eraser button
 			JButton eraserButton = new JButton();
@@ -98,6 +94,7 @@ public class ToolPalette extends JPanel {
 				JButton b = (JButton) buttons.nextElement();
 				b.setPreferredSize(new Dimension(30, 30));
 				b.addActionListener(btnListener);
+				b.setFocusPainted(false);
 				this.add(b);
 			}
 		} catch (Exception ex) {
@@ -107,10 +104,14 @@ public class ToolPalette extends JPanel {
 
 	private class BtnListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			Enumeration<AbstractButton> buttons = btnGroup.getElements();
+			while (buttons.hasMoreElements()) {
+				JButton b = (JButton) buttons.nextElement();
+				b.setBackground(new Color(255, 255, 255));
+			}
+			
 			JButton pressedButton = ((JButton) e.getSource());
-
-			// Show visually which button was pressed down
-			pressedButton.getModel().setPressed(true);
+			pressedButton.setBackground(new Color(200, 200, 200));
 
 			int tool = Integer.parseInt(e.getActionCommand());
 			tp.changeTool(tool);
