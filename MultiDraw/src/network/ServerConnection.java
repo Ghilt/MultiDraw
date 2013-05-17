@@ -194,20 +194,21 @@ public class ServerConnection extends Thread {
 				if (!state.isDisabled()) {
 					if (words.length > 3) {
 						int x, y, color;
-						char c;
+						char cToDraw;
 						byte brushType;
 						x = Integer.parseInt(words[1]);
 						y = Integer.parseInt(words[2]);
-						c = interpretAsChar(words[3]);
+						cToDraw = interpretAsChar(words[3]);
+						 
 						
 						brushType = Byte.parseByte(words[4]);
 						color = tp.getColor(brushType);
-						image.drawText(x, y, c, color);
+						image.drawText(x, y, cToDraw, color);
 						
 						String strOut = Protocol.DRAW_TEXT + " " + 
 										x + " " + 
 										y + " " +
-										c + " " +
+										words[3] + " " +
 										color;
 						writeToAll(strOut);
 					}
