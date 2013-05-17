@@ -303,8 +303,13 @@ public class ServerConnection extends Thread {
 	}
 
 	public void write(String in) { // send command to receiver
-		out.println(in);
-		out.flush();
+		if(out != null){
+			out.println(in);
+			out.flush();
+		} else {
+			System.out.println("Error, outstream was null");
+			disconnection();
+		}
 	}
 
 	public void writeToAll(String msg) {
