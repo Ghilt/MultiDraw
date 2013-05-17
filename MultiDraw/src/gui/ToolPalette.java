@@ -104,19 +104,22 @@ public class ToolPalette extends JPanel {
 		}
 	}
 
+	public void setActiveTool(int tool) {
+		Enumeration<AbstractButton> buttons = btnGroup.getElements();
+		while (buttons.hasMoreElements()) {
+			JButton b = (JButton) buttons.nextElement();
+			if (tool == Integer.parseInt(b.getActionCommand()))
+				b.setBackground(new Color(200, 200, 200));
+			else
+				b.setBackground(new Color(255, 255, 255));
+		}
+	}
+
 	private class BtnListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Enumeration<AbstractButton> buttons = btnGroup.getElements();
-			while (buttons.hasMoreElements()) {
-				JButton b = (JButton) buttons.nextElement();
-				b.setBackground(new Color(255, 255, 255));
-			}
-			
-			JButton pressedButton = ((JButton) e.getSource());
-			pressedButton.setBackground(new Color(200, 200, 200));
-
 			int tool = Integer.parseInt(e.getActionCommand());
 			tp.changeTool(tool);
+			setActiveTool(tool);
 		}
 	}
 }

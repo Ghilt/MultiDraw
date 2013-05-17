@@ -243,7 +243,8 @@ public class MultiDrawFrame extends JFrame {
 		// Tool palette
 		ToolPalette toolPalette = new ToolPalette(tp);
 		toolPalette.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH-10, LEFT_ICON_BUTTONS_HEIGHT));
-
+		tp.addPalette(toolPalette);
+		
 		// Tools label
 		JLabel brushSizeLabel = new JLabel("Brush Size");
 		
