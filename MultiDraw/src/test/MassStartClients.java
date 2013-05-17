@@ -18,6 +18,11 @@ public class MassStartClients {
 		for (int i = 0; i < 10; i++) {
 			MssThread test = new MssThread("Test" + i);
 			test.run();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	
 	}
@@ -31,7 +36,6 @@ class MssThread extends Thread{
 	
 	@Override
 	public void run() {
-		
 		Socket s = null;
 		try {
 			s = new Socket("localhost", 30001);
@@ -53,6 +57,5 @@ class MssThread extends Thread{
 		controller.setSender(sender);
 		receiver.start();
 		sender.start();
-		
 	}
 }
