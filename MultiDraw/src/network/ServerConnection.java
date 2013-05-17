@@ -46,13 +46,18 @@ public class ServerConnection extends Thread {
 			while ((strIn = in.readLine()) != null) {
 				parseCommand(strIn);
 			}
+			disconnection();
 		} catch (IOException e) {
-			this.state.removeConnection(this);
-			for (ServerConnection cc : state.getConnections()) {
-				cc.sendUsers();
-			}
-			System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
+			disconnection();
 		}
+	}
+	
+	private void disconnection() {
+		this.state.removeConnection(this);
+		for (ServerConnection cc : state.getConnections()) {
+			cc.sendUsers();
+		}
+		System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
 	}
 
 	private String parseCommand(String strIn) {
