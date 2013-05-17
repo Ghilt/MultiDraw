@@ -1,6 +1,6 @@
 package utils;
 
-public interface Protocol {	
+public abstract class Protocol {	
 	// Misc commands
 	public static final byte ALOHA = 1;
 	public static final byte SEND_FILE = 2;
@@ -20,4 +20,27 @@ public interface Protocol {
 	public static final byte BRUSH_COLOR_2 = 21;
 	public static final byte CHANGE_BRUSH_SIZE = 22;
 	public static final byte CHAR_SPACE = 30;
+	
+	
+	
+	
+public static char interpretAsChar(String in) {
+		
+		if(in.length() == 1){
+			return in.charAt(0);
+		}
+		
+		char c = 0;
+		byte code = Byte.parseByte(in);
+		
+		switch (code) {
+		case Protocol.CHAR_SPACE:
+			c = ' ';
+			break;
+		default:
+			break;
+		}
+		
+		return c;
+	}
 }

@@ -198,7 +198,7 @@ public class ServerConnection extends Thread {
 						byte brushType;
 						x = Integer.parseInt(words[1]);
 						y = Integer.parseInt(words[2]);
-						cToDraw = interpretAsChar(words[3]);
+						cToDraw = Protocol.interpretAsChar(words[3]);
 						 
 						
 						brushType = Byte.parseByte(words[4]);
@@ -228,25 +228,7 @@ public class ServerConnection extends Thread {
 		return strIn;
 	}
 
-	private char interpretAsChar(String in) {
-		
-		if(in.length() == 1){
-			return in.charAt(0);
-		}
-		
-		char c = 0;
-		byte code = Byte.parseByte(in);
-		
-		switch (code) {
-		case Protocol.CHAR_SPACE:
-			c = ' ';
-			break;
-		default:
-			break;
-		}
-		
-		return c;
-	}
+	
 
 	private void sendUsers() {
 		String list = Protocol.USERLIST + " ";
