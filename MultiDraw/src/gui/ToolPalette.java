@@ -95,8 +95,10 @@ public class ToolPalette extends JPanel {
 				b.setPreferredSize(new Dimension(30, 30));
 				b.addActionListener(btnListener);
 				b.setFocusPainted(false);
+				b.setBackground(new Color(255, 255, 255));
 				this.add(b);
 			}
+			brushButton.setBackground(new Color(200, 200, 200));
 		} catch (Exception ex) {
 			System.out.println("Exception: " + ex.getMessage());
 		}

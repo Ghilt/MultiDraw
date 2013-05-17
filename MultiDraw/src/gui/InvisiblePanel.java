@@ -198,10 +198,8 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		repaint();
 		
 		colorType = Protocol.BRUSH_COLOR_1;
-		System.out.println("Colortype = 1");
 		if (e.getButton() == 2 || e.getButton() == 3) { // getButton returnerar olika beroende på mus.. MouseEvent.BUTTON2 är inte högerklick för mig t.ex.
 			colorType = Protocol.BRUSH_COLOR_2;
-			System.out.println("Colortype = 2");
 		}
 		previousX = e.getX();
 		previousY = e.getY();
