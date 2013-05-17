@@ -20,5 +20,4 @@ public interface Protocol {
 	public static final byte BRUSH_COLOR_2 = 21;
 	public static final byte CHANGE_BRUSH_SIZE = 22;
 	public static final byte CHAR_SPACE = 30;
-	public static final byte CHAR_ENTER = 31;
 }

@@ -198,11 +198,8 @@ public class ServerConnection extends Thread {
 						byte brushType;
 						x = Integer.parseInt(words[1]);
 						y = Integer.parseInt(words[2]);
-						if(words[3].length() != 1){
-							c = interpretAsChar(words[3]);
-						} else {
-							c = words[3].charAt(0);
-						}
+						c = interpretAsChar(words[3]);
+						
 						brushType = Byte.parseByte(words[4]);
 						color = tp.getColor(brushType);
 						image.drawText(x, y, c, color);
@@ -231,15 +228,17 @@ public class ServerConnection extends Thread {
 	}
 
 	private char interpretAsChar(String in) {
+		
+		if(in.length() == 1){
+			return in.charAt(0);
+		}
+		
 		char c = 0;
 		byte code = Byte.parseByte(in);
 		
 		switch (code) {
 		case Protocol.CHAR_SPACE:
 			c = ' ';
-			break;
-		case Protocol.CHAR_ENTER:
-			c = '\n';
 			break;
 		default:
 			break;
