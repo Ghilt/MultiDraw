@@ -71,6 +71,7 @@ public class ServerConnection extends Thread {
 				state.setDisabled(true);
 				sendImage();
 				state.setDisabled(false);
+				writeToAll(Protocol.CHAT_MESSAGE +" > " + name + " < Connected" );
 			break;
 			case Protocol.CHAT_MESSAGE:
 				String text = strIn.substring(strIn.indexOf(" "));
@@ -253,7 +254,6 @@ public class ServerConnection extends Thread {
 			write(Protocol.ALOHA + " " + imageInByte.length);
 			
 			String waitForAck = in.readLine();
-			System.out.println(waitForAck + "= WAIT FOR ACK");
 			if(waitForAck == null){
 				disconnection();
 				System.out.println("Error");
