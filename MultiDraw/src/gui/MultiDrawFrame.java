@@ -46,7 +46,7 @@ public class MultiDrawFrame extends JFrame {
 	private static final int CHATWINDOW_HEIGHT = 510;
 	private static final int LEFT_PANEL_HEIGHT = 800;
 	private static final int LEFT_PANEL_WIDTH = 90;
-	private static final int LEFT_ICON_BUTTONS_HEIGHT = 180;
+	private static final int LEFT_ICON_BUTTONS_HEIGHT = 160;
 
 	private SendBuffer buffer;
 	private PaintPanel paintpanel;
@@ -242,7 +242,7 @@ public class MultiDrawFrame extends JFrame {
 
 		// Tool palette
 		ToolPalette toolPalette = new ToolPalette(tp);
-		toolPalette.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, LEFT_ICON_BUTTONS_HEIGHT));
+		toolPalette.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH-10, LEFT_ICON_BUTTONS_HEIGHT));
 
 		// Tools label
 		JLabel brushSizeLabel = new JLabel("Brush Size");
