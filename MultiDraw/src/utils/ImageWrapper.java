@@ -2,6 +2,7 @@ package utils;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -25,6 +26,7 @@ public class ImageWrapper extends BufferedImage {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.g2 = createGraphics();
+		this.g2.setColor(Color.BLACK);
 	}
 	
 	public void setWhiteBackground() {
@@ -78,8 +80,9 @@ public class ImageWrapper extends BufferedImage {
 		g2.fillOval(x, y, width, height);
 	}
 
-	public void drawText(int x, int y, char c, int color) {
+	public void drawText(int x, int y, char c, int color, int width) {
 		g2.setColor(new Color(color));
+		g2.setFont(new Font("Monospace", Font.PLAIN, width));
 		g2.drawString(c + "", x, y);
 	}
 

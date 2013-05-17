@@ -111,14 +111,15 @@ public class ClientReceiver extends Thread {
 						}
 						break;
 					case Protocol.DRAW_TEXT:
-						if (words.length > 3) {
-							int x, y, color;
+						if (words.length > 4) {
+							int x, y, color, width;
 							char c;
 							x = Integer.parseInt(words[1]);
 							y = Integer.parseInt(words[2]);
 							c = Protocol.interpretAsChar(words[3]);
 							color = Integer.parseInt(words[4]);
-							controller.drawText(x, y, c, color);
+							width = Integer.parseInt(words[5]);
+							controller.drawText(x, y, c, color, width);
 						}
 						break;
 					case Protocol.BRUSH_COLOR_1:
