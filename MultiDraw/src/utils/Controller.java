@@ -70,4 +70,8 @@ public class Controller {
 	public void sendAck() {
 		sender.sendAck();
 	}
+
+	public String getName() {
+		return sender.getName();
+	}
 }
