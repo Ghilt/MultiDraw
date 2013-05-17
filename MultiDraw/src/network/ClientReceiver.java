@@ -115,7 +115,7 @@ public class ClientReceiver extends Thread {
 							char c;
 							x = Integer.parseInt(words[1]);
 							y = Integer.parseInt(words[2]);
-							c = interpretAsChar(words[3]);
+							c = Protocol.interpretAsChar(words[3]);
 							color = Integer.parseInt(words[4]);
 							width = Integer.parseInt(words[5]);
 							controller.drawText(x, y, c, color, width);
@@ -150,26 +150,7 @@ public class ClientReceiver extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	private char interpretAsChar(String in) {
-		
-		if(in.length() == 1){
-			return in.charAt(0);
-		}
-		
-		char c = 0;
-		byte code = Byte.parseByte(in);
-		
-		switch (code) {
-		case Protocol.CHAR_SPACE:
-			c = ' ';
-			break;
-		default:
-			break;
-		}
-		
-		return c;
-	}
+
 
 	private void receiveImage(int size) {
 		try {
