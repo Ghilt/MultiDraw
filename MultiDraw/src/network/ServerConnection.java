@@ -73,7 +73,8 @@ public class ServerConnection extends Thread {
 				state.setDisabled(false);
 			break;
 			case Protocol.CHAT_MESSAGE:
-				writeToAll(strIn);
+				String text = strIn.substring(strIn.indexOf(" "));
+				writeToAll(Protocol.CHAT_MESSAGE +" " + name + ": " + text);
 				break;
 			case Protocol.SEND_FILE:
 				write(Protocol.SEND_FILE + " ");
