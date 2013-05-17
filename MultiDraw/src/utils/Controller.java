@@ -74,4 +74,8 @@ public class Controller {
 	public String getName() {
 		return sender.getClientName();
 	}
+
+	public void blur(int i) {
+		frame.getPaintPanel().blur(i);		
+	}
 }

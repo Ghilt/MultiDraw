@@ -61,7 +61,7 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g; // downcast to Graphics2D
 
-		g2.drawImage(bufImage, null, 0, 0);
+		g2.drawImage(bufImage.getImage(), null, 0, 0);
 	}
 	
 	private void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {

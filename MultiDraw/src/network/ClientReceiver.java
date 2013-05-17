@@ -136,6 +136,11 @@ public class ClientReceiver extends Thread {
 							controller.setBrushColor(new Color(rgb), Protocol.BRUSH_COLOR_2);
 						}
 						break;
+					case Protocol.BLUR:
+						if (words.length > 1) {
+							controller.blur(Integer.parseInt(words[1]));
+						}
+						break;
 					case Protocol.CHAT_MESSAGE:
 						String msg = strIn.substring(strIn.indexOf(" ")).trim();
 						msg = msg.substring(msg.indexOf(" ")).trim();

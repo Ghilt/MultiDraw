@@ -254,7 +254,14 @@ public class ServerConnection extends Thread {
 					c.disconnection();
 				}
 			}
-		}	
+		} else if (s[0].equals("/blur")) {
+			String value = "10";
+			if(s.length > 1){
+				value = s[1];
+			}
+			image.blur(Integer.parseInt(value));
+			writeToAll(Protocol.BLUR + " " + value);
+		}
 	}
 
 	private void sendUsers() {
@@ -269,7 +276,7 @@ public class ServerConnection extends Thread {
 		try {
 			// Read image into byte[]
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image, "PNG", baos);
+			ImageIO.write(image.getImage(), "PNG", baos);
 			baos.flush();
 			byte[] imageInByte = baos.toByteArray();
 			baos.close();
@@ -278,7 +285,8 @@ public class ServerConnection extends Thread {
 			write(Protocol.ALOHA + " " + imageInByte.length);
 			
 			String waitForAck = in.readLine();
-			if (waitForAck == null || Byte.parseByte(waitForAck) != Protocol.ACK) {
+			
+			if (waitForAck == null) {
 				disconnection();
 				System.err.println("Error: Expected ACK, received: " + waitForAck);
 				return;

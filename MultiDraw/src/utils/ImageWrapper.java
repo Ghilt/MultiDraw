@@ -13,19 +13,20 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class ImageWrapper extends BufferedImage {
+public class ImageWrapper {
 	private int sizeX;
 	private int sizeY;
+	private BufferedImage img;
 	private Graphics2D g2;
 
 	// Temporary storage for convolution filters (blur etc.)
-	private BufferedImage bufDest;
+
 
 	public ImageWrapper(int sizeX, int sizeY) {
-		super(sizeX, sizeY, BufferedImage.TYPE_INT_ARGB);
+		img = new BufferedImage(sizeX, sizeY, BufferedImage.TYPE_INT_ARGB);
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
-		this.g2 = createGraphics();
+		this.g2 = img.createGraphics();
 		this.g2.setColor(Color.BLACK);
 	}
 	
@@ -84,6 +85,7 @@ public class ImageWrapper extends BufferedImage {
 		g2.setColor(new Color(color));
 		g2.setFont(new Font("Monospaced", Font.PLAIN, width));
 		g2.drawString(c + "", x, y);
+		
 	}
 
 	public void insertPicture(File f) {
@@ -101,14 +103,23 @@ public class ImageWrapper extends BufferedImage {
 		g2.drawImage(img, null, 0, 0);
 	}
 
-	public void blur() {
-		float[] blurKernel = { 
-			1/9f, 1/9f, 1/9f,
-			1/9f, 1/9f, 1/9f,
-			1/9f, 1/9f, 1/9f
-		};
-
-		BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
-		blur.filter(this, bufDest);
+	public BufferedImage getImage() {
+		return img;
 	}
+	
+	public void blur(int itr) {
+		
+		float pwr = 1/9f;
+		float[] blurKernel = { 
+			pwr, pwr, pwr,
+			pwr, pwr, pwr,
+			pwr, pwr, pwr
+		};
+		BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
+		for(int i = 0; i< itr%10;i++){
+			img = blur.filter(img, null);
+		}
+		g2 = img.createGraphics();
+	}
+
 }

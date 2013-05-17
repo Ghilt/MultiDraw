@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.File;
 
 import javax.swing.JPanel;
@@ -34,7 +37,7 @@ public class PaintPanel extends JPanel {
 		super.paintComponent(g);
 
 		Graphics2D g2 = (Graphics2D) g; // downcast to Graphics2D
-		g2.drawImage(bufImage, null, 0, 0);
+		g2.drawImage(bufImage.getImage(), null, 0, 0);
 	}
 
 	public void drawLine(int previousX, int previousY, int currentX, int currentY, int rgb, int width) {
@@ -68,10 +71,16 @@ public class PaintPanel extends JPanel {
 	}
 
 	public int getColor(Point point) {
-		return bufImage.getRGB(point.x, point.y);
+		return bufImage.getImage().getRGB(point.x, point.y);
 	}
 
 	public BufferedImage getImage() {
-		return bufImage;
+		return bufImage.getImage();
 	}
+	
+	public void blur(int i) {
+		bufImage.blur(i);
+		repaint();
+	}
+	
 }
