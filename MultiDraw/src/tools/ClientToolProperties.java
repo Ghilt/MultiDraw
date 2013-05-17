@@ -1,6 +1,7 @@
 package tools;
 
 import gui.ColorButton;
+import gui.ToolPalette;
 
 import java.awt.Color;
 
@@ -22,10 +23,12 @@ public class ClientToolProperties {
 	private int width;
 	private int color1;
 	private int color2;
+	private int previousTool;
 	private int tool;
 	private SendBuffer buffer;
 	private ColorButton colorButton1;
 	private ColorButton colorButton2;
+	private ToolPalette toolPalette;
 	
 	public ClientToolProperties(SendBuffer buffer) {
 		this.color1 = Color.BLACK.getRGB();
@@ -83,19 +86,31 @@ public class ClientToolProperties {
 	}
 	
 	public void setTool(int tool) {
+		this.previousTool = this.tool;
 		this.tool = tool;
+		toolPalette.setActiveTool(this.tool);
+	}
+
+	public void changeTool(int tool) {
+		this.previousTool = this.tool;
+		this.tool = tool;
+		toolPalette.setActiveTool(this.tool);
 	}
 	
 	public int getTool() {
 		return tool;
 	}
-
-	public void changeTool(int tool) {
-		this.tool = tool;
+	
+	public int getPreviousTool() {
+		return this.previousTool;
 	}
 
 	public void setColorbuttons(ColorButton colorButton1,ColorButton colorButton2) {
 		this.colorButton1 = colorButton1;
 		this.colorButton2 = colorButton2;
+	}
+
+	public void addPalette(ToolPalette toolPalette) {
+		this.toolPalette = toolPalette;
 	}
 }

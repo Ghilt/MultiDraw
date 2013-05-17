@@ -217,7 +217,7 @@ public class InvisiblePanel extends JPanel implements MouseListener, MouseMotion
 			case ClientToolProperties.COLORPICKER_TOOL:
 				int rgb = paintPanel.getColor(e.getPoint());
 				tp.setColor(rgb,colorType);
-				tp.setTool(ClientToolProperties.BRUSH_TOOL);
+				tp.setTool(tp.getPreviousTool());
 				break;
 			case ClientToolProperties.ERASER_TOOL:
 				sendErase(previousX, previousY, e.getX(), e.getY());
