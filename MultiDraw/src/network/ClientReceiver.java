@@ -137,9 +137,9 @@ public class ClientReceiver extends Thread {
 						}
 						break;
 					case Protocol.CHAT_MESSAGE:
-						String msg = strIn.substring(strIn.indexOf(" "));
-						hiddenCommands(msg);
-						controller.putChatMessage(msg);
+						String msg = strIn.substring(strIn.indexOf(" ")).trim();
+						msg = msg.substring(msg.indexOf(" ")).trim();
+						controller.putChatMessage(words[1], msg);
 						break;
 					case Protocol.SEND_FILE:
 						controller.sendImage();
@@ -150,13 +150,6 @@ public class ClientReceiver extends Thread {
 			s.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
-
-
-	private void hiddenCommands(String msg) {
-		if(msg.startsWith("/kick " + controller.getName())){
-			System.exit(1);
 		}
 	}
 

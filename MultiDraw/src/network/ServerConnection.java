@@ -53,6 +53,11 @@ public class ServerConnection extends Thread {
 	}
 	
 	private void disconnection() {
+		if (this.s != null && !this.s.isClosed() && this.s.isConnected()) {
+			try {
+				this.s.close();
+			} catch (IOException e) { /* IGNORE */ }
+		}
 		this.state.removeConnection(this);
 		for (ServerConnection cc : state.getConnections()) {
 			cc.sendUsers();
@@ -66,16 +71,28 @@ public class ServerConnection extends Thread {
 		words = strIn.split(" ");
 		switch (Integer.parseInt(cmd)) {
 			case Protocol.ALOHA:
-				this.name = words[1];
-				sendUsers();
-				state.setDisabled(true);
-				sendImage();
-				state.setDisabled(false);
-				writeToAll(Protocol.CHAT_MESSAGE +" > " + name + " < Connected" );
-			break;
+				if (words.length > 1) {
+					this.name = words[1];
+					sendUsers();
+					state.setDisabled(true);
+					sendImage();
+					state.setDisabled(false);
+					String send = Protocol.CHAT_MESSAGE +" " + name + " Connected";
+					writeToAll(send);
+				}
+				break;
 			case Protocol.CHAT_MESSAGE:
-				String text = strIn.substring(strIn.indexOf(" "));
-				writeToAll(Protocol.CHAT_MESSAGE +" " + name + ": " + text);
+				if (words.length > 1) {
+					String text = strIn.substring(strIn.indexOf(" ")).trim();
+					String send = Protocol.CHAT_MESSAGE + " " + name + " " + text;
+					if (text.charAt(0) == '/') {
+						handleSlashCommand(text);
+						write(send);
+					} else {
+						System.out.println(send);
+						writeToAll(send);
+					}
+				}
 				break;
 			case Protocol.SEND_FILE:
 				write(Protocol.SEND_FILE + " ");
@@ -230,7 +247,17 @@ public class ServerConnection extends Thread {
 		return strIn;
 	}
 
-	
+	private void handleSlashCommand(String text) {
+		String[] s = text.split(" ");
+		if (s[0].equals("/sudokick")) {
+			for (ServerConnection c : state.getConnections()) {
+				if (c.name.toLowerCase().equals(s[1].toLowerCase())) {
+					c.write(Protocol.CHAT_MESSAGE + " SERVER You were kicked by " + name);
+					c.disconnection();
+				}
+			}
+		}	
+	}
 
 	private void sendUsers() {
 		String list = Protocol.USERLIST + " ";

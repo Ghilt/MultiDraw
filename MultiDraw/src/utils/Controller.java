@@ -26,10 +26,10 @@ public class Controller {
 		frame.getToolProperties().setColor(color, type);
 	}
 	
-	public void putChatMessage(String msg) {
+	public void putChatMessage(String from, String msg) {
 		StyledDocument doc = frame.getChatPanel().getStyledDocument();
 		try {
-			doc.insertString(doc.getLength(), msg + "\n", null);
+			doc.insertString(doc.getLength(), from + ": " + msg + "\n", null);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -72,6 +72,6 @@ public class Controller {
 	}
 
 	public String getName() {
-		return sender.getName();
+		return sender.getClientName();
 	}
 }
