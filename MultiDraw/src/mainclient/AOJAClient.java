@@ -30,8 +30,10 @@ class AOJAClient {
 		String myName = "";
 		final JTextField nick = new JTextField(25);
 		JTextField address = new JTextField(25);
+		JTextField port = new JTextField(25);
 		try {
 			address.setText(InetAddress.getLocalHost().getHostAddress());
+			port.setText("30001");
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
@@ -44,7 +46,9 @@ class AOJAClient {
 		myPanel.add(nick);
 		myPanel.add(new JLabel("Host: "));
 		myPanel.add(address);
-		myPanel.setPreferredSize(new Dimension(380,60));
+		myPanel.add(new JLabel("Port: "));
+		myPanel.add(port);
+		myPanel.setPreferredSize(new Dimension(370, 90));
 		
 		Image img = null;
 		try {
@@ -60,7 +64,7 @@ class AOJAClient {
 			int result = JOptionPane.showOptionDialog(null, myPanel, "Connect to an AOJA Mainframe", 
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, imgic, options, "");
 			if (result == JOptionPane.OK_OPTION) {
-				myName = nick.getText();
+				myName = nick.getText().split(" ")[0];
 			} else {
 				System.exit(0);
 			}
@@ -68,7 +72,7 @@ class AOJAClient {
 
 		Socket s = null;
 		try {
-			s = new Socket(address.getText(), 30001);
+			s = new Socket(address.getText(), Integer.parseInt(port.getText()));
 		} catch (UnknownHostException e) {
 			System.err.println("Did not find a host at the specified address.");
 			System.exit(1);
