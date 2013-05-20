@@ -77,7 +77,7 @@ class AOJAClient {
 			System.exit(1);
 		}
 
-		SendBuffer buffer = new SendBuffer(10);
+		SendBuffer buffer = new SendBuffer(100);
 		Controller controller = new Controller();
 		ClientReceiver receiver = new ClientReceiver(s, controller);
 		ClientSender sender = new ClientSender(myName, s, buffer);
