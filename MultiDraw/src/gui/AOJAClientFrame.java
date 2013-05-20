@@ -129,11 +129,9 @@ public class AOJAClientFrame extends JFrame {
 		});
 		fileMenu.add(savePic);
 
-		JMenu editMenu = new JMenu("Edit");
-		JMenu aboutMenu = new JMenu("About");
+
 		menuBar.add(fileMenu);
-		menuBar.add(editMenu);
-		menuBar.add(aboutMenu);
+
 		return menuBar;
 	}
 
