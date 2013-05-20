@@ -7,10 +7,14 @@ import network.ServerConnection;
 public class ServerState {
 	private boolean disabled;
 	private ArrayList<ServerConnection> connections;
+	private ImageWrapper image;
 
 	public ServerState() {
 		this.connections = new ArrayList<ServerConnection>();
 		this.disabled = false;
+		
+		image = new ImageWrapper(900, 780);
+		image.setWhiteBackground();
 	}
 	
 	public boolean isDisabled() {
@@ -33,5 +37,9 @@ public class ServerState {
 		ArrayList<ServerConnection> temp = new ArrayList<ServerConnection>();
 		temp.addAll(connections);
 		return temp;
+	}
+
+	public ImageWrapper getImgWrapper() {
+		return image;
 	}
 }

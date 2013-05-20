@@ -8,12 +8,11 @@ import utils.ImageWrapper;
 import utils.ServerState;
 
 public class AOJAServer {
-	private static ImageWrapper image;
+
 	private static ServerState state;
 	
 	public static void main(String[] args) {
-		image = new ImageWrapper(900, 780);
-		image.setWhiteBackground();
+	
 		state = new ServerState();
 		
 		if (args.length < 1) {
@@ -28,7 +27,7 @@ public class AOJAServer {
 			Socket s;
 			while ((s = server.accept()) != null) {
 				System.out.println("Connected : " + s.getInetAddress().getHostAddress());
-				ServerConnection conn = new ServerConnection(s, image, state);
+				ServerConnection conn = new ServerConnection(s, state);
 				conn.start();
 				state.addConnection(conn);
 			}

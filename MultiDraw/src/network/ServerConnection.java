@@ -26,15 +26,14 @@ public class ServerConnection extends Thread {
 	private PrintWriter out;
 	private BufferedReader in;
 
-	private ImageWrapper image;
+
 	private ToolProperties tp;
 	private ServerState state;
 
-	public ServerConnection(Socket s, ImageWrapper image, ServerState state) {
+	public ServerConnection(Socket s, ServerState state) {
 		super();
 		this.s = s;
 		this.state = state;
-		this.image = image;
 		this.tp = new ToolProperties(Color.BLACK.getRGB(),Color.WHITE.getRGB(), 10);
 	}
 
@@ -68,6 +67,7 @@ public class ServerConnection extends Thread {
 	private String parseCommand(String strIn) {
 		String cmd = strIn.substring(0, strIn.indexOf(" "));
 		String[] words;
+		ImageWrapper image = state.getImgWrapper();
 		words = strIn.split(" ");
 		switch (Integer.parseInt(cmd)) {
 			case Protocol.ALOHA:
@@ -259,7 +259,7 @@ public class ServerConnection extends Thread {
 			if(s.length > 1){
 				value = s[1];
 			}
-			image.blur(Integer.parseInt(value));
+			state.getImgWrapper().blur(Integer.parseInt(value));
 			writeToAll(Protocol.BLUR + " " + value);
 		}
 	}
@@ -276,7 +276,7 @@ public class ServerConnection extends Thread {
 		try {
 			// Read image into byte[]
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image.getImage(), "PNG", baos);
+			ImageIO.write(state.getImgWrapper().getImage(), "PNG", baos);
 			baos.flush();
 			byte[] imageInByte = baos.toByteArray();
 			baos.close();
