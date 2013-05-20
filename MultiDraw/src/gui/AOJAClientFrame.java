@@ -182,11 +182,12 @@ public class AOJAClientFrame extends JFrame {
 		connectedUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		connectedUsersList.setSelectedIndex(0);
 		connectedUsersList.setVisibleRowCount(5);
-
+		
 		chatWindow = new JTextPane();
-		chatWindow.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, CHATWINDOW_HEIGHT));
-		chatWindow.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		chatWindow.setEditable(false);
+		JScrollPane chatScroll = new JScrollPane(chatWindow);
+		chatScroll.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, CHATWINDOW_HEIGHT));
+		chatScroll.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
 		JTextField chatInput = new JTextField();
 		chatInput.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH - 8, 25));
@@ -202,7 +203,7 @@ public class AOJAClientFrame extends JFrame {
 		JPanel rightCenterPanel = new JPanel();
 		rightCenterPanel.setLayout(new BorderLayout());
 		rightCenterPanel.setBorder(new EmptyBorder(0, 4, 2, 4));
-		rightCenterPanel.add(chatWindow, BorderLayout.CENTER);
+		rightCenterPanel.add(chatScroll, BorderLayout.CENTER);
 		
 		JPanel rightBottomPanel = new JPanel();
 		rightBottomPanel.add(chatInput);
