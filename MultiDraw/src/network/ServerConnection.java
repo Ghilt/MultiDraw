@@ -64,7 +64,9 @@ public class ServerConnection extends Thread {
 		System.out.println("Disconnected: " + s.getInetAddress().getHostAddress());
 	}
 
-	private String parseCommand(String strIn) {
+	private void parseCommand(String strIn) {
+		if (!strIn.contains(" ")) 
+			return;
 		String cmd = strIn.substring(0, strIn.indexOf(" "));
 		String[] words;
 		ImageWrapper image = state.getImgWrapper();
@@ -241,8 +243,6 @@ public class ServerConnection extends Thread {
 				tp.setBrushWidth(Integer.parseInt(words[1]));
 				break;
 		}
-
-		return strIn;
 	}
 
 	private void handleSlashCommand(String text) {
