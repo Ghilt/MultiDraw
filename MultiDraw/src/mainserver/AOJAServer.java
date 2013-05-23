@@ -4,16 +4,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import network.ServerConnection;
-import utils.ImageWrapper;
 import utils.ServerState;
 
 public class AOJAServer {
 
-	private static ServerState state;
 	
 	public static void main(String[] args) {
 	
-		state = new ServerState();
+		ServerState state = new ServerState();
 		
 		if (args.length < 1) {
 			System.err.println("Usage: MultiDrawServer <port>");
